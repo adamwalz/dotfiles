@@ -2,7 +2,7 @@
 #          FILE:  Rakefile
 #   DESCRIPTION:  Installs and uninstalls dot configuaration files.
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.2
+#       VERSION:  1.0.3
 #------------------------------------------------------------------------------
 
 require 'date'
@@ -102,6 +102,7 @@ end
 # @param [String] to the backup destination.
 def backup(from, to)
   return unless File.exists? from
+  info "Backing up old version of #{File.basename(from)}"
   FileUtils.mkdir_p(File.dirname(to))
   File.rename(from, to)
 end
@@ -189,8 +190,8 @@ module Enumerable
 end
 
 namespace :dotfiles do
-  desc('Links dofiles')
-  task :link => [:link_dotfiles]
+  desc('Renders, links, and cleans dotfiles')
+  task :install => [:render, :link_dotfiles, :clean]
 
   task :link_dotfiles do
     Dir["#{CONFIG_DIR_PATH}/*"].in_parallel do |source|
@@ -211,7 +212,7 @@ namespace :dotfiles do
       or (File.exists?(target) \
         and File.ftype(target) == 'link' \
         and File.identical?(source, target))
-      link_and_backup(source, target, target_relative)
+      link_and_backup source, target, target_backup
     end
   end
 
@@ -248,19 +249,74 @@ namespace :dotfiles do
     end
   end
 
+  desc 'Uninstall dot files'
+  task :uninstall => 'dotfiles:clean' do
+    # unlink dotfiles from home directory
+    Dir["#{CONFIG_DIR_PATH}/*"].each do |source|
+      next if ((source =~ /#{CONFIG_DIR_PATH}\/mac-.+/ and not Platform.mac?) \
+            or (source =~ /#{CONFIG_DIR_PATH}\/linux-.+/ and not Platform.linux?) \
+            or (source =~ /#{CONFIG_DIR_PATH}\/windows-.+/ and not Platform.windows?))
+
+      #link_relative = source.gsub("#{CONFIG_DIR_PATH}/", '')
+      link_relative = File.basename(source)
+      # Remove platform specifier from dotfile
+      link_relative.gsub! /\A(mac|windows|linux)-/, ''
+
+      link = File.join(ENV['HOME'], ".#{link_relative}")
+      next if source =~ RAW_FILE_EXTENSION_REGEXP or excluded?(link_relative)
+      unlink link
+    end
+  end
+
+  desc 'Unlink broken symlinks'
+  task :clean do
+    Dir["#{ENV['HOME']}/.*"].in_parallel do |item|
+      unlink_if_broken item
+    end
+  end
+
   def link_and_backup(source, target, backup)
     info "Linking: #{target}"
     begin
-      backup(target, backup)
-    rescue IOError
-      error "Could not backup '#{target}', will skip symlinking '#{source}'"
+      backup target, backup
+    rescue Error
+      error "Could not backup '#{target}, will skip symlinking '#{source}'"
+      return
     end
+
+    FileUtils.mkdir_p File.dirname(target)
     begin
-      FileUtils.mkdir_p(File.dirname(target))
-      File.symlink(source, target)
-    rescue IOError
-      error "Could not symlink '#{source}' to '#{target}'"
+      File.symlink source, target
+    rescue NotImplementedError
+      error "Cannot create a symlink on #{RUBY_PLATFORM}"
     end
+  end
+
+  def unlink(file)
+    begin
+      if File.ftype(file) == 'link'
+        info "Unlinking: #{file}"
+        File.unlink file
+      end
+    rescue IOError
+      error "Could not unlink '#{file}'"
+    rescue Exception
+      return
+    end
+  end
+
+  def unlink_if_broken(file)
+    if (File.ftype(file) == 'link' and not File.exists?(file))
+      unlink file
+    end
+  end
+
+  desc 'Unlink broken symlinks'
+  task :test_broken_symlink do
+    file = '/Users/adamwalz/.broken'
+    info "#{file} is link: #{File.ftype(file) == 'link'}"
+    info "#{file} exists: #{File.exists?(file)}"
+    info "#{file} is file: #{File.file?(file)}"
   end
 
 end
