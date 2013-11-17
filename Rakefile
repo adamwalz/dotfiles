@@ -2,7 +2,7 @@
 #          FILE:  Rakefile
 #   DESCRIPTION:  Installs and uninstalls dot configuaration files.
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.1
+#       VERSION:  1.0.2
 #------------------------------------------------------------------------------
 
 require 'date'
@@ -171,12 +171,29 @@ module Keychain
   end
 end
 
+# Do stuff in parallel
+module Enumerable
+  def in_parallel
+    map{|x| Thread.new do
+        Thread.current.abort_on_exception = true
+        yield(x)
+      end
+    }.each do |t|
+      begin
+        t.join
+      rescue Exception => e
+        error e.message if e.class == IOError
+      end
+    end
+  end
+end
+
 namespace :dotfiles do
   desc('Links dofiles')
   task :link => [:link_dotfiles]
 
   task :link_dotfiles do
-    Dir["#{CONFIG_DIR_PATH}/*"].each do |source|
+    Dir["#{CONFIG_DIR_PATH}/*"].in_parallel do |source|
       next if ((source =~ /#{CONFIG_DIR_PATH}\/mac-.+/ and not Platform.mac?) \
             or (source =~ /#{CONFIG_DIR_PATH}\/linux-.+/ and not Platform.linux?) \
             or (source =~ /#{CONFIG_DIR_PATH}\/windows-.+/ and not Platform.windows?))
@@ -200,7 +217,7 @@ namespace :dotfiles do
 
   desc 'Render raw dot files'
   task :render do
-    Dir["#{CONFIG_DIR_PATH}/**/*.#{RAW_FILE_EXTENSION}"].each do |source|
+    Dir["#{CONFIG_DIR_PATH}/**/*.#{RAW_FILE_EXTENSION}"].in_parallel do |source|
       target = source.gsub(RAW_FILE_EXTENSION_REGEXP, '')
       next if excluded? source
       if File.file? source
@@ -247,3 +264,5 @@ namespace :dotfiles do
   end
 
 end
+
+task :default => [:install]
