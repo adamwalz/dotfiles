@@ -2,7 +2,7 @@
 #          FILE:  Rakefile
 #   DESCRIPTION:  Installs and uninstalls dot configuaration files.
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.3
+#       VERSION:  1.0.4
 #------------------------------------------------------------------------------
 
 require 'date'
@@ -268,8 +268,11 @@ namespace :dotfiles do
     end
   end
 
-  desc 'Unlink broken symlinks'
+  desc 'Unlink broken symlinks in home directory'
   task :clean do
+    # Must clean entire home directory instead of only the dotfiles that this
+    # script symlinked because if the link is broken that means that it is no
+    # longer in CONFIG_DIR_PATH
     Dir["#{ENV['HOME']}/.*"].in_parallel do |item|
       unlink_if_broken item
     end
@@ -306,17 +309,15 @@ namespace :dotfiles do
   end
 
   def unlink_if_broken(file)
-    if (File.ftype(file) == 'link' and not File.exists?(file))
-      unlink file
+    begin
+      if (File.ftype(file) == 'link' and not File.exists?(file))
+        unlink file
+      end
+    rescue IOError
+      error "Could not unlink '#{file}'"
+    rescue Exception
+      return
     end
-  end
-
-  desc 'Unlink broken symlinks'
-  task :test_broken_symlink do
-    file = '/Users/adamwalz/.broken'
-    info "#{file} is link: #{File.ftype(file) == 'link'}"
-    info "#{file} exists: #{File.exists?(file)}"
-    info "#{file} is file: #{File.file?(file)}"
   end
 
 end
