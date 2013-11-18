@@ -2,7 +2,7 @@
 #          FILE:  Rakefile
 #   DESCRIPTION:  Installs and uninstalls dot configuaration files.
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.4
+#       VERSION:  1.0.5
 #------------------------------------------------------------------------------
 
 require 'date'
@@ -194,7 +194,7 @@ namespace :dotfiles do
   task :install => [:render, :link_dotfiles, :clean]
 
   task :link_dotfiles do
-    Dir["#{CONFIG_DIR_PATH}/*"].in_parallel do |source|
+    Dir["#{CONFIG_DIR_PATH}/*"].each do |source|
       next if ((source =~ /#{CONFIG_DIR_PATH}\/mac-.+/ and not Platform.mac?) \
             or (source =~ /#{CONFIG_DIR_PATH}\/linux-.+/ and not Platform.linux?) \
             or (source =~ /#{CONFIG_DIR_PATH}\/windows-.+/ and not Platform.windows?))
@@ -218,7 +218,7 @@ namespace :dotfiles do
 
   desc 'Render raw dot files'
   task :render do
-    Dir["#{CONFIG_DIR_PATH}/**/*.#{RAW_FILE_EXTENSION}"].in_parallel do |source|
+    Dir["#{CONFIG_DIR_PATH}/**/*.#{RAW_FILE_EXTENSION}"].each do |source|
       target = source.gsub(RAW_FILE_EXTENSION_REGEXP, '')
       next if excluded? source
       if File.file? source
@@ -273,7 +273,7 @@ namespace :dotfiles do
     # Must clean entire home directory instead of only the dotfiles that this
     # script symlinked because if the link is broken that means that it is no
     # longer in CONFIG_DIR_PATH
-    Dir["#{ENV['HOME']}/.*"].in_parallel do |item|
+    Dir["#{ENV['HOME']}/.*"].each do |item|
       unlink_if_broken item
     end
   end
