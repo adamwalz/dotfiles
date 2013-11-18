@@ -1,0 +1,138 @@
+#------------------------------------------------------------------------------
+#          FILE:  mac-gitignore
+#   DESCRIPTION:  Global gitignore file for OS X systems
+#        AUTHOR:  Adam Walz <adam@adamwalz.net>
+#       VERSION:  1.0.0
+#
+# Make sure to edit linux-gitignore and windows-gitignore if the settings
+# changed are cross-platform
+#------------------------------------------------------------------------------
+
+#################### OS X ####################
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must ends with two \r.
+Icon
+
+# Thumbnails
+._*
+
+# OS X Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+#################### Eclipse ####################
+*.pydevproject
+.metadata
+.gradle
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
+
+# PDT-specific
+.buildpath
+
+# TeXlipse plugin
+.texlipse
+
+#################### Emacs ####################
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+#################### Mercurial ####################
+/.hg/*
+*/.hg/*
+.hgignore
+
+#################### SVN ####################
+.svn/
+
+#################### Sublime Text ####################
+# SublimeText project files
+*.sublime-workspace
+
+# project files should be checked into the repository, unless a significant
+# proportion of contributors will probably not be using SublimeText
+# *.sublime-project
+
+#################### Text Mate ####################
+*.tmproj
+*.tmproject
+tmtags
+
+#################### VirtualEnv ####################
+.Python
+[Bb]in
+[Ii]nclude
+[Ll]ib
+[Ss]cripts
+
+#################### Vim ####################
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+#################### Xcode ####################
+*~.nib
+DerivedData
+build/
+*.hmap
+
+# Private settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# Semi-private data
+xcuserdata
+*.xccheckout
+profile
+
+# Workspaces also are (could be) personal
+*.xcworkspace
+!default.xcworkspace
+
+# Deprecated classes
+*.moved-aside
+
+# Cocoapods
+Pods/
