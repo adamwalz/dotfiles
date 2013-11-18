@@ -2,7 +2,7 @@
 #          FILE:  Rakefile
 #   DESCRIPTION:  Installs and uninstalls dot configuaration files.
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.5
+#       VERSION:  1.0.6
 #------------------------------------------------------------------------------
 
 require 'date'
@@ -105,6 +105,16 @@ def backup(from, to)
   info "Backing up old version of #{File.basename(from)}"
   FileUtils.mkdir_p(File.dirname(to))
   File.rename(from, to)
+end
+
+# Returns whether a command exists in PATH.
+#
+# @param [String] command the name of the command.
+# @return [true, false] if true, the command exists; otherwise, it does not.
+def command?(command)
+  ENV['PATH'].split(':').any? do |directory|
+    File.exists?(File.join(directory, command))
+  end
 end
 
 # Raised when a Keychain item is not found.
@@ -321,5 +331,141 @@ namespace :dotfiles do
   end
 
 end
+
+namespace :gitmodule do
+  desc 'Initialize git submodules'
+  task :init do
+    if File.exists? '.gitmodules'
+      unless command?('git')
+        error "Could not initialize submodules, Git is not found"
+        next
+      end
+      # Popen3 does not return the exit status code.
+      # Echo it onto the last line of stderr.
+      Open3.popen3(
+        "git submodule update --init --recursive; echo $? 1>&2"
+        ) do |stdin, stdout, stderr|
+        stdios = [stdin, stdout, stderr]
+        threads = []
+        threads << Thread.new do
+          Thread.current.abort_on_exception = true
+          stdout.each do |line|
+            next if line !~ /^Cloning into .*\.{3}$/
+            info line.gsub(/^Cloning into (.*)\.{3}$/, "Initializing: \\1")
+          end
+        end
+        threads << Thread.new do
+          Thread.current.abort_on_exception = true
+          stderr.each do |line|
+            if line =~ /Unable to checkout '[^']+' in submodule path '([^']+)'/
+              error "Could not initialize submodule '#{$1}'"
+            end
+            if stderr.eof? and line.to_i != 0
+              error "Could not initialize submodules"
+            end
+          end
+        end
+        begin
+          threads.each(&:join)
+          stdios.each(&:close)
+        rescue Exception => e
+          error e.message if e.class == IOError
+        end
+      end
+    end
+  end
+
+  desc 'Make submodules'
+  task :make do
+    Dir["#{CONFIG_DIR_PATH}/**/Rakefile"].each do |rake_file|
+      next if SCRIPT_PATH.join('/') == rake_file
+      submodule = File.dirname rake_file
+      submodule_relative = submodule.gsub("#{CONFIG_DIR_PATH}/", '')
+      read, write = IO.pipe
+      pid = fork do
+        Dir.chdir submodule
+        Rake::Task.clear
+        load rake_file
+        next unless Rake::Task.task_defined?(:make)
+        info "Making: #{submodule_relative}"
+        # Redirect stdout, stderr since make is noisy.
+        stdout_old = STDOUT.clone
+        stderr_old = STDERR.clone
+        begin
+          STDOUT.reopen write
+          STDERR.reopen STDOUT
+          read.close
+          Rake::Task[:make].invoke
+        rescue Exception => e
+          STDOUT.reopen stdout_old
+          STDERR.reopen stderr_old
+          error e.message
+        end
+      end
+      begin
+        write.close
+        read.each do |line|
+          if read.eof? and line =~ /error:/i
+            error "Could not make '#{submodule_relative}'"
+          end
+        end
+      rescue IOError => e
+        error e.message
+      end
+      Process.waitpid pid
+    end
+  end
+
+  desc 'Update submodules'
+  task :update do
+    if File.exists? '.gitmodules'
+      unless command?('git')
+        error "Could not update submodules, Git is not found"
+        next
+      end
+      # Popen3 does not return the exit status code.
+      # Echo it onto the last line of stderr.
+      Open3.popen3(
+        "git submodule foreach git pull origin master; echo $? 1>&2"
+        ) do |stdin, stdout, stderr|
+        stdios = [stdin, stdout, stderr]
+        threads = []
+        threads << Thread.new do
+          stdout.each do |line|
+            if line =~ /Entering '([^']+)'/
+              info "Updating: #{$1}"
+            end
+          end
+        end
+        threads << Thread.new do
+          stderr.each do |line|
+            if line =~ /Stopping at '([^']+)'/
+              error "Could not update submodule '#{$1}'"
+            end
+            if stderr.eof? and line.to_i != 0
+              error "Could not update submodules"
+            end
+          end
+        end
+        begin
+          threads.each(&:join)
+          stdios.each(&:close)
+          Rake::Task[:make].invoke
+        rescue Exception => e
+          error e.message if e.class == IOError
+        end
+      end
+    end
+  end
+end
+
+desc 'Install dot files'
+task :install => [
+  'gitmodule:init',
+  'dotfiles:install',
+  'gitmodule:make'
+  ] do
+    info "Backup: #{BACKUP_DIR_PATH}" if File.directory? BACKUP_DIR_PATH
+  end
 
 task :default => [:install]
