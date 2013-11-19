@@ -1,0 +1,10 @@
+#------------------------------------------------------------------------------
+#          FILE:  netrc
+#   DESCRIPTION:  FTP configuration file
+#        AUTHOR:  Adam Walz <adam@adamwalz.net>
+#       VERSION:  1.0.0
+#------------------------------------------------------------------------------
+
+machine jdios.jdchs.org
+  login <%= Keychain['juandiego'].account %>
+  password <%= Keychain['juandiego'].password %>
