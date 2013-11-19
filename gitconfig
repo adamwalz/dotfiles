@@ -1,0 +1,102 @@
+#------------------------------------------------------------------------------
+#          FILE:  gitconfig
+#   DESCRIPTION:  Global configuration variables for git
+#        AUTHOR:  Adam Walz <adam@adamwalz.net>
+#       VERSION:  1.0.0
+#------------------------------------------------------------------------------
+
+[user]
+  name = Adam Walz
+  email = adam@adamwalz.net
+[advice]
+  pushNonFastForward = false
+  statusHints = false
+[alias]
+  addremove = !git add --all && git ls-files --deleted -z | xargs -0 git rm
+  switch = checkout
+  unadd = reset --mixed
+  uncommit = reset --soft
+  undo = reset --hard
+  unstage = reset
+[apply]
+  whitespace = warn
+[branch]
+  autosetupmerge = true
+[color]
+  ui = auto
+  [color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+  [color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+  [color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+[core]
+  legacyheaders = false
+  excludesfile = ~/.gitignore
+  whitespace = trailing-space,space-before-tab
+  quotepath = false
+  editor = subl -nw
+[format]
+  numbered = auto
+[pager]
+  status = false
+[push]
+  default = tracking
+[repack]
+  usedeltabaseoffset = true
+[rerere]
+  enabled = true
+
+[tig]
+  show-date = relative
+  author-width = 8
+  show-rev-graph = yes
+
+[diff]
+  tool = Kaleidoscope
+  guitool = ksdiff
+  mnemonicprefix = true
+  renames = copies
+[difftool]
+  prompt = false
+[difftool "Kaleidoscope"]
+  cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[difftool "sourcetree"]
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
+[merge]
+  tool = Kaleidoscope
+[mergetool]
+  prompt = false
+[mergetool "Kaleidoscope"]
+  cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+  trustExitCode = true
+[mergetool "vimdiff3"]
+  cmd = vim -f -d -c \"wincmd J\" -c \"wincmd =\" \"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
+  trustExitCode = false
+[mergetool "gvimdiff3"]
+  cmd = gvim -f -d -c \"wincmd J\" -c \"wincmd =\" \"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
+  trustExitCode = false
+[mergetool "fugitive"]
+  cmd = vim -f -c \"Gdiff\" \"$MERGED\" -c \"wincmd =\"
+  trustExitCode = false
+[mergetool "gfugitive"]
+  cmd = gvim -f-c \"Gdiff\" \"$MERGED\" -c \"wincmd =\"
+  trustExitCode = false
+[mergetool "splice"]
+  cmd = vim -f -c \"SpliceInit\" \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+  trustExitCode = true
+[mergetool "gsplice"]
+  cmd = gvim -f -c \"SpliceInit\" \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+  trustExitCode = true
+[mergetool "sourcetree"]
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
