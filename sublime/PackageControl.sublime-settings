@@ -1,0 +1,27 @@
+{
+  "auto_upgrade_last_run": 1353518956,
+  "installed_packages": [
+    "Arduino-like IDE",
+    "AdvancedNewFile",
+    "AutoWrap",
+    "BeautifyRuby",
+    "Better CoffeeScript",
+    "DashDoc",
+    "Emmet",
+    "Git",
+    "GitGutter",
+    "MarkAndMove",
+    "Package Control",
+    "Pretty JSON",
+    "Processing",
+    "Racket",
+    "SideBarEnhancements",
+    "SideBarGit",
+    "SublimeCodeIntel",
+    "SublimeGit",
+    "SublimeLinter",
+    "SublimeREPL",
+    "Syntax Highlighting for Sass"
+    "Theme - Soda"
+  ]
+}

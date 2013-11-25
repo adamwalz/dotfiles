@@ -1,0 +1,13 @@
+<snippet>
+  <tabTrigger>ver</tabTrigger>
+  <description>File header comment</description>
+  <scope>source.Python,Ruby</scope>
+  <content><![CDATA[
+#------------------------------------------------------------------------------
+#          FILE:  $TM_FILENAME
+#   DESCRIPTION:  ${1:Description}
+#        AUTHOR:  ${2:Adam Walz} ${3:<adam@adamwalz.net>}
+#       VERSION:  ${4:1.0.0}
+#------------------------------------------------------------------------------
+]]></content>
+</snippet>

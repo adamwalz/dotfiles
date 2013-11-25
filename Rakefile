@@ -2,7 +2,7 @@
 #          FILE:  Rakefile
 #   DESCRIPTION:  Installs and uninstalls dot configuaration files.
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.6
+#       VERSION:  1.0.7
 #------------------------------------------------------------------------------
 
 require 'date'
@@ -21,6 +21,8 @@ PASSWORD_REGEXP = /^password: (?:0x([0-9A-F]+)\s*)?(?:"(.*)")?$/
 SCRIPT_PATH = File.split(File.expand_path(__FILE__))
 SCRIPT_NAME = SCRIPT_PATH.last
 CONFIG_DIR_PATH = SCRIPT_PATH.first
+
+SUBLIME_DIR_PATH = File.join("#{CONFIG_DIR_PATH}", 'sublime')
 
 BACKUP_DIR_PATH = File.join(
   ENV['HOME'],
@@ -201,7 +203,9 @@ end
 
 namespace :dotfiles do
   desc('Renders, links, and cleans dotfiles')
-  task :install => [:render, :link_dotfiles, :clean]
+  task :install => [:render, :link, :clean]
+
+  multitask :link => [:link_dotfiles, :link_sublime]
 
   task :link_dotfiles do
     Dir["#{CONFIG_DIR_PATH}/*"].each do |source|
@@ -223,6 +227,21 @@ namespace :dotfiles do
         and File.ftype(target) == 'link' \
         and File.identical?(source, target))
       link_and_backup source, target, target_backup
+    end
+  end
+
+   task :link_sublime do
+    Dir["#{SUBLIME_DIR_PATH}/*"].each do |source|
+      target_relative = source.gsub "#{SUBLIME_DIR_PATH}/", ''
+      tartget_backup = File.join(BACKUP_DIR_PATH, target_relative)
+      preference_type = target_relative =~ /.*\(.+\).+/ ? 'Default' : 'User'
+      target = File.join(sublime_package_path, preference_type, target_relative)
+
+      next if (File.exists?(target) \
+        and File.ftype(target) == 'link' \
+        and (File.identical?(source, target) \
+          or (File.mtime(target) > File.mtime(source))))
+      link_and_backup(source, target, target_relative)
     end
   end
 
@@ -260,7 +279,11 @@ namespace :dotfiles do
   end
 
   desc 'Uninstall dot files'
-  task :uninstall => 'dotfiles:clean' do
+  task :uninstall => [:unlink, :clean]
+
+  multitask :unlink => [:unlink_dotfiles, :unlink_sublime]
+
+  task :unlink_dotfiles do
     # unlink dotfiles from home directory
     Dir["#{CONFIG_DIR_PATH}/*"].each do |source|
       next if ((source =~ /#{CONFIG_DIR_PATH}\/mac-.+/ and not Platform.mac?) \
@@ -278,12 +301,23 @@ namespace :dotfiles do
     end
   end
 
+  task :unlink_sublime do
+    Dir["#{sublime_package_path}/**/*"].each do |symlink|
+      link_relative = File.basename symlink
+      next if symlink =~ RAW_FILE_EXTENSION_REGEXP or excluded?(link_relative)
+      unlink symlink
+    end
+  end
+
   desc 'Unlink broken symlinks in home directory'
   task :clean do
     # Must clean entire home directory instead of only the dotfiles that this
     # script symlinked because if the link is broken that means that it is no
     # longer in CONFIG_DIR_PATH
     Dir["#{ENV['HOME']}/.*"].each do |item|
+      unlink_if_broken item
+    end
+    Dir["#{sublime_package_path}/*"].each do |item|
       unlink_if_broken item
     end
   end
@@ -327,6 +361,16 @@ namespace :dotfiles do
       error "Could not unlink '#{file}'"
     rescue Exception
       return
+    end
+  end
+
+  def sublime_package_path
+    if Platform.mac?
+      "#{ENV['HOME']}/Library/Application Support/Sublime Text 3/Packages"
+    elsif Platform.linux?
+      "#{ENV['HOME']}/.Sublime Text 3/Packages"
+    else
+      "#{ENV['APPDATA']}\\Sublime Text 3/Packages"
     end
   end
 
