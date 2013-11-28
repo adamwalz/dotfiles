@@ -11,6 +11,11 @@ Installation
 
 Clone this repository into *~/.dotfiles*, change directory into _~/.dotfiles_, and execute the `rake install` task.
 
+####Installation one-liner
+```curl -L https://raw.github.com/adamwalz/dotfiles/master/install.sh | sh```
+
+#### --OR--
+
 (1.) Launch [Zsh][1]:
 
 ```sh

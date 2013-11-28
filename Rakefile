@@ -2,7 +2,7 @@
 #          FILE:  Rakefile
 #   DESCRIPTION:  Installs and uninstalls dot configuaration files.
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.7
+#       VERSION:  1.0.8
 #------------------------------------------------------------------------------
 
 require 'date'
@@ -36,6 +36,7 @@ EXCLUDES = [
   '.git',
   '.gitignore',
   '.gitmodules',
+  'install.sh',
   'brew',
   'sublime',
   'pythons' ,
