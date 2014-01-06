@@ -69,7 +69,7 @@
 	],
 	"save_on_focus_lost": true,
 	"show_encoding": true,
-        "show_line_endings": true,
+	"show_line_endings": true,
 	"tab_completion": true,
 	"tab_size": 2,
 	"theme": "Default.sublime-theme",
