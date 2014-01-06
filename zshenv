@@ -2,7 +2,7 @@
 #          FILE:  zshenv
 #   DESCRIPTION:  Defines environment variables
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.0
+#       VERSION:  1.0.1
 #------------------------------------------------------------------------------
 
 #===================================== Browser ===============================
@@ -94,3 +94,8 @@ if [[ -d "$TMPDIR" ]]; then
   fi
 fi
 
+#=================================== Boxen ====================================
+# Will reset PATH if boxen is installed
+if [[ -s /opt/boxen/env.sh ]]; then
+  source /opt/boxen/env.sh
+fi
