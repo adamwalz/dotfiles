@@ -1,2 +1,5 @@
 netrc
 hub
+
+# ignore this symlink I use for ease of directory switching
+prezto
