@@ -2,7 +2,7 @@
 #          FILE:  zpreztorc
 #   DESCRIPTION:  Sets Prezto zsh options
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.1
+#       VERSION:  1.0.2
 #------------------------------------------------------------------------------
 
 #
@@ -39,6 +39,7 @@ zstyle ':prezto:load' pmodule \
   'archive' \
   'fasd' \
   'editor' \
+  'evernote' \
   'git' \
   'history' \
   'homebrew' \
