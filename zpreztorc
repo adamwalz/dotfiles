@@ -2,7 +2,7 @@
 #          FILE:  zpreztorc
 #   DESCRIPTION:  Sets Prezto zsh options
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.0
+#       VERSION:  1.0.1
 #------------------------------------------------------------------------------
 
 #
@@ -36,16 +36,16 @@ zstyle ':prezto:load' pmodule \
   'gnu-utility' \
   'utility' \
   'completion' \
+  'archive' \
   'fasd' \
-  'directory' \
   'editor' \
   'git' \
   'history' \
+  'homebrew' \
   'osx' \
   'python' \
   'ruby' \
   'spectrum' \
-  'tmux' \
   'syntax-highlighting' \
   'history-substring-search' \
   'prompt'
