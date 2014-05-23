@@ -48,6 +48,7 @@ zstyle ':prezto:load' pmodule \
   'ruby' \
   'spectrum' \
   'syntax-highlighting' \
+  'tmux' \
   'history-substring-search' \
   'prompt'
 
