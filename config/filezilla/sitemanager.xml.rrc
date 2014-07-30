@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<FileZilla3>
+    <Servers>
+        <Server>
+            <Host>nqhf111.dediseedbox.com</Host>
+            <Port>21</Port>
+            <Protocol>4</Protocol>
+            <Type>0</Type>
+            <User><%= Keychain['dediseedbox'].account %></User>
+            <Pass><%= Keychain['dediseedbox'].password %></Pass>
+            <Logontype>1</Logontype>
+            <TimezoneOffset>0</TimezoneOffset>
+            <PasvMode>MODE_DEFAULT</PasvMode>
+            <MaximumMultipleConnections>0</MaximumMultipleConnections>
+            <EncodingType>Auto</EncodingType>
+            <BypassProxy>0</BypassProxy>
+            <Name>Dedi Seedbox</Name>
+            <Comments />
+            <LocalDir>/Users/adamwalz/Downloads</LocalDir>
+            <RemoteDir />
+            <SyncBrowsing>0</SyncBrowsing>Dedi Seedbox
+        </Server>
+    </Servers>
+</FileZilla3>
