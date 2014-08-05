@@ -1,4 +1,4 @@
---- 
-github.com: 
-- oauth_token: <%= Keychain['Github'].password %>
-  user:  <%= Keychain['Github'].account %>
+---
+github.com:
+- protocol: https
+  user: <%= Keychain['Github'].account %>
