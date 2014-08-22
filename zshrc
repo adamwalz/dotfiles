@@ -2,7 +2,7 @@
 #          FILE:  zshrc
 #   DESCRIPTION:  Executes commands at the start of an interactive session
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.2
+#       VERSION:  1.0.3
 #------------------------------------------------------------------------------
 
 # Source Prezto.
@@ -12,3 +12,7 @@ fi
 
 # ========================== Customize to your needs ==========================
 
+# Source environment variables generated from OS X keychain.
+if [[ -s "${ZDOTDIR:-$HOME}/.env.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.env.zsh"
+fi

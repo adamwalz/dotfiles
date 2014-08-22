@@ -2,6 +2,7 @@
 # not be tracked publicly
 netrc
 hub
+mac-env.zsh
 
 # ignore this symlink I use for ease of directory switching
 prezto
