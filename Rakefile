@@ -203,7 +203,6 @@ module Enumerable
 end
 
 namespace :dotfiles do
-  desc('Renders, links, and cleans dotfiles')
   task :install => [:render, :link, :clean]
 
   multitask :link => [:link_dotfiles, :link_sublime]
@@ -279,9 +278,6 @@ namespace :dotfiles do
     end
   end
 
-  desc 'Uninstall dot files'
-  task :uninstall => [:unlink, :clean]
-
   multitask :unlink => [:unlink_dotfiles, :unlink_sublime]
 
   task :unlink_dotfiles do
@@ -310,7 +306,6 @@ namespace :dotfiles do
     end
   end
 
-  desc 'Unlink broken symlinks in home directory'
   task :clean do
     # Must clean entire home directory instead of only the dotfiles that this
     # script symlinked because if the link is broken that means that it is no
@@ -378,7 +373,6 @@ namespace :dotfiles do
 end
 
 namespace :gitmodule do
-  desc 'Initialize git submodules'
   task :init do
     if File.exists? '.gitmodules'
       unless command?('git')
@@ -420,7 +414,6 @@ namespace :gitmodule do
     end
   end
 
-  desc 'Make submodules'
   task :make do
     Dir["#{CONFIG_DIR_PATH}/**/Rakefile"].each do |rake_file|
       next if SCRIPT_PATH.join('/') == rake_file
@@ -461,7 +454,6 @@ namespace :gitmodule do
     end
   end
 
-  desc 'Update submodules'
   task :update do
     if File.exists? '.gitmodules'
       unless command?('git')
@@ -504,13 +496,15 @@ namespace :gitmodule do
   end
 end
 
-desc 'Install dot files'
-task :install => [
-  'gitmodule:init',
-  'dotfiles:install',
-  'gitmodule:make'
-  ] do
-    info "Backup: #{BACKUP_DIR_PATH}" if File.directory? BACKUP_DIR_PATH
-  end
+desc 'Renders, links, and cleans dotfiles'
+task :install => [ 'gitmodule:init', 'dotfiles:install', 'gitmodule:make' ] do
+  info "Backup: #{BACKUP_DIR_PATH}" if File.directory? BACKUP_DIR_PATH
+end
+
+desc 'Uninstall dot files'
+task :uninstall => [ 'dotfiles:unlink', 'dotfiles:clean' ]
+
+desc 'Unlink broken symlinks in home directory'
+task :clean => [ 'dotfiles:clean' ]
 
 task :default => [:install]
