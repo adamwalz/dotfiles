@@ -24,9 +24,7 @@ CONFIG_DIR_PATH = SCRIPT_PATH.first
 
 SUBLIME_DIR_PATH = File.join("#{CONFIG_DIR_PATH}", 'sublime')
 
-BACKUP_DIR_PATH = File.join(
-  ENV['HOME'],
-  '.dotfiles_backup',
+BACKUP_DIR_PATH = File.join(ENV['HOME'], '.dotfiles_backup',
   DateTime.now.strftime('%Y-%m-%d-%H-%M-%S'))
 
 EXCLUDES = [
@@ -233,7 +231,7 @@ namespace :dotfiles do
    task :link_sublime do
     Dir["#{SUBLIME_DIR_PATH}/*"].each do |source|
       target_relative = source.gsub "#{SUBLIME_DIR_PATH}/", ''
-      tartget_backup = File.join(BACKUP_DIR_PATH, target_relative)
+      target_backup = File.join(BACKUP_DIR_PATH, target_relative)
       preference_type = target_relative =~ /.*\(.+\).+/ ? 'Default' : 'User'
       target = File.join(sublime_package_path, preference_type, target_relative)
 
@@ -241,7 +239,7 @@ namespace :dotfiles do
         and File.ftype(target) == 'link' \
         and (File.identical?(source, target) \
           or (File.mtime(target) > File.mtime(source))))
-      link_and_backup(source, target, target_relative)
+      link_and_backup(source, target, target_backup)
     end
   end
 
