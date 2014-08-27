@@ -1,4 +1,0 @@
----
-github.com:
-- protocol: https
-  user: <%= Keychain['Github'].account %>
