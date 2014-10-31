@@ -1,0 +1,1 @@
+(setq gaff-whitespace nil)

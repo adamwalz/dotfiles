@@ -1,3 +1,12 @@
+(defun gaff-smart-open-line-above ()
+    "Insert an empty line above the current line.
+Position the cursor at it's beginning, according to the current mode."
+    (interactive)
+    (move-beginning-of-line nil)
+    (newline-and-indent)
+    (forward-line -1)
+    (indent-according-to-mode))
+
 (defvar gaff-daily-tips
   '(;"Press <C-c o> to open a file with external program."
     ;"Press <C-c p f> to navigate a project's files with ido."
