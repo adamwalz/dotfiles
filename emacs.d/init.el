@@ -51,6 +51,7 @@ by Gaff.")
 (require 'gaff-ui)
 (require 'gaff-core)
 (require 'gaff-editor)
+(require 'gaff-keybindings)
 
 ;; OSX specific settings
 (when (eq system-type 'darwin)
