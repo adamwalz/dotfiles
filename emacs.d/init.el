@@ -14,6 +14,8 @@
   "The root dir of the Garr distribution.")
 (defvar gaff-core-dir (expand-file-name "core" gaff-dir)
   "The home of Gaff's core functionality.")
+(defvar gaff-modules-dir (expand-file-name  "modules" gaff-dir)
+    "This directory houses all of the built-in Gaff's modules.")
 (defvar gaff-personal-dir (expand-file-name "personal" gaff-dir)
     "This directory is for your personal configuration.
 
@@ -27,6 +29,7 @@ by Gaff.")
 
 ;; add directories to Emacs's `load-path'
 (add-to-list 'load-path gaff-core-dir)
+(add-to-list 'load-path gaff-modules-dir)
 
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)
@@ -52,6 +55,12 @@ by Gaff.")
 ;; OSX specific settings
 (when (eq system-type 'darwin)
   (require 'gaff-osx))
+
+(message "Loading Gaff's modules...")
+
+;; the modules
+(when (file-exists-p gaff-modules-file)
+    (load gaff-modules-file))
 
 ;; config changes made through the customize UI will be store here
 (setq custom-file (expand-file-name "custom.el" gaff-personal-dir))
