@@ -6,5 +6,8 @@ config/gh
 config/gh-update
 mac-env.zsh
 
+# Machine/project specific list of zprezto modules
+pmodules
+
 # ignore this symlink I use for ease of directory switching
 prezto
