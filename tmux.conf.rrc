@@ -2,7 +2,7 @@
 #          FILE:  tmux.conf
 #   DESCRIPTION:  Configures tmux terminal multiplexer
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.0
+#       VERSION:  1.1.0
 #
 # See the following for examples:
 # - https://gist.github.com/shinzui/866897
@@ -16,6 +16,8 @@
 unbind-key C-b
 set-option -g prefix C-a
 
+<% if RUBY_PLATFORM.include? 'darwin' %>
 # Add reattach-to-user-namespace to path at launch
 # Remember to use homebrew to install `brew install reattach-to-user-namespace`
 set-option -g default-command "reattach-to-user-namespace -l zsh"
+<% end %>
