@@ -12,6 +12,11 @@ fi
 
 # ========================== Customize to your needs ==========================
 
+# Source machine specific aliases
+if [[ -s "${ZDOTDIR:-$HOME}/.aliases" ]]; then
+  source "${ZDOTDIR:-$HOME}/.aliases"
+fi
+
 # Source environment variables generated from OS X keychain.
 if [[ -s "${ZDOTDIR:-$HOME}/.env.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.env.zsh"

@@ -9,6 +9,7 @@ mac-env.zsh
 
 # Machine/project specific list of zprezto modules
 pmodules
+aliases
 
 # ignore this symlink I use for ease of directory switching
 prezto
