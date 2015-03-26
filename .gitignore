@@ -5,6 +5,7 @@ tmux.conf
 config/hub
 config/gh
 config/gh-update
+config/configstore
 mac-env.zsh
 
 # Machine/project specific list of zprezto modules
