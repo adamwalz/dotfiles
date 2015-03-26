@@ -1,1 +1,0 @@
-export MYSQL_PASSWORD="<%= Keychain['MySQL Evernote MBP'].password %>"
