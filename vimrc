@@ -2,7 +2,7 @@
 "          FILE: vimrc
 "   DESCRIPTION: Configures vim text editor
 "        AUTHOR: Adam Walz <adam@adamwalz.net>
-"       VERSION: 1.0.2
+"       VERSION: 1.0.3
 "------------------------------------------------------------------------------
 
 set encoding=utf-8
@@ -83,3 +83,38 @@ let g:ctrlp_max_height = 30
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_window_reversed = 0
 
+" use silver searcher for ctrlp
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+" unmap F1 help
+nmap <F1> <nop>
+imap <F1> <nop>
+
+" unmap ex mode: 'Type visual to go into Normal mode.'
+nnoremap Q <nop>
+
+" map . in visual mode
+vnoremap . :norm.<cr>
+
+" map git commands
+map <leader>b :Gblame<cr>
+map <leader>l :!clear && git log -p %<cr>
+map <leader>d :!clear && git diff %<cr>
+
+" map Silver Searcher
+map <leader>a :Ag!<space>
+
+" clear the command line and search highlighting
+noremap <C-l> :nohlsearch<CR>
+
+" toggle spell check with <F5>
+map <F5> :setlocal spell! spelllang=en_us<cr>
+imap <F5> <ESC>:setlocal spell! spelllang=en_us<cr>
+
+" add :Plain command for converting text to plaintext
+command! Plain execute "%s/’/'/ge | %s/[“”]/\"/ge | %s/—/-/ge"
+
+" hint to keep lines short
+if exists('+colorcolumn')
+  set colorcolumn=80
+endif

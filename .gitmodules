@@ -7,4 +7,10 @@
 [submodule "vim ctrlp"]
 	path = vim/bundle/ctrlp
 	url = https://github.com/kien/ctrlp.vim.git
+[submodule "vim ag-vim"]
+	path = vim/bundle/ag-vim
+	url = git://github.com/epmatsw/ag.vim.git
+[submodule "vim commentary"]
+	path = vim/bundle/vim-commentary
+	url = https://github.com/tpope/vim-commentary.git
 
