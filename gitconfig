@@ -43,7 +43,7 @@
   excludesfile = ~/.gitignore
   whitespace = trailing-space,space-before-tab
   quotepath = false
-  editor = subl -nw
+  editor = vim
 [format]
   numbered = auto
 [pager]

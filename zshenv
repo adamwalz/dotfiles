@@ -13,8 +13,8 @@ fi
 
 #===================================== Editor ===============================
 
-export EDITOR='/usr/local/bin/subl -n'
-export VISUAL='/usr/local/bin/subl -n'
+export EDITOR='vi -e'
+export VISUAL='vim'
 export PAGER='less'
 
 #==================================== Language ===============================
