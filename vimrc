@@ -2,7 +2,7 @@
 "          FILE: vimrc
 "   DESCRIPTION: Configures vim text editor
 "        AUTHOR: Adam Walz <adam@adamwalz.net>
-"       VERSION: 1.0.1
+"       VERSION: 1.0.2
 "------------------------------------------------------------------------------
 
 set encoding=utf-8
@@ -73,4 +73,13 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+
+" set leader key to comma
+let mapleader = ","
+
+" ctrlp config
+let g:ctrlp_map = '<leader>f'
+let g:ctrlp_max_height = 30
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_match_window_reversed = 0
 
