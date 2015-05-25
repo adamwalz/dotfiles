@@ -2,7 +2,7 @@
 #          FILE:  mac-gitignore
 #   DESCRIPTION:  Global gitignore file for OS X systems
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.1
+#       VERSION:  1.0.2
 #
 # Make sure to edit linux-gitignore and windows-gitignore if the settings
 # changed are cross-platform
@@ -79,6 +79,14 @@ tramp
 
 # flymake-mode
 *_flymake.*
+
+###################### Vim ########################
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
 
 #################### Mercurial ####################
 /.hg/*
