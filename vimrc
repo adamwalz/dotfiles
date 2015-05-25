@@ -88,6 +88,12 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
+" Removes trailing whitespace on save
+autocmd FileWritePre    * :%s/\s\+$//e
+autocmd FileAppendPre   * :%s/\s\+$//e
+autocmd FilterWritePre  * :%s/\s\+$//e
+autocmd BufWritePre     * :%s/\s\+$//e
+
 " set leader key to comma
 let mapleader = ","
 
