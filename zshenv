@@ -13,7 +13,7 @@ fi
 
 #===================================== Editor ===============================
 
-export EDITOR='vi -e'
+export EDITOR='vim'
 export VISUAL='vim'
 export PAGER='less'
 
