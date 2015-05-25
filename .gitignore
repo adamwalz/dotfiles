@@ -14,3 +14,7 @@ aliases
 
 # ignore this symlink I use for ease of directory switching
 prezto
+
+# Vim bundles managed by Vundle
+vim/bundle/
+!vim/bundle/Vundle.vim

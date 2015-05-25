@@ -2,20 +2,17 @@
 "          FILE: vimrc
 "   DESCRIPTION: Configures vim text editor
 "        AUTHOR: Adam Walz <adam@adamwalz.net>
-"       VERSION: 1.0.3
+"       VERSION: 1.1.0
 "------------------------------------------------------------------------------
 
 set encoding=utf-8
 
-" load up pathogen and all bundles
-call pathogen#infect()
-call pathogen#helptags()
-
 syntax on                         " show syntax highlighting
-filetype plugin indent on
+filetype off
 set autoindent                    " set auto indent
 set ts=2                          " set indent to 2 spaces
 set shiftwidth=2
+set backspace=indent,eol,start
 set expandtab                     " use spaces, not tab characters
 set nocompatible                  " don't need to be compatible with old vim
 set relativenumber                " show relative line numbers
@@ -35,7 +32,24 @@ set nofoldenable                  " disable code folding
 set clipboard=unnamed             " use the system clipboard
 set wildmenu                      " enable bash style tab completion
 set wildmode=list:longest,full
-runtime macros/matchit.vim        " use % to jump between start/end of methods
+
+" Set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle
+Plugin 'gmarik/Vundle.vim'
+
+" Add all the things
+Plugin 'sickill/vim-monokai'
+Plugin 'tpope/vim-fugitive'
+Plugin 'kien/ctrlp.vim'
+Plugin 'epmatsw/ag.vim'
+Plugin 'tpope/vim-commentary'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
 
 " put git status, column/row number, total lines, and percentage in status
 set statusline=%F%m%r%h%w\ %{fugitive#statusline()}\ [%l,%c]\ [%L,%p%%]
@@ -118,3 +132,4 @@ command! Plain execute "%s/’/'/ge | %s/[“”]/\"/ge | %s/—/-/ge"
 if exists('+colorcolumn')
   set colorcolumn=80
 endif
+
