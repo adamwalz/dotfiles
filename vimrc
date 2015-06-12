@@ -44,6 +44,9 @@ Plugin 'gmarik/Vundle.vim'
 
 " Add all the things
 Plugin 'sickill/vim-monokai'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'jpo/vim-railscasts-theme'
+Plugin 'Lokaltog/vim-distinguished'
 Plugin 'tpope/vim-fugitive'
 Plugin 'kien/ctrlp.vim'
 Plugin 'epmatsw/ag.vim'
