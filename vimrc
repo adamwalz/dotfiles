@@ -8,7 +8,6 @@
 set encoding=utf-8
 
 syntax on                         " show syntax highlighting
-filetype off
 set autoindent                    " set auto indent
 set ts=2                          " set indent to 2 spaces
 set shiftwidth=2
@@ -32,6 +31,9 @@ set nofoldenable                  " disable code folding
 set clipboard=unnamed             " use the system clipboard
 set wildmenu                      " enable bash style tab completion
 set wildmode=list:longest,full
+set sessionoptions+=tabpages,globals " remember tab names when you save session
+
+filetype off
 
 " Set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -46,6 +48,9 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'kien/ctrlp.vim'
 Plugin 'epmatsw/ag.vim'
 Plugin 'tpope/vim-commentary'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-session'
+Plugin 'gcmt/taboo.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -79,6 +84,9 @@ if version >= 700
   au InsertEnter * hi StatusLine ctermfg=235 ctermbg=2
   au InsertLeave * hi StatusLine ctermbg=240 ctermfg=12
 endif
+
+" Don't autosave vim session
+let g:session_autosave = 'no'
 
 " highlight trailing spaces in annoying red
 highlight ExtraWhitespace ctermbg=1 guibg=red
