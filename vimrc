@@ -48,7 +48,11 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'kien/ctrlp.vim'
 Plugin 'epmatsw/ag.vim'
 Plugin 'tpope/vim-commentary'
+Plugin 'Raimondi/delimitMate'
 Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'marijnh/tern_for_vim'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
 Plugin 'gcmt/taboo.vim'
@@ -115,6 +119,9 @@ let g:ctrlp_match_window_reversed = 0
 " use silver searcher for ctrlp
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 
+" line splitting
+imap <C-c> <CR><Esc>O
+
 " unmap F1 help
 nmap <F1> <nop>
 imap <F1> <nop>
@@ -142,6 +149,17 @@ map <leader>a :Ag!<space>
 
 " clear the command line and search highlighting
 noremap <C-l> :nohlsearch<CR>
+
+" Syntastic syntax checking plugin
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_html_checkers = ['']
 
 " toggle spell check with <F5>
 map <F5> :setlocal spell! spelllang=en_us<cr>
