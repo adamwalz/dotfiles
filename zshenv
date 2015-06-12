@@ -92,9 +92,3 @@ if [[ -d "$TMPDIR" ]]; then
     mkdir -p "$TMPPREFIX"
   fi
 fi
-
-#=================================== Boxen ====================================
-# Will reset PATH if boxen is installed
-if [[ -s /opt/boxen/env.sh ]]; then
-  source /opt/boxen/env.sh
-fi
