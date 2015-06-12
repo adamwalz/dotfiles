@@ -6,6 +6,7 @@ config/hub
 config/gh
 config/gh-update
 config/configstore
+config/browser-launcher2
 mac-env.zsh
 
 # Machine/project specific list of zprezto modules
