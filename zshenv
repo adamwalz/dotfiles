@@ -76,7 +76,6 @@ path=(
   /usr/local/{bin,sbin}
   /usr/{bin,sbin}
   /{bin,sbin}
-  $HOME/.rvm/{bin,sbin}
   $path
 )
 
