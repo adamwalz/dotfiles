@@ -17,5 +17,6 @@ aliases
 prezto
 
 # Vim bundles managed by Vundle
-vim/bundle/
-!vim/bundle/Vundle.vim
+/vim/bundle/*
+/vim/bundle/*/
+!/vim/bundle/Vundle.vim/
