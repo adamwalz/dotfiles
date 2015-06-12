@@ -48,6 +48,9 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'kien/ctrlp.vim'
 Plugin 'epmatsw/ag.vim'
 Plugin 'tpope/vim-commentary'
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'pangloss/vim-javascript'
+Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'Raimondi/delimitMate'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
@@ -56,6 +59,11 @@ Plugin 'marijnh/tern_for_vim'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
 Plugin 'gcmt/taboo.vim'
+Plugin 'othree/javascript-libraries-syntax.vim'
+Plugin 'honza/vim-snippets'
+Plugin 'matthewsimo/angular-vim-snippets'
+Plugin 'claco/jasmine.vim'
+Plugin 'burnettk/vim-angular'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -106,6 +114,9 @@ autocmd FileWritePre    * :%s/\s\+$//e
 autocmd FileAppendPre   * :%s/\s\+$//e
 autocmd FilterWritePre  * :%s/\s\+$//e
 autocmd BufWritePre     * :%s/\s\+$//e
+
+" Set code folding for javascript files useing jelera/vim-javascript-syntax
+autocmd FileType javascript call JavaScriptFold()
 
 " set leader key to comma
 let mapleader = ","
@@ -164,6 +175,9 @@ let g:syntastic_html_checkers = ['']
 " toggle spell check with <F5>
 map <F5> :setlocal spell! spelllang=en_us<cr>
 imap <F5> <ESC>:setlocal spell! spelllang=en_us<cr>
+
+" AngularJS Stuff
+let g:used_javascript_libs = 'angularjs,underscore,angularui,jasmine,chai'
 
 " add :Plain command for converting text to plaintext
 command! Plain execute "%s/’/'/ge | %s/[“”]/\"/ge | %s/—/-/ge"
