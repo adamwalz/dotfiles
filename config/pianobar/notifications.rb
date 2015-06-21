@@ -33,20 +33,9 @@ album  = data[:album]
 
 heart = "<3" if data[:rating] == '1'
 
-# The AppleScript for creating the growl notification
+# The AppleScript for using OS X notification center
 script = <<-END
-tell application "System Events"
-	set isRunning to (count of (every process whose bundle identifier is "com.Growl.GrowlHelperApp")) > 0
-end tell
-
-if isRunning then
-	tell application id "com.Growl.GrowlHelperApp"
-		register as application "Pianobar" all notifications {"Now Playing"} default notifications {"Now Playing"} icon of application "iTunes.app"
-
-		notify with name "Now Playing" title "#{song} #{heart}" description "by #{artist}\non #{album}" application name "Pianobar"
-
-	end tell
-end if
+display notification "by #{artist} on #{album}" with title "Now Playing" subtitle "#{song} #{heart}"
 END
 
 # Sometimes the stupid shellwords stuff shits a brick on unicode.
