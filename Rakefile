@@ -213,7 +213,7 @@ namespace :dotfiles do
 
       target_relative = source.gsub "#{CONFIG_DIR_PATH}/", ''
       # Remove platform specifier from dotfile
-      target_relative.gsub! /\A(mac|windows|linux)-/, ''
+      target_relative.gsub!(/\A(mac|windows|linux)-/, '')
 
       target_backup = File.join(BACKUP_DIR_PATH, target_relative)
       target = File.join(ENV['HOME'], ".#{target_relative}")
@@ -288,7 +288,7 @@ namespace :dotfiles do
       #link_relative = source.gsub("#{CONFIG_DIR_PATH}/", '')
       link_relative = File.basename(source)
       # Remove platform specifier from dotfile
-      link_relative.gsub! /\A(mac|windows|linux)-/, ''
+      link_relative.gsub!(/\A(mac|windows|linux)-/, '')
 
       link = File.join(ENV['HOME'], ".#{link_relative}")
       next if source =~ RAW_FILE_EXTENSION_REGEXP or excluded?(link_relative)
