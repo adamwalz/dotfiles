@@ -495,7 +495,10 @@ namespace :gitmodule do
 end
 
 desc 'Renders, links, and cleans dotfiles'
-task :install => [ 'gitmodule:init', 'dotfiles:install', 'gitmodule:make' ] do
+task :install => [ 'dotfiles:install' ] do
+  # Note: this task previously also ran gitmodules:init and gitmodules:make
+  # but these subtasks were removed because they weren't used. Add them
+  # back if there becomes a point where gitmodules are necessary
   info "Backup: #{BACKUP_DIR_PATH}" if File.directory? BACKUP_DIR_PATH
 end
 
