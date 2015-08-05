@@ -37,6 +37,7 @@ EXCLUDES = [
   'install.sh',
   'brew',
   'sublime',
+  'iterm2',
   'pythons' ,
   'README.md',
   /.*~$/,
