@@ -20,4 +20,5 @@ prezto
 /vim/bundle/*
 /vim/bundle/*/
 !/vim/bundle/Vundle.vim/
+/vim/sessions/*
 /vim/spell/*.spl
