@@ -16,6 +16,7 @@ fi
 export EDITOR='vim'
 export VISUAL='vim'
 export PAGER='less'
+export KEYTIMEOUT=1
 
 #==================================== Language ===============================
 
