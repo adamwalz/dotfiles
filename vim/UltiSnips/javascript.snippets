@@ -1,0 +1,45 @@
+snippet fun "Javascript function"
+function ${1:name}($2) {
+  $0
+}
+endsnippet
+
+snippet export "CommonJS module export"
+export ${2:default} $0
+endsnippet
+
+snippet desc "Mocha test suite description"
+describe('${1:Unit Tests:}', function() {
+  $2
+})
+endsnippet
+
+snippet before "Hook to run before the mocha test suite"
+before(function($1) {
+  $2
+})
+endsnippet
+
+snippet after "Hook to run after the mocha test suite"
+after(function($1) {
+  $2
+})
+endsnippet
+
+snippet beforeEach "Hook to run before each mocha test case"
+beforeEach(function($1) {
+  $2
+})
+endsnippet
+
+snippet afterEach "Hook to run after each mocha test case"
+afterEach(function($1) {
+  $2
+})
+endsnippet
+
+snippet it "Mocha test case"
+it('${1:should }', function(${2:done}) {
+  $3
+})
+endsnippet
