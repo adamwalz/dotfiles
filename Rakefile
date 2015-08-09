@@ -2,7 +2,7 @@
 #          FILE:  Rakefile
 #   DESCRIPTION:  Installs and uninstalls dot configuaration files.
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.1.0
+#       VERSION:  1.1.1
 #------------------------------------------------------------------------------
 
 require 'date'
@@ -222,9 +222,8 @@ namespace :dotfiles do
             or (source =~ /#{CONFIG_DIR_PATH}\/linux-.+/ and not Platform.linux?) \
             or (source =~ /#{CONFIG_DIR_PATH}\/windows-.+/ and not Platform.windows?))
 
-      target_relative = source.gsub "#{CONFIG_DIR_PATH}/", ''
       # Remove platform specifier from dotfile
-      target_relative.gsub!(/\A(mac|windows|linux)-/, '')
+      target_relative = File.basename(source).gsub(/^(mac|windows|linux)-/, '')
 
       target_backup = File.join(BACKUP_DIR_PATH, target_relative)
       target = File.join(ENV['HOME'], ".#{target_relative}")
@@ -235,15 +234,17 @@ namespace :dotfiles do
       or (File.exists?(target) \
         and File.ftype(target) == 'link' \
         and File.identical?(source, target))
-      link_and_backup source, target, target_backup
+      link_and_backup(source, target, target_backup)
     end
   end
 
    task :link_sublime do
+    PLATFORM_PREF_REGEX = /^Preferences \((OSX|Windows|Linux)\)\.sublime-settings$/
     Dir["#{SUBLIME_DIR_PATH}/*"].each do |source|
-      target_relative = source.gsub "#{SUBLIME_DIR_PATH}/", ''
+      target_relative = File.basename(source)
       target_backup = File.join(BACKUP_DIR_PATH, target_relative)
-      preference_type = target_relative =~ /.*\(.+\).+/ ? 'Default' : 'User'
+
+      preference_type = target_relative =~ PLATFORM_PREF_REGEX ? 'Default' : 'User'
       target = File.join(sublime_package_path, preference_type, target_relative)
 
       next if (File.exists?(target) \
@@ -296,20 +297,18 @@ namespace :dotfiles do
             or (source =~ /#{CONFIG_DIR_PATH}\/linux-.+/ and not Platform.linux?) \
             or (source =~ /#{CONFIG_DIR_PATH}\/windows-.+/ and not Platform.windows?))
 
-      #link_relative = source.gsub("#{CONFIG_DIR_PATH}/", '')
-      link_relative = File.basename(source)
       # Remove platform specifier from dotfile
-      link_relative.gsub!(/\A(mac|windows|linux)-/, '')
+      link_relative = File.basename(source).gsub(/^(mac|windows|linux)-/, '')
 
       link = File.join(ENV['HOME'], ".#{link_relative}")
       next if source =~ RAW_FILE_EXTENSION_REGEXP or excluded?(link_relative)
-      unlink link
+      unlink(link)
     end
   end
 
   task :unlink_sublime do
     Dir["#{sublime_package_path}/**/*"].each do |symlink|
-      link_relative = File.basename symlink
+      link_relative = File.basename(symlink)
       next if symlink =~ RAW_FILE_EXTENSION_REGEXP or excluded?(link_relative)
       unlink symlink
     end
