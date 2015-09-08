@@ -212,6 +212,10 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
+" Set code folding method and open all folds by defailt
+autocmd Syntax javascript,html setlocal foldmethod=syntax
+autocmd Syntax javascript,html normal zR
+
 " Removes trailing whitespace on save
 autocmd FileWritePre    * :%s/\s\+$//e
 autocmd FileAppendPre   * :%s/\s\+$//e
@@ -329,7 +333,7 @@ let g:syntastic_html_checkers = ['']
 
 " pangloss/vim-javascript
 let g:javascript_enable_domhtmlcss = 1 " Enables HTML/CSS syntax highlighting
-let g:javascript_conceal_function  = "ƒ"
+let b:javascript_fold = 1
 
 " othree/javascript-libraries-syntax.vim
 let g:used_javascript_libs = 'angularjs,angularui,underscore,jasmine,chai'
