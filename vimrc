@@ -107,6 +107,8 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'jpo/vim-railscasts-theme'
 Plugin 'Lokaltog/vim-distinguished'
 Plugin 'sjl/badwolf'
+Plugin 'marcus/vim-mustang'
+Plugin 'goatslacker/mango.vim'
 
 " Git
 Plugin 'tpope/vim-fugitive'
