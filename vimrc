@@ -222,7 +222,7 @@ autocmd BufWinLeave * call clearmatches()
 
 " Set code folding method and open all folds by defailt
 autocmd Syntax javascript,html setlocal foldmethod=syntax
-autocmd Syntax javascript,html normal zR
+autocmd BufRead * normal zR
 
 " Removes trailing whitespace on save
 autocmd FileWritePre    * :%s/\s\+$//e
@@ -323,9 +323,10 @@ let g:UtilSnipsJumpForwardTrigger = '<tab>'
 let g:UtilSnipsJumpBackwardTrigger = '<s-tab>'
 let g:ycm_key_list_select_completion = ['<C-j', '<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-k', '<C-p>', '<Up>']
+let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 
 " scrooloose/syntastic (syntax checking)
-let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_html_checkers = []
 let g:syntastic_check_on_open = 1
 let g:syntastic_enable_signs=1
@@ -334,7 +335,7 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
+let g:syntastic_auto_loc_list = 2 " error window will not automatically open
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_html_checkers = ['']
