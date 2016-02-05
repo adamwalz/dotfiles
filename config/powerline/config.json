@@ -1,0 +1,17 @@
+{
+  "common": {
+    "term_truecolor": true,
+    "dividers": {
+      "left": {
+        "hard": " ",
+        "soft": " "
+      },
+      "right": {
+        "hard": " ",
+        "soft": " "
+      }
+    },
+    "spaces": 1,
+    "log_file": "~/Library/Logs/Powerline/powerline.log"
+  }
+}
