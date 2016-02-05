@@ -114,6 +114,7 @@ Plugin 'goatslacker/mango.vim'
 Plugin 'tpope/vim-fugitive'
 
 " Tmux
+
 Plugin 'benmills/vimux'
 Plugin 'christoomey/vim-tmux-navigator'
 
@@ -121,6 +122,8 @@ Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'kien/ctrlp.vim'
 Plugin 'epmatsw/ag.vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'airblade/vim-gitgutter'
 
 " Syntax checking
 Plugin 'scrooloose/syntastic'
