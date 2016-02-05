@@ -1,0 +1,11 @@
+{
+  "libs": [
+    "ecma6",
+    "chai",
+    "underscore"
+  ],
+  "loadEagerly": [],
+  "plugins": {
+    "node": {}
+  }
+}
