@@ -154,6 +154,8 @@ Plugin 'othree/yajs.vim'          " Javascript syntax highlighting
 Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'matthewsimo/angular-vim-snippets'
 Plugin 'burnettk/vim-angular'
+Plugin 'moll/vim-node'
+Plugin 'guileen/vim-node-dict'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -342,6 +344,9 @@ let b:javascript_fold = 1
 
 " othree/javascript-libraries-syntax.vim
 let g:used_javascript_libs = 'angularjs,angularui,underscore,jasmine,chai'
+
+" guileen/vim-node-dict
+au FileType javascript set dictionary+=$HOME/.vim/dict/node.dict
 
 augroup spell_check
   au!
