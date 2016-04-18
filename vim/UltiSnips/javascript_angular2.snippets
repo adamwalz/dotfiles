@@ -1,0 +1,55 @@
+snippet @Component "Angular2 component" b
+@Component({
+	selector: '${2:selector}',
+	template: ${3:template},
+	directives: [$4],
+	pipes: [$5],
+})
+export class $1Component {
+	constructor() {}
+	$0
+}
+endsnippet
+
+snippet @Component "Angular2 application component" b
+@Component({
+	selector: '${1:selector}',
+	template: ${2:template},
+	directives: [${3:ROUTER_DIRECTIVES}],
+	providers: [${4:HTTP_PROVIDERS, ROUTER_PROVIDERS}]
+	pipes: [$5],
+})
+@RouterConfig([
+	$0
+])
+export class AppComponent {}
+endsnippet
+
+snippet @Injectable "Angular2 Service" b
+@Injectable()
+export class $1Service {
+	$0
+	constructor() {}
+}
+endsnippet
+
+snippet @RouteConfig "Angular2 route config" b
+@RouteConfig([
+	{ path: '/$1', as: '$2', component: ${2/\w+\s*/\u$0/}Component, name: ${2/\w+\s*/\u$0/}${3:, useAsDefault: true}},$0
+])
+endsnippet
+
+snippet route "Angular2 route definition" b
+{ path: '/$1', as: '$2', component: ${2/\w+\s*/\u$0/}Component, name: ${2/\w+\s*/\u$0/}},$0
+endsnippet
+
+snippet subscribe "Angular2 Observable subscribe"
+this.${1:service}.${2:aFunction}
+	.subscribe(${3:arg} => this.${4:property} = $3)
+endsnippet
+
+snippet bootstrap "Angular2 bootrapping" b
+	bootstrap(${1:App}Component, [])
+		.then(success => console.log('Bootrap success'))
+		.catch(err => console.log(err))
+endsnippet
