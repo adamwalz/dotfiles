@@ -1,0 +1,106 @@
+#!/bin/bash
+#------------------------------------------------------------------------------
+#          FILE:  dotfiles
+#   DESCRIPTION:  Script to clone and install all dotfiles from github
+#        AUTHOR:  Adam Walz <adam@adamwalz.net>
+#       VERSION:  1.0.0
+#------------------------------------------------------------------------------
+
+SCRIPT_NAME=$( basename "$0" )
+CONFIG_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+usage() {
+  echo "Use like this"
+}
+
+err() {
+  echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: \033[31m$*\033[0m" >&2
+}
+
+info() {
+  echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: \033[34m$*\033[0m" >&2
+}
+
+log() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*"
+}
+
+platform() {
+  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    echo 'linux'
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    echo 'mac'
+  elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+    echo 'windows'
+  elif [[ "$OSTYPE" == "freebsd"* ]]; then
+    echo 'freebsd'
+  fi
+}
+
+compile_config_templates() {
+  :
+}
+
+link_dotfiles() {
+  local target_relative
+  for source in ${CONFIG_DIR_PATH}/*; do
+    set "$source"
+    if [[ "$1" =~ ${CONFIG_DIR_PATH}/mac-.* && $(platform) != 'mac' ]]; then
+      continue
+    elif [[ "$1" =~ ${CONFIG_DIR_PATH}/linux-.* && $(platform) != 'linux' ]]; then
+      continue
+    elif [[ "$1" =~ ${CONFIG_DIR_PATH}/windows-.* && $(platform) != 'windows' ]]; then
+      continue
+    elif [[ "$1" =~ ${CONFIG_DIR_PATH}/freebsd-.* && $(platform) != 'freebsd' ]]; then
+      continue
+    fi
+
+    target_relative=$(basename "$1")
+
+    log " === $target_relative ==="
+  done
+}
+
+unlink_dotfiles() {
+  :
+}
+
+clean() {
+  echo "Cleaning"
+  echo "$@"
+}
+
+install() {
+  link_dotfiles
+}
+
+uninstall() {
+  echo "Uninstalling"
+}
+
+main() {
+  if [[ $# -gt 0 ]]; then
+    cmd="$1"
+    case $cmd in
+      install)
+        shift # past command
+        install
+        ;;
+      uninstall)
+        shift # past command
+        uninstall
+        ;;
+      clean)
+        shift # past command
+        clean "$@"
+        ;;
+      *)
+        usage
+        ;;
+    esac
+  else
+    usage
+  fi
+}
+
+main "$@"
