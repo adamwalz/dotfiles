@@ -1,0 +1,59 @@
+{
+  "segments": {
+    "right": [
+      {
+        "function": "powerline.segments.common.env.user",
+        "priority": 50
+      }, {
+        "function": "powerline.segments.common.net.hostname",
+        "priority": 50,
+        "args": {
+          "only_if_ssh": true
+        }
+      }, {
+        "name": "adamwalz_net_mail",
+        "function": "powerline.segments.common.mail.email_imap_alert",
+        "priority": 45,
+        "args": {
+          "username": "<%= Keychain['Gmail Tmux Powerline'].account %>",
+          "password": "<%= Keychain['Gmail Tmux Powerline'].password %>",
+          "max_msgs": 5,
+          "interval": 600
+        }
+      }, {
+        "name": "mangabi_mail",
+        "function": "powerline.segments.common.mail.email_imap_alert",
+        "priority": 45,
+        "args": {
+          "username": "<%= Keychain['Gmail Mangabi Tmux Powerline'].account %>",
+          "password": "<%= Keychain['Gmail Mangabi Tmux Powerline'].password %>",
+          "max_msgs": 5,
+          "interval": 600
+        }
+      }, {
+        "function": "powerline.segments.common.sys.cpu_load_percent",
+        "priority": 10
+      }, {
+        "function": "powerline.segments.common.sys.uptime",
+        "priority": 60
+      }, {
+        "function": "powerline.segments.common.time.date",
+        "priority": 70
+      }, {
+        "function": "powerline.segments.common.time.date",
+        "name": "time",
+        "args": {
+          "format": "%I:%M%p",
+          "istime": true
+        },
+        "priority": 40
+      }, {
+        "function": "powerline.segments.common.wthr.weather",
+        "args": {
+          "location_query": "Sandy, UT, USA"
+        },
+        "priority": 80
+      }
+    ]
+  }
+}
