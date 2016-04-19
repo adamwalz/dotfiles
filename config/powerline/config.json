@@ -1,7 +1,8 @@
 {
   "common": {
     "term_truecolor": false,
-    "default_top_theme": "default"
+    "default_top_theme": "default",
+    "log_file": "~/Library/Logs/Powerline/powerline.log"
   },
   "ext": {
     "tmux": {
