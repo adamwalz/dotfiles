@@ -9,6 +9,7 @@ config/configstore
 config/browser-launcher2
 config/gcloud
 mac-env.zsh
+config/powerline/themes/tmux/default.json
 
 # Machine/project specific list of zprezto modules
 pmodules
