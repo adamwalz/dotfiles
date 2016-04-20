@@ -42,6 +42,11 @@
           "minimum": 2
         }
       }, {
+        "function": "powerline.segments.common.bat.battery",
+        "args": {
+          "gamify": true
+        }
+      }, {
         "function": "powerline.segments.common.time.date",
         "priority": 70
       }, {
