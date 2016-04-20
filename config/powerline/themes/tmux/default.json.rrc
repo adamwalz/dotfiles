@@ -37,6 +37,11 @@
         "function": "powerline.segments.common.sys.uptime",
         "priority": 60
       }, {
+        "function": "powerline.segments.tmux.attached_clients",
+        "args": {
+          "minimum": 2
+        }
+      }, {
         "function": "powerline.segments.common.time.date",
         "priority": 70
       }, {
