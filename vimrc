@@ -164,6 +164,10 @@ Plugin 'burnettk/vim-angular'
 Plugin 'moll/vim-node'
 Plugin 'guileen/vim-node-dict'
 
+" Python
+Plugin 'tmhedberg/SimpylFold'
+Plugin 'klen/python-mode'
+
 " Latex
 Plugin 'xuhdev/vim-latex-live-preview'
 
