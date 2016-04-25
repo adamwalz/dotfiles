@@ -20,3 +20,10 @@
     done
   fi
 } &!
+
+# Print a random, hopefully interesting, adage.
+if (( $+commands[fortune] && $+commands[cowsay] && $+commands[lolcat] )); then
+  if [[ -t 0 || -t 1 ]]; then
+    fortune ~/.tilde/share/fortunes/zen | cowsay | lolcat
+  fi
+fi
