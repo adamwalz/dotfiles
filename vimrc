@@ -421,6 +421,7 @@ augroup file_type " autocommand group for setting filetype by extension
   au BufRead,BufNewFile *.es6 setfiletype javascript
   au BufRead,BufNewFile *.tex,*.cls setfiletype tex
   au BufRead,BufNewFile *.template setfiletype json
+  au BufRead,BufNewFile *.env setfiletype config
 augroup END
 
 augroup update_time " autocommand group for setting update time
