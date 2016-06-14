@@ -317,7 +317,8 @@ let g:ctrlp_switch_buffer = 'e' " Jump to an already opened window instead of cr
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 
 " scrooloose/nerdtree
-let NERDTreeQuitOnOpen=1
+let NERDTreeQuitOnOpen = 1
+let NERDTreeIgnore = ['\.pyc$', '\.egg-info$']
 map <C-n> :NERDTreeToggle<CR>
 augroup nerdtree
   au!
@@ -364,6 +365,8 @@ let g:ycm_use_ultisnips_completer = 1
 " scrooloose/syntastic (syntax checking)
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_html_checkers = []
+let g:syntastic_python_checkers=['flake8']
+let g:syntastic_python_flake8_args='--ignore=E501,E225'
 let g:syntastic_check_on_open = 1
 let g:syntastic_enable_signs=1
 set statusline+=%#warningmsg#
@@ -382,6 +385,9 @@ let b:javascript_fold = 1
 
 " othree/javascript-libraries-syntax.vim
 let g:used_javascript_libs = 'angularjs,angularui,underscore,jasmine,chai'
+
+" klen/python-mode
+let g:pymode_lint_checkers = []
 
 " xuhdev/vim-latex-live-preview
 let g:livepreview_previewer = 'open -a Preview'
