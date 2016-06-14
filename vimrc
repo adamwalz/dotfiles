@@ -130,6 +130,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'majutsushi/tagbar'
+Plugin 'wesQ3/vim-windowswap'
 
 " Undolist navigation
 Plugin 'sjl/gundo.vim'
