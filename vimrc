@@ -298,6 +298,7 @@ if exists('+colorcolumn')
   augroup colorcolumn
     au!
     au FileType gitcommit setlocal colorcolumn=72
+    au FileType python setlocal colorcolumn=80,100
   augroup END
 endif
 
