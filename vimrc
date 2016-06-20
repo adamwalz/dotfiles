@@ -424,6 +424,11 @@ augroup file_type " autocommand group for setting filetype by extension
   au BufRead,BufNewFile *.env setfiletype config
 augroup END
 
+augroup epandtabs " autocommand group for setting expandtab by filetype
+  au!
+  au FileType sshconfig setlocal noexpandtab
+augroup END
+
 augroup update_time " autocommand group for setting update time
   au!
   au Filetype tex setl updatetime=1000
