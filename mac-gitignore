@@ -111,6 +111,7 @@ tmtags
 
 #################### VirtualEnv ####################
 .Python
+.python-version
 .ropeproject
 
 #################### Vim ####################
