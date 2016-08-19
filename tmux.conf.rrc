@@ -76,6 +76,7 @@ bind-key -n Home choose-tree
 # tmux prefix
 unbind-key C-b
 set-option -g prefix C-j
+bind-key j send-prefix
 
 # copy with 'enter' or 'y' and send to mac os clipboard: http://goo.gl/2Bfn8
 <% if RUBY_PLATFORM.include? 'darwin' %>
