@@ -111,6 +111,7 @@ tmtags
 
 #################### VirtualEnv ####################
 .Python
+.ropeproject
 
 #################### Vim ####################
 Session.vim
