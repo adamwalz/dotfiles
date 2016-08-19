@@ -154,9 +154,6 @@ set-option -g pane-border-bg black
 # Status Bar
 ###########################
 
-# enable UTF-8 support in status bar
-set-option -g status-utf8 on
-
 # enable vim key bindings
 set-option -g status-keys vi
 
