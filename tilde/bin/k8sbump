@@ -1,0 +1,12 @@
+#!/bin/bash
+set -x
+
+tag="$1"
+version="$2"
+registry="654415022833.dkr.ecr.us-west-2.amazonaws.com"
+
+docker build -t ${tag}:latest .
+docker tag ${tag}:latest ${tag}:${version}
+
+docker tag ${tag}:latest ${registry}/${tag}:${version}
+docker push ${registry}/${tag}:${version}
