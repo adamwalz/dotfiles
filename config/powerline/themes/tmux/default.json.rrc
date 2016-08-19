@@ -21,13 +21,13 @@
           "interval": 600
         }
       }, {
-        "name": "mangabi_mail",
+        "name": "butter_mail",
         "function": "powerline.segments.common.mail.email_imap_alert",
         "priority": 45,
         "args": {
           "username": "<%= Keychain['Gmail Mangabi Tmux Powerline'].account %>",
           "password": "<%= Keychain['Gmail Mangabi Tmux Powerline'].password %>",
-          "max_msgs": 5,
+          "max_msgs": 10,
           "interval": 600
         }
       }, {
