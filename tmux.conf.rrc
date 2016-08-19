@@ -111,6 +111,10 @@ bind-key ^J select-pane -t :.+
 bind-key -n S-right next
 bind-key -n S-left prev
 
+# moving windows
+bind-key -n C-S-right swap-window -t +1
+bind-key -n C-S-left swap-window -t -1
+
 # cycling sessions
 bind-key -n S-Up switch-client -p
 bind-key -n S-Down switch-client -n
