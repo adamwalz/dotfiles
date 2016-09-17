@@ -111,10 +111,6 @@ Plugin 'pangloss/vim-javascript'  " Javascript syntax and indent plugins
 " Git
 Plugin 'tpope/vim-fugitive'
 
-" Tmux
-Plugin 'benmills/vimux'
-Plugin 'christoomey/vim-tmux-navigator'
-
 " File Navigation
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'epmatsw/ag.vim'
