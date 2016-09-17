@@ -126,10 +126,6 @@ Plugin 'sjl/gundo.vim'
 " Syntax checking
 Plugin 'scrooloose/syntastic'
 
-" Sessions
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-session'
-
 " Tabs
 Plugin 'mkitt/tabline.vim'
 Plugin 'gcmt/taboo.vim'
