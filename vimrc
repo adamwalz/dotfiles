@@ -126,10 +126,6 @@ Plugin 'sjl/gundo.vim'
 " Syntax checking
 Plugin 'scrooloose/syntastic'
 
-" Tabs
-Plugin 'mkitt/tabline.vim'
-Plugin 'gcmt/taboo.vim'
-
 " Insert Mode
 " General
 Plugin 'tpope/vim-commentary'
