@@ -108,11 +108,11 @@ Plugin 'sickill/vim-monokai'
 Plugin 'tpope/vim-fugitive'
 
 " File Navigation
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'epmatsw/ag.vim'
-Plugin 'scrooloose/nerdtree'
+Plugin 'ctrlpvim/ctrlp.vim' " Full path fuzzy file, buffer, mru, tag finder
+Plugin 'rking/ag.vim' " front for ag, A.K.A. the_silver_searcher
+Plugin 'scrooloose/nerdtree' " presents the filesystem in the form of a tree
 Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'airblade/vim-gitgutter'
+Plugin 'airblade/vim-gitgutter' " shows a git diff in the 'gutter'
 Plugin 'majutsushi/tagbar'
 Plugin 'wesQ3/vim-windowswap'
 
@@ -124,8 +124,8 @@ Plugin 'scrooloose/syntastic'
 
 " Insert Mode
 " General
-Plugin 'tpope/vim-commentary'
-Plugin 'Raimondi/delimitMate'
+Plugin 'tpope/vim-commentary' " Comment out stuff
+Plugin 'Raimondi/delimitMate' " automatic closing of quotes, parenthesis, brackets
 Plugin 'ervandew/supertab'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'SirVer/ultisnips'
