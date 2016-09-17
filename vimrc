@@ -157,7 +157,7 @@ filetype plugin indent on    " required
 set statusline=%F%m%r%h%w\ %{fugitive#statusline()}\ [%l,%c]\ [%L,%p%%]
 
 " Use powerline statusbar if available
-set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim/
+set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
 
 " set up some custom colors
 highlight clear SignColumn
