@@ -102,4 +102,7 @@
   trustExitCode = true
 
 [gerrit]
-	createchangeid = true
+  createchangeid = true
+
+[gpg]
+  program = /usr/local/bin/gpg
