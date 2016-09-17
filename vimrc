@@ -103,12 +103,6 @@ Plugin 'gmarik/Vundle.vim'
 
 " Colorschemes
 Plugin 'sickill/vim-monokai'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'jpo/vim-railscasts-theme'
-Plugin 'Lokaltog/vim-distinguished'
-Plugin 'sjl/badwolf'
-Plugin 'marcus/vim-mustang'
-Plugin 'goatslacker/mango.vim'
 
 " Syntax
 Plugin 'Matt-Deacalion/vim-systemd-syntax'
