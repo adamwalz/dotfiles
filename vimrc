@@ -104,10 +104,6 @@ Plugin 'gmarik/Vundle.vim'
 " Colorschemes
 Plugin 'sickill/vim-monokai'
 
-" Syntax
-Plugin 'Matt-Deacalion/vim-systemd-syntax' " Syntax highlighting for systemd config files
-Plugin 'pangloss/vim-javascript'  " Javascript syntax and indent plugins
-
 " Git
 Plugin 'tpope/vim-fugitive'
 
@@ -140,6 +136,7 @@ Plugin 'mattn/emmet-vim'
 
 " Javascript
 Plugin 'marijnh/tern_for_vim'     " Lookup js references under cursor
+Plugin 'pangloss/vim-javascript'  " Javascript syntax and indent plugins
 
 " Python
 Plugin 'tmhedberg/SimpylFold'
@@ -147,6 +144,9 @@ Plugin 'klen/python-mode'
 
 " Latex
 Plugin 'xuhdev/vim-latex-live-preview'
+
+" Systemd
+Plugin 'Matt-Deacalion/vim-systemd-syntax'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
