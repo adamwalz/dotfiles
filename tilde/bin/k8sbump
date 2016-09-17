@@ -1,12 +1,31 @@
 #!/bin/bash
-set -x
 
-tag="$1"
-version="$2"
-registry="654415022833.dkr.ecr.us-west-2.amazonaws.com"
+ECR_REGISTRY="654415022833.dkr.ecr.us-west-2.amazonaws.com"
+IMAGES_WITH_ENV=(bots butter-answer crud etl slack-rtm)
 
-docker build -t ${tag}:latest .
-docker tag ${tag}:latest ${tag}:${version}
+image="$1"
+tag="$2"
 
-docker tag ${tag}:latest ${registry}/${tag}:${version}
-docker push ${registry}/${tag}:${version}
+array_contains () {
+    local array="$1[@]"
+    local seeking=$2
+    local in=1
+    for element in "${!array}"; do
+        if [[ $element == "$seeking" ]]; then
+            in=0
+            break
+        fi
+    done
+    return $in
+}
+
+# if array_contains "${IMAGES_WITH_ENV[@]}" "$image"; then
+if array_contains IMAGES_WITH_ENV "$image"; then
+  echo Building with docker build args: ENV=production
+  docker build -t "${ECR_REGISTRY}/${image}:${tag}" --build-arg ENV=production .
+else
+  echo Building with docker build args: None
+  docker build -t "${ECR_REGISTRY}/${image}:${tag}" .
+fi
+
+docker push "${ECR_REGISTRY}/${image}:${tag}"
