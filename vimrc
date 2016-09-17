@@ -81,7 +81,7 @@ set magic                            " better searching
 set clipboard=unnamed                " use the system clipboard
 set sessionoptions+=tabpages,globals " remember tab names when you save session
 
-set foldlevelstart=0
+set foldlevelstart=20
 set foldenable                       " enable code folding
 
 set splitbelow                       " split current window below
@@ -217,8 +217,13 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 au BufWinLeave * call clearmatches()
 
 " Set code folding method and open all folds by defailt
-au Syntax javascript,html setlocal foldmethod=syntax
-au BufRead * normal zR
+augroup foldmethod " autocommand group for setting foldmethod per filetype
+  au!
+  au Syntax javascript,html setlocal foldmethod=syntax
+  au BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
+  au BufWinLeave *.py setlocal foldexpr< foldmethod<
+  au BufRead * normal zR
+augroup END
 
 " Removes trailing whitespace on save
 au FileWritePre    * :%s/\s\+$//e
@@ -359,6 +364,10 @@ let b:javascript_fold = 1
 
 " othree/javascript-libraries-syntax.vim
 let g:used_javascript_libs = 'angularjs,angularui,underscore,jasmine,chai'
+
+" tmhedberg/SimpylFold
+let g:SimpylFold_docstring_preview = 1
+let g:SimpylFold_fold_import = 1
 
 " klen/python-mode
 let g:pymode_lint_checkers = []
