@@ -141,6 +141,7 @@ Plugin 'pangloss/vim-javascript'  " Javascript syntax and indent plugins
 " Python
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'klen/python-mode'
+Plugin 'vim-scripts/indentpython.vim'
 
 " Latex
 Plugin 'xuhdev/vim-latex-live-preview'
