@@ -140,10 +140,6 @@ Plugin 'mattn/emmet-vim'
 
 " Javascript
 Plugin 'marijnh/tern_for_vim'     " Lookup js references under cursor
-Plugin 'matthewsimo/angular-vim-snippets'
-Plugin 'burnettk/vim-angular'
-Plugin 'moll/vim-node'
-Plugin 'guileen/vim-node-dict'
 
 " Python
 Plugin 'tmhedberg/SimpylFold'
