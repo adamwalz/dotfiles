@@ -2,13 +2,12 @@
 #          FILE:  gitconfig
 #   DESCRIPTION:  Global configuration variables for git
 #        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.1
+#       VERSION:  1.1.0
 #------------------------------------------------------------------------------
 
 [user]
   name = Adam Walz
-  email =
-	useconfigonly = true
+  useConfigOnly = true
 [advice]
   pushNonFastForward = false
   statusHints = false
