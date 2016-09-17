@@ -105,10 +105,8 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'sickill/vim-monokai'
 
 " Syntax
-Plugin 'Matt-Deacalion/vim-systemd-syntax'
+Plugin 'Matt-Deacalion/vim-systemd-syntax' " Syntax highlighting for systemd config files
 Plugin 'pangloss/vim-javascript'  " Javascript syntax and indent plugins
-Plugin 'othree/yajs.vim'          " Javascript syntax highlighting
-Plugin 'othree/javascript-libraries-syntax.vim'
 
 " Git
 Plugin 'tpope/vim-fugitive'
