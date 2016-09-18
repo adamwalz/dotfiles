@@ -136,6 +136,10 @@ Plugin 'mattn/emmet-vim'
 
 " Javascript
 Plugin 'pangloss/vim-javascript'  " Javascript syntax and indent plugins
+Plugin 'Quramy/vim-js-pretty-template'  " provides syntax highlight for contents in Template Strings.
+
+" Typescript
+Plugin 'leafgarland/typescript-vim'  " Syntax file and other settings for TypeScript.
 
 " Python
 Plugin 'tmhedberg/SimpylFold'
