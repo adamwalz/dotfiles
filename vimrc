@@ -135,7 +135,6 @@ Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'mattn/emmet-vim'
 
 " Javascript
-Plugin 'marijnh/tern_for_vim'     " Lookup js references under cursor
 Plugin 'pangloss/vim-javascript'  " Javascript syntax and indent plugins
 
 " Python
