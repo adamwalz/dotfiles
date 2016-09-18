@@ -1,5 +1,0 @@
-user = <%= Keychain['Pianobar'].account %>
-password = <%= Keychain['Pianobar'].password %>
-history = 10
-audio_format = aacplus
-event_command = <%= File.join ENV['HOME'], '.config/pianobar/notifications.rb' %>
