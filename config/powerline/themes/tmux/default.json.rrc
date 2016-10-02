@@ -60,7 +60,7 @@
       }, {
         "function": "powerline.segments.common.wthr.weather",
         "args": {
-          "location_query": "Sandy, UT, USA"
+          "location_query": "San Francisco, CA, USA"
         },
         "priority": 80
       }
