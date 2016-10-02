@@ -25,8 +25,8 @@
         "function": "powerline.segments.common.mail.email_imap_alert",
         "priority": 45,
         "args": {
-          "username": "<%= Keychain['Gmail Mangabi Tmux Powerline'].account %>",
-          "password": "<%= Keychain['Gmail Mangabi Tmux Powerline'].password %>",
+          "username": "<%= Keychain['Gmail Butter Tmux Powerline'].account %>",
+          "password": "<%= Keychain['Gmail Butter Tmux Powerline'].password %>",
           "max_msgs": 10,
           "interval": 600
         }
