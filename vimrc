@@ -291,14 +291,17 @@ let g:ctrlp_switch_buffer = 'e' " Jump to an already opened window instead of cr
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 
 " scrooloose/nerdtree
+let loaded_netrwPlugin = 1
+let NERDTreeRespectWildIgnore = 1
 let NERDTreeQuitOnOpen = 1
-let NERDTreeIgnore = ['\.pyc$', '\.egg-info$']
+let NERDTreeIgnore = []
 map <C-n> :NERDTreeToggle<CR>
 augroup nerdtree
   au!
   au StdinReadPre * let s:std_in=1
   au VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
   au bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+  au bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 augroup END
 
 " tpope/vim-fugitive (git)
