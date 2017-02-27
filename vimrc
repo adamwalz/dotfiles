@@ -103,7 +103,6 @@ Plugin 'gmarik/Vundle.vim'
 
 " Colorschemes
 Plugin 'sickill/vim-monokai'
-Plugin 'reedes/vim-colors-pencil'
 
 " Git
 Plugin 'tpope/vim-fugitive'
@@ -123,6 +122,7 @@ Plugin 'scrooloose/syntastic'
 " General
 Plugin 'tpope/vim-commentary' " Comment out stuff
 Plugin 'Raimondi/delimitMate' " automatic closing of quotes, parenthesis, brackets
+Plugin 'ervandew/supertab'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'SirVer/ultisnips'
 Plugin 'nathanaelkane/vim-indent-guides'
