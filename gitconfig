@@ -7,6 +7,7 @@
 
 [user]
   name = Adam Walz
+  email =
   useConfigOnly = true
 [advice]
   pushNonFastForward = false
