@@ -57,6 +57,12 @@
 [rerere]
   enabled = true
 
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge --skip -- %f
+  process = git-lfs filter-process --skip
+  required = true
+
 [tig]
   show-date = relative
   author-width = 8
@@ -108,8 +114,3 @@
 
 [gpg]
   program = /usr/local/bin/gpg
-[filter "lfs"]
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
