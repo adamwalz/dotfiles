@@ -19,6 +19,7 @@
   uncommit = reset --soft
   undo = reset --hard
   unstage = reset
+  quick-stats = ! /usr/local/bin/git-quick-stats
 [apply]
   whitespace = warn
 [branch]
