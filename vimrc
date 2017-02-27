@@ -103,9 +103,11 @@ Plugin 'gmarik/Vundle.vim'
 
 " Colorschemes
 Plugin 'sickill/vim-monokai'
+Plugin 'reedes/vim-colors-pencil'
 
 " Git
 Plugin 'tpope/vim-fugitive'
+Plugin 'octref/RootIgnore'
 
 " File Navigation
 Plugin 'ctrlpvim/ctrlp.vim' " Full path fuzzy file, buffer, mru, tag finder
@@ -113,11 +115,6 @@ Plugin 'rking/ag.vim' " front for ag, A.K.A. the_silver_searcher
 Plugin 'scrooloose/nerdtree' " presents the filesystem in the form of a tree
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'airblade/vim-gitgutter' " shows a git diff in the 'gutter'
-Plugin 'majutsushi/tagbar'
-Plugin 'wesQ3/vim-windowswap'
-
-" Undolist navigation
-Plugin 'sjl/gundo.vim'
 
 " Syntax checking
 Plugin 'scrooloose/syntastic'
@@ -126,31 +123,23 @@ Plugin 'scrooloose/syntastic'
 " General
 Plugin 'tpope/vim-commentary' " Comment out stuff
 Plugin 'Raimondi/delimitMate' " automatic closing of quotes, parenthesis, brackets
-Plugin 'ervandew/supertab'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'SirVer/ultisnips'
 Plugin 'nathanaelkane/vim-indent-guides'
 
-" HTML
-Plugin 'mattn/emmet-vim'
-
-" Javascript
+"" Code
+Plugin 'mattn/emmet-vim' " HTML
 Plugin 'pangloss/vim-javascript'  " Javascript syntax and indent plugins
-Plugin 'Quramy/vim-js-pretty-template'  " provides syntax highlight for contents in Template Strings.
-
-" Typescript
+Plugin 'Quramy/vim-js-pretty-template'  " provides syntax highlight for contents in Javascript Template Strings.
 Plugin 'leafgarland/typescript-vim'  " Syntax file and other settings for TypeScript.
-
-" Python
-Plugin 'tmhedberg/SimpylFold'
+Plugin 'clausreinke/typescript-tools.vim'
 Plugin 'klen/python-mode'
-Plugin 'vim-scripts/indentpython.vim'
-
-" Latex
-Plugin 'xuhdev/vim-latex-live-preview'
-
-" Systemd
 Plugin 'Matt-Deacalion/vim-systemd-syntax'
+
+" Writing
+Plugin 'tpope/vim-markdown'
+Plugin 'reedes/vim-pencil'
+Plugin 'xuhdev/vim-latex-live-preview'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
