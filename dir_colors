@@ -117,6 +117,7 @@ EXEC 00;31   # This is for files with execute permission
 # executable bit actually set.
 .sh 00;31
 .csh 00;31
+.zsh 00;31
 
 # archives or compressed (yellow like directories, but not bold)
 .7z 00;33
@@ -157,9 +158,12 @@ EXEC 00;31   # This is for files with execute permission
 .doc 00;32
 .docx 00;32
 .log 00;32
+.md 00;32
+.markdown 00;32
 .patch 00;32
 .pdf 01;32
 .ps 00;32
+.rst 00;32
 .tex 00;32
 .txt 00;32
 
@@ -268,6 +272,7 @@ EXEC 00;31   # This is for files with execute permission
 # compiled source code (gray and bold)
 # Java
 .class 01;37
+.pyc 01;37
 
 ################################################################
 # Unknown File Types
