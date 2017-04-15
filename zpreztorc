@@ -54,7 +54,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.pmodules" ]]; then
   pmodules=($pmodules "${(f)$(< ${ZDOTDIR:-$HOME}/.pmodules)}")
 fi
 
-## syntax-highlighting, history-substring-search, and prompt must be loaded last,
+## syntax-highlighting, history-substring-search, autosuggestions, and prompt must be loaded last,
 ## in that order
 pmodules=($pmodules 'syntax-highlighting' 'history-substring-search' 'prompt')
 
