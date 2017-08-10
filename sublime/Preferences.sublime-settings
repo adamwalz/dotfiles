@@ -17,7 +17,7 @@
 	],
 	"bold_folder_labels": true,
 	"close_windows_when_empty": true,
-	"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
+	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
 	"copy_with_empty_selection": false,
 	"detect_indentation": false,
 	"ensure_newline_at_eof_on_save": true,
@@ -51,12 +51,14 @@
 		".hg",
 		"CVS"
 	],
+	"font_size": 14,
 	"gutter": true,
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
-		"Vintage",
-		"Markdown"
+		"Markdown",
+		"SideBarGit",
+		"Vintage"
 	],
 	"indent_guide_options":
 	[

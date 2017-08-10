@@ -1,6 +1,8 @@
 {
+	"bootstrapped": true,
 	"in_process_packages":
 	[
+		"SideBarGit"
 	],
 	"installed_packages":
 	[
@@ -22,6 +24,7 @@
 		"Nodejs",
 		"Package Control",
 		"Pretty JSON",
+		"Python Pretty Print",
 		"SassBeautify",
 		"SCSS",
 		"SideBarEnhancements",
