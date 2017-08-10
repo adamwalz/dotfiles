@@ -235,9 +235,6 @@ au FileAppendPre   * :%s/\s\+$//e
 au FilterWritePre  * :%s/\s\+$//e
 au BufWritePre     * :%s/\s\+$//e
 
-" add :Plain command for converting text to plaintext
-command! Plain execute "%s/’/'/ge | %s/[“”]/\"/ge | %s/—/-/ge"
-
 " line splitting
 imap <C-c> <CR><Esc>O
 
@@ -288,10 +285,6 @@ if exists('+colorcolumn')
   augroup END
 endif
 
-" xolox/vim-session
-" Don't autosave vim session
-let g:session_autosave = 'no'
-
 " kien/ctrlp.vim
 let g:ctrlp_map = '<leader>f'
 nnoremap <silent> <leader>f :CtrlP<cr>
@@ -303,7 +296,6 @@ let g:ctrlp_switch_buffer = 'e' " jump to an already opened window instead of cr
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""' " specify an external tool for search instead of Vim's globpath()
 
 " scrooloose/nerdtree
-let loaded_netrwPlugin = 1
 let NERDTreeRespectWildIgnore = 1
 let NERDTreeQuitOnOpen = 1 " the NERDTree window will close after opening a file
 let NERDTreeIgnore = [] " specify which files the NERD tree should ignore
@@ -327,9 +319,6 @@ map <leader>a :Ag!<space>
 
 " Raimondi/delimitMate
 au FileType gitcommit let b:delimitMate_autoclose = 0
-
-" ervandew/supertab
-let g:SuperTabDefaultCompletionType = '<C-n>'
 
 " valloric/YouCompleteMe
 let g:ycm_auto_trigger = 1 "  YCM's identifier completer (the as-you-type popup)
