@@ -11,88 +11,83 @@ let maplocalleader = ','
 
 set encoding=utf-8
 
-set nocompatible                     " don't need to be compatible with old vim
+set nocompatible   " don't need to be compatible with old vim
 
-" Make vim harder (better to force myself to learn)
-set mouse=                           " disable mouse support
-" Disabling arrow keys
-nnoremap  <up> <nop>
-nnoremap  <down> <nop>
-nnoremap  <left> <nop>
-nnoremap  <right> <nop>
-inoremap  <up> <nop>
-inoremap  <down> <nop>
-inoremap  <left> <nop>
-inoremap  <right> <nop>
-cnoremap  <up> <nop>
-cnoremap  <down> <nop>
+set autoindent     " copy indent from current line when starting a new line
+set shiftround     " round indent to multiple of 'shiftwidth'. Applies to > and < commands
+set shiftwidth=2   " number of spaces to use for each indent
+set expandtab      " use spaces to insert a <Tab>
+set tabstop=2      " number of spaces that a <Tab> counts for
+set softtabstop=2  " number of spaces that a <Tab> counts for while editing
 
-set autoindent                       " set auto indent
-
-set shiftround
-set shiftwidth=2                     " spaces inserted when using indentation in normal mode
-set expandtab                        " use spaces in place of tab character
-set tabstop=2                        " width of tab character in columns
-set softtabstop=2
+" When smarttab is on, a <Tab> in front of a line inserts blanks according to 'shiftwidth'.
+" 'tabstop' or 'softtabstop' are used in other places
 set smarttab
 
-set tw=500
+set textwidth=500  " maxmimum width of text that is being inserted
+
+" q Allow formatting of comments with gq
+" r Automatically insert the current comment leader after <Enter> in insert mode
+" n When formatting text, recognize numbered lists
+" 1 Don't break a line after a one-letter word
 set formatoptions=qrn1
 
-set list
+set list " list mode: useful to see the difference between tabs and spaces and for trailing blanks.
 set listchars=tab:▸\ ,trail:·,eol:¬  " show extra space characters
 set relativenumber                   " show relative line numbers
 
-set backspace=indent,eol,start       " backspace for dummies
-set autoread                         " autoread a file when it is changed outside
+set backspace=indent,eol,start " influences the use of <BS>, <Del> in Insert mode
+set autoread                   " autoread a file when it is changed outside of vim
 
-set complete+=kspell
+" This option specifies how keyword completion |ins-completion| works when CTRL-P
+" or CTRL-N are used.
+set complete+=kspell " kspell: use the currently active spell checking `spell`
 
-set showmatch                        " show bracket matches
-set matchtime=3
+set showmatch     " when a bracket is inserted, briefly jump to the matching one.
+set matchtime=3   " tenths of a second to show the matching paren
 
-set hlsearch                         " highlight all search matches
-set incsearch                        " show search results as I type
-set ignorecase                       " ignore case in search
-set smartcase                        " pay attention to case when caps are used
+set hlsearch            " highlight all search matches
+set incsearch           " show search results as they are typed
+set ignorecase          " ignore case in search
+set smartcase           " override the 'ignorecase' option if the search pattern contains uppercase characters
 
-set history=1000                     " remember everything
-set undolevels=1000                  " remember all undos
-set undoreload=10000                 " maximum number of lines to save for undo
+set history=1000        " record a history of ":" commands
+set undolevels=1000     " maximum number of changes that can be undone
+set undoreload=10000    " save the whole buffer for undo when reloading it
 
-set cursorline                       " highlight current line
-set ruler                            " show row and column in footer
+set cursorline          " highlight the screen line of the cursor with CursorLine
+set ruler               " show the line and column number of the cursor position
 
-set scrolljump=5                     " minimum lines scrolled when hitting border
-set scrolloff=2                      " minimum lines above/below cursor
+set scrolljump=5        " minimal number of lines to scroll when the cursor gets off the screen
+set scrolloff=2         " minimal number of screen lines to keep above and below the cursor
 
-set ttimeoutlen=100                  " decrease timeout for faster insert with 'O'
-set laststatus=2                     " always show status bar
-set ttyfast                          " smoother terminal connection
+set ttimeoutlen=100     " time in milliseconds that is waited for a key to complete
+set laststatus=2        " always show status line
+set ttyfast             " indicates a fast terminal connection
 
-set noerrorbells
-set visualbell                       " enable visual bell (disable audio bell)
-set t_vb=
+set noerrorbells        " don't ring the bell (beep or screen flash) for error messages
+set visualbell          " use visual bell instead of beeping
+set t_vb=               " no beep or flash is wanted
 
-set nospell                          " disable spell checking
-set hidden                           " change buffer without saving
-set magic                            " better searching
+set nospell             " disable spell checking
+set hidden              " buffer becomes hidden when it is abandoned
+set magic               " changes the special characters that can be used in search patterns
 
-set clipboard=unnamed                " use the system clipboard
+set clipboard=unnamed   " use the system clipboard for all yank, delete, change, and put operations
 set sessionoptions+=tabpages,globals " remember tab names when you save session
 
-set foldlevelstart=20
-set foldenable                       " enable code folding
+set foldlevelstart=20   " sets 'foldlevel' when starting to edit another buffer in a window
+set foldenable          " when off, all folds are open
 
-set splitbelow                       " split current window below
-set splitright                       " split current window right
-set title
+set splitbelow          " splitting a window will put the new window below the current one
+set splitright          " splitting a window will put the new window to the right of the current one
+set title               " When on, the title of the window will be set to the filename
 
-set noswapfile                       " don't pollute harddrive with swap files
-set lazyredraw
-set whichwrap=b,s
+set noswapfile          " don't use a swapfile for the buffer
+set lazyredraw          " screen will not be redrawn while executing macros and registers
+set whichwrap=b,s       " allow specified keys that move the cursor left/right to move to the previous/next line
 
-filetype off                         " required by vundle
+filetype off            " required by vundle
 
 " Set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -101,12 +96,15 @@ call vundle#begin()
 " let Vundle manage Vundle
 Plugin 'gmarik/Vundle.vim'
 
+" Runtimes
+" Plugin 'Shougo/vimproc.vim' " Asynchronous execution library for Vim
+
 " Colorschemes
 Plugin 'sickill/vim-monokai'
 
 " Git
 Plugin 'tpope/vim-fugitive'
-Plugin 'octref/RootIgnore'
+Plugin 'octref/RootIgnore' " set 'wildignore' from git repo root or home folder
 
 " File Navigation
 Plugin 'ctrlpvim/ctrlp.vim' " Full path fuzzy file, buffer, mru, tag finder
@@ -122,24 +120,27 @@ Plugin 'scrooloose/syntastic'
 " General
 Plugin 'tpope/vim-commentary' " Comment out stuff
 Plugin 'Raimondi/delimitMate' " automatic closing of quotes, parenthesis, brackets
-Plugin 'ervandew/supertab'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'SirVer/ultisnips'
-Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'ervandew/supertab' " allows you to use <Tab> for insert completion (:help ins-completion)
+Plugin 'Valloric/YouCompleteMe' " fast, as-you-type, fuzzy-search code completion engine
+Plugin 'SirVer/ultisnips' " Code/text Snippets
+Plugin 'nathanaelkane/vim-indent-guides' " visually display indentation guides
 
-"" Code
-Plugin 'mattn/emmet-vim' " HTML
-Plugin 'pangloss/vim-javascript'  " Javascript syntax and indent plugins
+" Code
+Plugin 'chrisbra/Colorizer' " color css colornames and hex codes
+Plugin 'mattn/emmet-vim' " provides support for expanding abbreviations similar to emmet
+Plugin 'pangloss/vim-javascript'  " Javascript indentation and syntax support
+Plugin 'Quramy/tsuquyomi' " Typescript TSServer client
 Plugin 'Quramy/vim-js-pretty-template'  " provides syntax highlight for contents in Javascript Template Strings.
 Plugin 'leafgarland/typescript-vim'  " Syntax file and other settings for TypeScript.
-Plugin 'clausreinke/typescript-tools.vim'
-Plugin 'klen/python-mode'
-Plugin 'Matt-Deacalion/vim-systemd-syntax'
+Plugin 'clausreinke/typescript-tools.vim' " typescript-tools provides access to the TypeScript Language Services via a simple commandline server (tss)
+Plugin 'klen/python-mode' " access to libraries including pylint, rope, pydoc, pyflakes, pep8, autopep8, pep257 and mccabe for features like static analysis, refactoring, folding, completion, documentation
+Plugin 'lambdalisue/vim-pyenv' " allows you to activate and deactivate the pyenv Python correctly in a live session
+Plugin 'Matt-Deacalion/vim-systemd-syntax' " Syntax highlighting for systemd service files
 
 " Writing
-Plugin 'tpope/vim-markdown'
-Plugin 'reedes/vim-pencil'
-Plugin 'xuhdev/vim-latex-live-preview'
+Plugin 'tpope/vim-markdown' " Syntax highlighting, matching rules and mappings for the original Markdown and extensions.
+Plugin 'reedes/vim-pencil' " Vim as a tool for writers
+Plugin 'xuhdev/vim-latex-live-preview' " lively previewing LaTeX pdf output
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -151,21 +152,34 @@ set statusline=%F%m%r%h%w\ %{fugitive#statusline()}\ [%l,%c]\ [%L,%p%%]
 " Use powerline statusbar if available
 set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
 
-" set up some custom colors
+" set dark background and color scheme
+let base16colorspace=256  " Access colors present in 256 colorspace
+set background=dark
+colorscheme monokai
+syntax on
+
+" Override colorscheme with custom colors
+" 0 - black   8 - gray
+" 1 - maroon  9 - red
+" 2 - green  10 - lime
+" 3 - olive  11 - yellow
+" 4 - navy   12 - blue
+" 5 - purple 13 - fuchsia
+" 6 - teal   14 - aqua
+" 7 - silver 15 - white
 highlight clear SignColumn
-highlight VertSplit    ctermbg=236
-highlight ColorColumn  ctermbg=237
-highlight LineNr       ctermbg=236 ctermfg=240
-highlight CursorLineNr ctermbg=236 ctermfg=240
-highlight CursorLine   ctermbg=236
-highlight StatusLineNC ctermbg=238 ctermfg=0
-highlight StatusLine   ctermbg=249 ctermfg=20
-highlight IncSearch    ctermbg=3   ctermfg=1
-highlight Search       ctermbg=1   ctermfg=3
-highlight Visual       ctermbg=3   ctermfg=0
-highlight Pmenu        ctermbg=240 ctermfg=12
-highlight PmenuSel     ctermbg=3   ctermfg=1
-highlight SpellBad     ctermbg=0   ctermfg=1
+highlight VertSplit                    ctermbg=241
+highlight ColorColumn                  ctermbg=237
+highlight LineNr                       ctermbg=237 ctermfg=102
+highlight CursorLineNr                             ctermfg=11
+highlight CursorLine                   ctermbg=237
+highlight IncSearch                    ctermbg=186 ctermfg=235
+highlight Search       cterm=underline
+highlight Visual                       ctermbg=59
+highlight clear Pmenu
+highlight PmenuSel                     ctermbg=59
+highlight SpellBad                     ctermbg=9
+highlight Comment                                 ctermfg=243
 
 if &term =~ '256color'
   " Disable Background Color Erase (BCE) so that color schemes
@@ -174,18 +188,16 @@ if &term =~ '256color'
   set t_ut=
 endif
 
-" set dark background and color scheme
-let base16colorspace=256  " Access colors present in 256 colorspace
-set background=dark
-colorscheme monokai
-syntax on
-
 " Allow for cursor beyond last character
 set virtualedit=onemore
 
-" Enable wild menu
-set wildmenu
+set wildmenu " when 'wildmenu' is on, command-line completion operates in an enhanced mode
+" Completion mode that is used for the character specified with 'wildchar'
+" list - When more than one match, list all matches
+" longest - Complete till longest common string
+" fukk - Complete the next full match
 set wildmode=list:longest,full
+" A file that matches with one of these patterns is ignored when expanding |wildcards
 set wildignore=
 set wildignore+=.git,.svn                               " Version control
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg,*.pdf    " binary images
@@ -196,8 +208,8 @@ set wildignore+=*.zip                                   " zip
 
 " highlight the status bar when in insert mode
 if version >= 700
-  au InsertEnter * hi StatusLine ctermbg=2   ctermfg=235
-  au InsertLeave * hi StatusLine ctermbg=249 ctermfg=20
+  au InsertEnter * highlight StatusLine ctermbg=2   ctermfg=235
+  au InsertLeave * highlight StatusLine ctermbg=249 ctermfg=20
 endif
 
 " highlight trailing spaces in annoying red
@@ -283,25 +295,27 @@ let g:session_autosave = 'no'
 " kien/ctrlp.vim
 let g:ctrlp_map = '<leader>f'
 nnoremap <silent> <leader>f :CtrlP<cr>
-let g:ctrlp_match_window = 'bottom,order=btt,min:1,max:30,results:10'
-let g:ctrlp_working_path_mode = 'ra' " Set root to nearest .git directory
-let g:ctrlp_open_new_file = 'v' " Open new files in new vertical split
-let g:ctrlp_by_filename = 0 " Search full path by default
-let g:ctrlp_switch_buffer = 'e' " Jump to an already opened window instead of creating new instance
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+let g:ctrlp_match_window = 'bottom,order=btt,min:1,max:30,results:10' " result position and ordering
+let g:ctrlp_working_path_mode = 'ra' " set root to nearest .git directory
+let g:ctrlp_open_new_file = 'v' " open new files in new vertical split
+let g:ctrlp_by_filename = 0 " search full path by default
+let g:ctrlp_switch_buffer = 'e' " jump to an already opened window instead of creating new instance
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""' " specify an external tool for search instead of Vim's globpath()
 
 " scrooloose/nerdtree
 let loaded_netrwPlugin = 1
 let NERDTreeRespectWildIgnore = 1
-let NERDTreeQuitOnOpen = 1
-let NERDTreeIgnore = []
+let NERDTreeQuitOnOpen = 1 " the NERDTree window will close after opening a file
+let NERDTreeIgnore = [] " specify which files the NERD tree should ignore
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
 map <C-n> :NERDTreeToggle<CR>
 augroup nerdtree
   au!
   au StdinReadPre * let s:std_in=1
-  au VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-  au bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-  au bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+  au VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif " open NERDTree automatically if no files were opened"
+  au bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif " open NERDTree automatically when opening a directory
+  au bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif " close vim if the only window left open is a NERDTree
 augroup END
 
 " tpope/vim-fugitive (git)
@@ -318,7 +332,7 @@ au FileType gitcommit let b:delimitMate_autoclose = 0
 let g:SuperTabDefaultCompletionType = '<C-n>'
 
 " valloric/YouCompleteMe
-let g:ycm_auto_trigger = 1
+let g:ycm_auto_trigger = 1 "  YCM's identifier completer (the as-you-type popup)
 let g:ycm_complete_in_comments = 0
 let g:ycm_complete_in_strings = 1
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
@@ -370,7 +384,7 @@ let g:SimpylFold_docstring_preview = 1
 let g:SimpylFold_fold_import = 1
 
 " klen/python-mode
-let g:pymode_lint_checkers = []
+let g:pymode_lint_checkers = [] " Let syntastic handle linting
 
 " xuhdev/vim-latex-live-preview
 let g:livepreview_previewer = 'open -a Preview'
@@ -388,8 +402,7 @@ augroup END
 
 augroup autoload_vimrc " automatically reload vimrc when it's saved
   au!
-  " vim automatically sets MYVIMRC environment variable to the full path of the
-  " vimrc file.
+  " vim automatically sets MYVIMRC environment variable to the full path of the vimrc file.
   au BufWritePost $MYVIMRC so $MYVIMRC
 augroup END
 
