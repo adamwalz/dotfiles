@@ -361,6 +361,9 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+" chrisbra/Colorizer
+let g:colorizer_auto_filetype='css,html'
+
 " pangloss/vim-javascript
 let g:javascript_enable_domhtmlcss = 1 " Enables HTML/CSS syntax highlighting
 let b:javascript_fold = 1
