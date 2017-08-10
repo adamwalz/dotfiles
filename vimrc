@@ -386,6 +386,12 @@ augroup nodejs_dict " add filetype specific keywords to dictionary
   au FileType javascript set dictionary+=$HOME/.vim/dict/node.dict " see guileen/vim-node-dict
 augroup END
 
+augroup js_template_string " Set JS template strings to html
+  au!
+  autocmd FileType typescript JsPreTmpl html
+  autocmd FileType typescript syn clear foldBraces " For leafgarland/typescript-vim
+augroup END
+
 augroup spell_check " autocmd for using spell check by file type
   au!
   au Filetype markdown setlocal spell
