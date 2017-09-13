@@ -1,4 +1,3 @@
-# Configure how versions of packages installed to a package.json file via
-# --save or --save-dev get prefixed.
-save-prefix='~'
+save-prefix=~
 python=python2.7
+save=false
