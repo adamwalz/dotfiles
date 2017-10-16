@@ -1,0 +1,57 @@
+#!/bin/sh
+
+OLD_EMAIL=$1
+CORRECT_EMAIL=$2
+CORRECT_NAME=$3
+GIT_FILTER_BRANCH_OPTIONS=$4
+
+function usage {
+  echo "usage: $0 old_email correct_email [correct_name] [options]"
+  echo "  old_email      Email address to search git commit and replace with correct_email"
+  echo "  correct_email  Email addres to replace old_email with"
+  echo "  correct_name   Name to use when replacing old_email. Existing name is used if this is empty"
+  echo "  options        git filter-branch options"
+  exit 1
+}
+
+
+if [[ "$#" -lt 3 ]]; then
+  usage
+fi
+
+echo "Search for email $OLD_EMAIL in git working directory $GIT_WORKDIR"
+echo "Replacing author and committer email with $CORRECT_EMAIL"
+
+if [[ -z $CORRECT_NAME ]]; then
+  echo "Leaving author and committer name as is"
+else
+  echo "Replacing author and commiter name with $CORRECT_NAME"
+fi
+
+read -p 'Ok? [y|n]' ok
+if [[ $ok != "y" ]]; then
+  echo "Not ok. Exiting"
+  exit 0
+fi
+
+export_author_email="export GIT_AUTHOR_EMAIL=\"$CORRECT_EMAIL\""
+export_committer_email="export GIT_COMMITTER_EMAIL=\"$CORRECT_EMAIL\""
+
+if [[ -n $CORRECT_NAME ]]; then
+  export_author_name="export GIT_AUTHOR_NAME=\"$CORRECT_NAME\""
+  export_committer_name="export GIT_COMMITTER_NAME=\"$CORRECT_NAME\""
+else
+  export_author_name=""
+  export_committer_name=""
+fi
+
+git filter-branch $GIT_FILTER_BRANCH_OPTIONS --env-filter "
+if [ \""\$GIT_COMMITTER_EMAIL"\" = \""$OLD_EMAIL"\" ]; then
+    $export_committer_name
+    $export_committer_email
+fi
+if [ \""\$GIT_AUTHOR_EMAIL"\" = \""$OLD_EMAIL"\" ]; then
+    $export_author_name
+    $export_author_email
+fi
+" --tag-name-filter cat -- --branches --tags
