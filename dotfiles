@@ -1,106 +1,151 @@
-#!/bin/bash
-#------------------------------------------------------------------------------
-#          FILE:  dotfiles
-#   DESCRIPTION:  Script to clone and install all dotfiles from github
-#        AUTHOR:  Adam Walz <adam@adamwalz.net>
-#       VERSION:  1.0.0
-#------------------------------------------------------------------------------
+#!/usr/bin/env bash
 
-SCRIPT_NAME=$( basename "$0" )
-CONFIG_DIR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+shopt -s nullglob
 
-usage() {
-  echo "Use like this"
+NAME=$(basename "${BASH_SOURCE[0]}")
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BACKUP_DIR=$HOME/.dotfiles_backup/`date -u +"%Y-%m-%d-%H-%M-%S"`
+
+VERSION=2.0.0
+
+RAW_FILE_EXT=rrc
+
+EXCLUDES=(
+  $NAME
+  README.md
+  LICENSE
+  backup
+  brew.csv
+  cask.csv
+  .*
+)
+
+puts() {
+  echo $* >&2
 }
-
-err() {
-  echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: \033[31m$*\033[0m" >&2
+log() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*"
 }
-
 info() {
   echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: \033[34m$*\033[0m" >&2
 }
-
-log() {
-  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*"
+warn() {
+  echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: \033[33m$*\033[0m" >&2
+}
+err() {
+  echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: \033[31m$*\033[0m" >&2
 }
 
 platform() {
   if [[ "$OSTYPE" == "linux-gnu" ]]; then
     echo 'linux'
   elif [[ "$OSTYPE" == "darwin"* ]]; then
-    echo 'mac'
-  elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
-    echo 'windows'
+    # macOS
+    echo 'darwin'
+  elif [[ "$OSTYPE" == 'cygwin' ]]; then
+    # POSIX compatibility layer and Linux environment emulation for Windows
+    echo 'cygwin'
+  elif [[ "$OSTYPE" == 'msys' ]]; then
+    # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
+    echo 'msys'
   elif [[ "$OSTYPE" == "freebsd"* ]]; then
     echo 'freebsd'
+  else
+    echo 'unknown'
   fi
 }
 
-compile_config_templates() {
-  :
+command_exists() {
+  command -v $1 >/dev/null 2>&1
 }
 
-link_dotfiles() {
-  local target_relative
-  for source in ${CONFIG_DIR_PATH}/*; do
-    set "$source"
-    if [[ "$1" =~ ${CONFIG_DIR_PATH}/mac-.* && $(platform) != 'mac' ]]; then
-      continue
-    elif [[ "$1" =~ ${CONFIG_DIR_PATH}/linux-.* && $(platform) != 'linux' ]]; then
-      continue
-    elif [[ "$1" =~ ${CONFIG_DIR_PATH}/windows-.* && $(platform) != 'windows' ]]; then
-      continue
-    elif [[ "$1" =~ ${CONFIG_DIR_PATH}/freebsd-.* && $(platform) != 'freebsd' ]]; then
+contains() {
+  [[ "$1" =~ (^|[[:space:]])"$2"($|[[:space:]]) ]]
+}
+
+usage() {
+  puts "$NAME manages dotiles (runcom files)"
+  puts ""
+  puts "Basic Commands:"
+  puts "  install     Install dotfiles"
+  puts "  uninstall   Uninstall dotfiles"
+  puts ""
+  puts "Other Commands:"
+  puts "  help        Help about any command"
+  puts "  version     Print the $NAME version"
+}
+
+backup() {
+  from=$1
+  to=$2
+  if [[ ! -f $from ]]; then return; fi
+  info "Backing up old version of $(basename $from)"
+  mkdir -p $(dirname $to)
+  mv $from $to
+}
+
+link_and_backup() {
+  src=$1
+  target=$2
+  backup_target=$3
+  info "Linking $target"
+  backup $target $backup_target
+  mkdir -p $(dirname $target)
+  ln -fsn $src $target
+}
+
+sub_version() {
+  puts "$VERSION"
+}
+
+sub_install() {
+  SAVEIFS=$IFS
+  IFS=$(echo -en "\n\b")
+  for src in `find $DIR -mindepth 1 -maxdepth 1`; do
+    src_relative=`echo $src | sed "s|$DIR/||"`
+    if [[ "$src_relative" =~ "mac-"* ]] && [[ ! `platform` == "darwin" ]] || \
+       [[ "$src_relative" =~ "linux-"* ]] && ! contains "linux-gnu freebsd" `platform` || \
+       [[ "$src_relative" =~ "windows-"* ]] && ! contains "cygwin msys" `platform`; then
       continue
     fi
 
-    target_relative=$(basename "$1")
+    # Remove platform specifier from dotfile
+    src_relative=`echo $src_relative | sed -E -e 's/^(mac|linux|windows)-//g'`
 
-    log " === $target_relative ==="
+    # Do not link if the source is a raw file, the target already exists and
+    # is a symlink to the source.
+    target=$HOME/.$src_relative
+    if [[ $src_relative == *"$RAW_FILE_EXT" ]] || \
+       contains "${EXCLUDES[*]}" $src_relative || \
+       ([[ -h $target ]] && [[ ! -d $target ]] && cmp --silent $src $target); then
+      continue
+    fi
+
+    link_and_backup $src $target $BACKUP_DIR/$src_relative
   done
+  IFS=$SAVEIFS
 }
 
-unlink_dotfiles() {
-  :
+sub_uninstall() {
+  info uninstall
 }
 
-clean() {
-  echo "Cleaning"
-  echo "$@"
-}
-
-install() {
-  link_dotfiles
-}
-
-uninstall() {
-  echo "Uninstalling"
-}
-
-main() {
-  if [[ $# -gt 0 ]]; then
-    cmd="$1"
-    case $cmd in
-      install)
-        shift # past command
-        install
-        ;;
-      uninstall)
-        shift # past command
-        uninstall
-        ;;
-      clean)
-        shift # past command
-        clean "$@"
-        ;;
-      *)
-        usage
-        ;;
-    esac
-  else
-    usage
-  fi
-}
-
-main "$@"
+subcommand=$1
+case $subcommand in
+    "" | "-h" | "--help" | "help")
+      usage
+      ;;
+    "-v" | "--version")
+      sub_version
+      ;;
+    *)
+      shift
+      sub_${subcommand} $@
+      if [ $? = 127 ]; then
+        err "unknown command \"$subcommand\" for \"$NAME\""
+        puts ""
+        err "Run '$NAME --help' for usage."
+        exit 1
+      fi
+      ;;
+esac
