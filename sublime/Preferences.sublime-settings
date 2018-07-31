@@ -57,7 +57,6 @@
 	"ignored_packages":
 	[
 		"Markdown",
-		"SideBarGit",
 		"Vintage"
 	],
 	"indent_guide_options":
