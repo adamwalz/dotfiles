@@ -334,7 +334,7 @@ let g:ycm_filetype_blacklist = {
 let g:ycm_filetype_specific_completion_to_disable = {
       \ 'gitcommit': 1
       \}
-let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+let g:ycm_path_to_python_interpreter = '/usr/local/bin/python2'
 nmap <leader>gt :YcmCompleter GetType <CR>
 nmap <leader>gtt :YcmCompleter GoToType <CR>
 nmap <leader>gd :YcmCompleter GoToDefinition <CR>
