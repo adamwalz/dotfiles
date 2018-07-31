@@ -51,7 +51,8 @@ fi
 
 # Load machine specific prezto modules from file
 if [[ -s "${ZDOTDIR:-$HOME}/.pmodules" ]]; then
-  pmodules=($pmodules "${(f)$(< ${ZDOTDIR:-$HOME}/.pmodules)}")
+  for pmodule in "${(f)$(< ${ZDOTDIR:-$HOME}/.pmodules)}"
+    if [[ "$pmodule" != '#'* ]] pmodules=($pmodules $pmodule)
 fi
 
 ## syntax-highlighting, history-substring-search, autosuggestions, and prompt must be loaded last,
