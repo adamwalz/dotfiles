@@ -80,9 +80,9 @@ bind-key j send-prefix
 
 # copy with 'enter' or 'y' and send to mac os clipboard: http://goo.gl/2Bfn8
 <% if RUBY_PLATFORM.include? 'darwin' %>
-unbind-key -t vi-copy Enter
-bind-key -t vi-copy Enter copy-pipe "reattach-to-user-namespace pbcopy"
-bind-key -t vi-copy y copy-pipe "reattach-to-user-namespace pbcopy"
+unbind-key -T copy-mode-vi Enter
+bind-key -T copy-mode-vi Enter send-keys -X copy-pipe "reattach-to-user-namespace pbcopy"
+bind-key -T copy-mode-vi y send-keys -X copy-pipe "reattach-to-user-namespace pbcopy"
 <% end %>
 
 # paste
@@ -161,7 +161,7 @@ set-option -g status-keys vi
 set-option -g status-interval 30
 
 # time for status messages to linger in ms
-set-option -g display-time 2500
+set-option -g display-time 1000
 
 # position the status bar at bottom on screen
 set-option -g status-position bottom
