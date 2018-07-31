@@ -8,7 +8,9 @@ config/gh-update
 config/configstore
 config/browser-launcher2
 config/gcloud
+linux-env.zsh
 mac-env.zsh
+windows-env.zsh
 config/powerline/themes/tmux/default.json
 
 # Machine/project specific list of zprezto modules
