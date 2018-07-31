@@ -80,10 +80,11 @@ path=(
   $path
 )
 
-for path_file in /etc/paths.d/*(.N); do
-  path+=($(<$path_file))
-done
-unset path_file
+# /etc/paths.d comes from /etc/zprofile
+#for path_file in /etc/paths.d/*(.N); do
+#  path+=($(<$path_file))
+#done
+#unset path_file
 
 #===================================== Temp Files ===============================
 
