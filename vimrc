@@ -136,6 +136,7 @@ Plugin 'clausreinke/typescript-tools.vim' " typescript-tools provides access to 
 Plugin 'klen/python-mode' " access to libraries including pylint, rope, pydoc, pyflakes, pep8, autopep8, pep257 and mccabe for features like static analysis, refactoring, folding, completion, documentation
 Plugin 'lambdalisue/vim-pyenv' " allows you to activate and deactivate the pyenv Python correctly in a live session
 Plugin 'Matt-Deacalion/vim-systemd-syntax' " Syntax highlighting for systemd service files
+Plugin 'google/vim-jsonnet' " Syntax highlighting for jsonnet
 
 " Writing
 Plugin 'tpope/vim-markdown' " Syntax highlighting, matching rules and mappings for the original Markdown and extensions.
@@ -370,6 +371,9 @@ let b:javascript_fold = 1
 
 " othree/javascript-libraries-syntax.vim
 let g:used_javascript_libs = 'angularjs,angularui,underscore,jasmine,chai'
+
+" google/jsonnet
+let g:jsonnet_fmt_on_save = 0
 
 " tmhedberg/SimpylFold
 let g:SimpylFold_docstring_preview = 1
