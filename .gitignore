@@ -26,6 +26,7 @@ prezto
 !/vim/bundle/Vundle.vim/
 /vim/sessions/*
 /vim/spell/*.spl
+/config/nvim/plugged/*
 
 # local binary executables
 tilde/bin/powerline*
