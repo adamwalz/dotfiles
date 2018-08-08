@@ -405,7 +405,7 @@ let g:neomake_sbt_maker = {
             \ '%-C%.%#,' .
             \ '%-G%.%#'
      \ }
-let g:neomake_enabled_makers = ['sbt']
+let g:neomake_scala_enabled_makers = ['sbt']
 let g:neomake_verbose=3
 
 " Neomake on text change
