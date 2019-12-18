@@ -28,11 +28,11 @@ else
   echo "Replacing author and commiter name with $CORRECT_NAME"
 fi
 
-read -p 'Ok? [y|n]' ok
-if [[ $ok != "y" ]]; then
-  echo "Not ok. Exiting"
-  exit 0
-fi
+#read -p 'Ok? [y|n]' ok
+#if [[ $ok != "y" ]]; then
+#  echo "Not ok. Exiting"
+#  exit 0
+#fi
 
 export_author_email="export GIT_AUTHOR_EMAIL=\"$CORRECT_EMAIL\""
 export_committer_email="export GIT_COMMITTER_EMAIL=\"$CORRECT_EMAIL\""
@@ -45,7 +45,7 @@ else
   export_committer_name=""
 fi
 
-git filter-branch $GIT_FILTER_BRANCH_OPTIONS --env-filter "
+git filter-branch -f $GIT_FILTER_BRANCH_OPTIONS --env-filter "
 if [ \""\$GIT_COMMITTER_EMAIL"\" = \""$OLD_EMAIL"\" ]; then
     $export_committer_name
     $export_committer_email
@@ -53,5 +53,9 @@ fi
 if [ \""\$GIT_AUTHOR_EMAIL"\" = \""$OLD_EMAIL"\" ]; then
     $export_author_name
     $export_author_email
+    $export_committer_name
+    $export_committer_email
 fi
-" --tag-name-filter cat -- --branches --tags
+
+" --tag-name-filter cat -- --branches --tags f8fdcd7bd..HEAD
+#" --tag-name-filter cat -- --branches --tags $(git rev-list --max-parents=0 HEAD)..HEAD
