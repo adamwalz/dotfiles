@@ -38,6 +38,7 @@ pmodules=($pmodules \
   'git'             \
   'history'         \
   'spectrum'        \
+  'ssh'             \
   'terminal'        \
   'tmux'            \
 )
@@ -57,7 +58,7 @@ fi
 
 ## syntax-highlighting, history-substring-search, autosuggestions, and prompt must be loaded last,
 ## in that order
-pmodules=($pmodules 'syntax-highlighting' 'history-substring-search' 'prompt')
+pmodules=($pmodules 'syntax-highlighting' 'history-substring-search' 'autosuggestions' 'prompt')
 
 # Now actually do the module loading
 zstyle ':prezto:load' pmodule $pmodules
@@ -95,6 +96,7 @@ zstyle ':prezto:module:git:status:ignore' submodules 'all'
 # Setting it to 'random' loads a random theme.
 # Auto set to 'off' on dumb terminals.
 zstyle ':prezto:module:prompt' theme 'adam'
+zstyle ':prezto:module:prompt' show-return-val 'yes'
 
 #
 # Terminal
@@ -103,9 +105,13 @@ zstyle ':prezto:module:prompt' theme 'adam'
 # Auto set the tab and window titles.
 zstyle ':prezto:module:terminal' auto-title 'yes'
 
+zstyle ':prezto:module:autosuggestions' color 'yes'
+zstyle ':prezto:module:ssh:load' identities 'id_rsa'
+
 #
 # Tmux
 #
+zstyle ':prezto:module:tmux:session' name 'default'
 
 # Auto start a session when Zsh is launched.
 zstyle ':prezto:module:tmux:auto-start' local 'yes'
