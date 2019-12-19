@@ -152,6 +152,7 @@ Plug 'derekwyatt/vim-scala', { 'for': 'scala' } " Syntax highlighting for Scala
 Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Matt-Deacalion/vim-systemd-syntax', { 'for': 'systemd' } " Syntax highlighting for systemd service files
 Plug 'google/vim-jsonnet', { 'for': 'jsonnet' } " Syntax highlighting for jsonnet
+Plug 'sboehler/jflex-vim', { 'for': 'jflex' } " Syntax highlighting for jflex
 
 " Writing
 Plug 'tpope/vim-markdown', { 'for': 'markdown' } " Syntax highlighting, matching rules and mappings for the original Markdown and extensions.
@@ -218,7 +219,7 @@ set wildmenu " when 'wildmenu' is on, command-line completion operates in an enh
 " Completion mode that is used for the character specified with 'wildchar'
 " list - When more than one match, list all matches
 " longest - Complete till longest common string
-" fukk - Complete the next full match
+" full - Complete the next full match
 set wildmode=list:longest,full
 " A file that matches with one of these patterns is ignored when expanding |wildcards
 set wildignore=
@@ -316,7 +317,7 @@ let g:ctrlp_working_path_mode = 'ra' " set root to nearest .git directory
 let g:ctrlp_open_new_file = 'v' " open new files in new vertical split
 let g:ctrlp_by_filename = 0 " search full path by default
 let g:ctrlp_switch_buffer = 'e' " jump to an already opened window instead of creating new instance
-let g:ctrlp_user_command = 'rg %s -l --nocolor -g ""' " specify an external tool for search instead of Vim's globpath()
+let g:ctrlp_user_command = 'rg %s --files -g ""' " specify an external tool for search instead of Vim's globpath()
 
 " scrooloose/nerdtree
 let NERDTreeRespectWildIgnore = 1
@@ -463,6 +464,7 @@ augroup file_type " autocommand group for setting filetype by extension
   au BufRead,BufNewFile *.tex,*.cls setfiletype tex
   au BufRead,BufNewFile *.template setfiletype json
   au BufRead,BufNewFile *.env setfiletype config
+  au BufRead,BufNewFile *.flex,*.jflex setfiletype jflex
 augroup END
 
 augroup epandtabs " autocommand group for setting expandtab by filetype
