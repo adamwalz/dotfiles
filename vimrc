@@ -151,7 +151,8 @@ filetype plugin indent on    " required
 set statusline=%F%m%r%h%w\ %{fugitive#statusline()}\ [%l,%c]\ [%L,%p%%]
 
 " Use powerline statusbar if available
-set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim
+" set rtp+=/Library/Python/2.7/site-packages/powerline/bindings/vim
+" set rtp+=$HOME/Library/Python/2.7/lib/python/site-packages/powerline/bindings/vim
 
 " set dark background and color scheme
 let base16colorspace=256  " Access colors present in 256 colorspace
