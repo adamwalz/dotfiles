@@ -149,7 +149,7 @@ Plug 'clausreinke/typescript-tools.vim', { 'for': 'typescript' } " typescript-to
 Plug 'klen/python-mode', { 'for': 'python' } " access to libraries including pylint, rope, pydoc, pyflakes, pep8, autopep8, pep257 and mccabe for features like static analysis, refactoring, folding, completion, documentation
 Plug 'lambdalisue/vim-pyenv', { 'for': 'python' } " allows you to activate and deactivate the pyenv Python correctly in a live session
 Plug 'derekwyatt/vim-scala', { 'for': 'scala' } " Syntax highlighting for Scala
-Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
+Plug 'ensime/ensime-vim', { 'for': 'scala', 'do': ':UpdateRemotePlugins' }
 Plug 'Matt-Deacalion/vim-systemd-syntax', { 'for': 'systemd' } " Syntax highlighting for systemd service files
 Plug 'google/vim-jsonnet', { 'for': 'jsonnet' } " Syntax highlighting for jsonnet
 Plug 'sboehler/jflex-vim', { 'for': 'jflex' } " Syntax highlighting for jflex
@@ -394,23 +394,23 @@ let g:ycm_use_ultisnips_completer = 1
 " set statusline+=%*
 
 "Linting with neomake
-let g:neomake_sbt_maker = {
-      \ 'exe': 'sbt',
-      \ 'args': ['-Dsbt.log.noformat=true', 'compile'],
-      \ 'append_file': 0,
-      \ 'auto_enabled': 1,
-      \ 'output_stream': 'stdout',
-      \ 'errorformat':
-          \ '%E[%trror]\ %f:%l:\ %m,' .
-            \ '%-Z[error]\ %p^,' .
-            \ '%-C%.%#,' .
-            \ '%-G%.%#'
-     \ }
-let g:neomake_scala_enabled_makers = ['sbt']
-let g:neomake_verbose=3
+" let g:neomake_sbt_maker = {
+"       \ 'exe': 'sbt',
+"       \ 'args': ['-Dsbt.log.noformat=true', 'compile'],
+"       \ 'append_file': 0,
+"       \ 'auto_enabled': 1,
+"       \ 'output_stream': 'stdout',
+"       \ 'errorformat':
+"           \ '%E[%trror]\ %f:%l:\ %m,' .
+"             \ '%-Z[error]\ %p^,' .
+"             \ '%-C%.%#,' .
+"             \ '%-G%.%#'
+"      \ }
+" let g:neomake_scala_enabled_makers = ['sbt']
+" let g:neomake_verbose=3
 
-" Neomake on text change
-autocmd InsertLeave,TextChanged * update | Neomake! sbt
+" " Neomake on text change
+" autocmd InsertLeave,TextChanged * update | Neomake! sbt
 
 " chrisbra/Colorizer
 let g:colorizer_auto_filetype='css,html'
