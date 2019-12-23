@@ -47,7 +47,7 @@ pmodules=($pmodules \
 if [[ "$OSTYPE" == darwin* ]]; then
   pmodules=($pmodules 'homebrew' 'osx')
 elif [[ "$OSTYPE" == linux-gnu ]]; then
-  pmodules=($pmodules 'dpkg' 'pacman' 'yum')
+  pmodules=($pmodules 'dpkg' 'pacman' 'yum' 'snap')
 fi
 
 # Load machine specific prezto modules from file
