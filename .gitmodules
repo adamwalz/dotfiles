@@ -4,3 +4,6 @@
 [submodule "tilde/bin/git-quick-stats"]
   path = tilde/bin/git-quick-stats
   url = https://github.com/arzzen/git-quick-stats.git
+[submodule "tmux/plugins/tpm"]
+	path = tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm
