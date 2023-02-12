@@ -5,52 +5,52 @@ import sys
 
 IGNORED_REPOS = [
   "setup/dotfiles/vim/bundle",
+  "setup/dotfiles/tmux/plugins",
 ]
 
 def find_git_repos(root_dir):
   git_repos = []
   for dirpath, dirnames, filenames in os.walk(root_dir):
     if '.git' in dirnames:
-      git_dir = os.path.join(dirpath, '.git')
+      repo_root = dirpath
       ignored = False
       for ignored_repo in IGNORED_REPOS:
-        if ignored_repo in git_dir:
+        if ignored_repo in repo_root:
           ignored = True
           break
       if not ignored:
-        git_repos.append(git_dir)
-  return ['/Users/adamwalz/Developer/setup/dotfiles/.git']
-  # return git_repos
+        git_repos.append(repo_root)
+  return git_repos
 
 def find_uncommitted(git_repos):
   uncommitted_repos = []
-  for git_dir in git_repos:
-    try:
-      subprocess.run(
-        ['git', 'diff-index', '--quiet', 'HEAD', '--'],
-        cwd=git_dir,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL
-      )
-    except subprocess.CalledProcessError:
-      uncommitted_repos.append(git_dir + " (uncommitted changes)")
+  for repo_root in git_repos:
+    result = subprocess.run(
+      ['git', 'status', '--ignore-submodules', '--porcelain'],
+      cwd=repo_root,
+      stdout=subprocess.PIPE,
+      stderr=subprocess.DEVNULL
+    )
+    output = result.stdout.decode().strip()
+    if output:
+      uncommitted_repos.append(repo_root + " (uncommitted changes)")
   return uncommitted_repos
 
 def find_unpushed(git_repos):
   branches = ['master', 'main', 'dev', 'development', 'develop', 'release', 'staging']
   unpushed_repos = []
-  for git_dir in git_repos:
+  for repo_root in git_repos:
     for branch in branches:
       try:
         result = subprocess.run(
           ['git', 'rev-list', 'HEAD...origin/' + branch, '--count'],
-          cwd=git_dir,
+          cwd=repo_root,
           stdout=subprocess.PIPE,
           stderr=subprocess.DEVNULL
         )
         output = result.stdout.decode().strip()
         if output and int(output) > 0:
-          unpushed_repos.append(git_dir + " (committed changes not pushed to origin/" + branch + ")")
+          unpushed_repos.append(repo_root + " (committed changes not pushed to origin/" + branch + ")")
           break
       except subprocess.CalledProcessError:
         pass
@@ -72,4 +72,3 @@ if __name__ == '__main__':
     print("Repositories with committed changes not pushed to origin:")
     for repo in unpushed_repos:
       print(repo)
-  print(git_repos)
