@@ -1,2 +1,3 @@
 /Users/awalz/.tmux	40
 /Users/awalz	40
+/Users/adamwalz/Developer/setup/dotfiles/tmux	40

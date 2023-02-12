@@ -8,22 +8,19 @@
 # Execute code that does not affect the current session in the background.
 {
   # Compile the completion dump to increase startup speed.
-  zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
-  if [[ "$zcompdump" -nt "${zcompdump}.zwc" || ! -s "${zcompdump}.zwc" ]]; then
+  zcompdump="${XDG_CACHE_HOME:-$HOME/.cache}/prezto/zcompdump"
+  if [[ -s "$zcompdump" && (! -s "${zcompdump}.zwc" || "$zcompdump" -nt "${zcompdump}.zwc") ]]; then
     zcompile "$zcompdump"
-  fi
-
-  # Set environment variables for launchd processes.
-  if [[ "$OSTYPE" == darwin* ]]; then
-    for env_var in PATH MANPATH; do
-      launchctl setenv "$env_var" "${(P)env_var}"
-    done
   fi
 } &!
 
-# Print a random, hopefully interesting, adage.
-if (( $+commands[fortune] && $+commands[cowsay] && $+commands[lolcat] )); then
-  if [[ -t 0 || -t 1 ]]; then
-    fortune ~/.tilde/share/fortunes/zen | cowsay | lolcat
+# Execute code only if STDERR is bound to a TTY.
+if [[ -o INTERACTIVE && -t 2 ]]; then
+
+  # Print a random, hopefully interesting, adage.
+  if (( $+commands[fortune] )); then
+    fortune -s
+    print
   fi
-fi
+
+fi >&2

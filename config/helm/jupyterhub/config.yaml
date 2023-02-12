@@ -1,0 +1,29 @@
+# For reference see the configuration reference and default values, but make
+# sure to refer to the Helm chart version of interest to you!
+#
+# Chart config reference:   https://zero-to-jupyterhub.readthedocs.io/en/stable/resources/reference.html
+# Chart default values:     https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
+# Available chart versions: https://jupyterhub.github.io/helm-chart/
+ingress:
+  enabled: true
+singleuser:
+  image:
+    name: registry.k8s.walz.io/jupyter/minimal-notebook
+    tag: 1.0.0
+  cmd: null
+  profileList:
+    - display_name: "Minimal environment"
+      description: "Basic python"
+      default: true
+    - display_name: "Scipy Environment"
+      description: "Python with common libraries and widgets installed for data science, ML, and visualization"
+      kubespawner_override:
+        image: registry.k8s.walz.io/jupyter/scipy-notebook:1.0.3
+    - display_name: "Big Data"
+      description: "Adds spark, Julia, R, and hadoop to the scipy environment"
+      kubespawner_override:
+        image: registry.k8s.walz.io/jupyter/bigdata-notebook:1.0.1
+    - display_name: "Massive Environment"
+      description: "Adds Golang, Rust, and Ruby to the Big Data environment"
+      kubespawner_override:
+        image: registry.k8s.walz.io/jupyter/massive-notebook:1.0.1

@@ -7,7 +7,7 @@
 
 [user]
   name = Adam Walz
-  email =
+	email = adam@adamwalz.net
   useConfigOnly = true
 [advice]
   pushNonFastForward = false
@@ -42,7 +42,7 @@
     untracked = cyan
 [core]
   legacyheaders = false
-  excludesfile = ~/.gitignore
+	excludesfile = /Users/adamwalz/.gitignore
   whitespace = trailing-space,space-before-tab
   quotepath = false
   editor = nvim
@@ -78,8 +78,8 @@
 [difftool "Kaleidoscope"]
   cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [difftool "sourcetree"]
-  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-  path =
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
 [merge]
   tool = Kaleidoscope
 [mergetool]
@@ -106,11 +106,13 @@
   cmd = gvim -f -c \"SpliceInit\" \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
   trustExitCode = true
 [mergetool "sourcetree"]
-  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-  trustExitCode = true
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
 
 [gerrit]
   createchangeid = true
 
 [gpg]
   program = /usr/local/bin/gpg
+[init]
+	defaultBranch = main
