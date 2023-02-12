@@ -37,7 +37,7 @@ def find_uncommitted(git_repos):
   return uncommitted_repos
 
 def find_unpushed(git_repos):
-  branches = ['master', 'main', 'dev', 'development', 'develop', 'release', 'staging']
+  branches = ['master', 'main', 'dev', 'development', 'develop', 'release', 'staging', 'production']
   unpushed_repos = []
   for repo_root in git_repos:
     for branch in branches:
