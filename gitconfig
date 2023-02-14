@@ -42,7 +42,7 @@
     untracked = cyan
 [core]
   legacyheaders = false
-	excludesfile = /Users/adamwalz/.gitignore
+  excludesfile = ~/.gitignore
   whitespace = trailing-space,space-before-tab
   quotepath = false
   editor = nvim
@@ -114,5 +114,3 @@
 
 [gpg]
   program = /usr/local/bin/gpg
-[init]
-	defaultBranch = main

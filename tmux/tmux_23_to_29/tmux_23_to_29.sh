@@ -590,7 +590,7 @@ _apply_24b() {
 _apply_bindings() {
   cfg=$(mktemp) && trap 'rm -f $cfg*' EXIT
 
-  tmux list-keys | grep -vF 'tmux_23_up.conf' | grep -E 'new-window|split(-|_)window|new-session|copy-selection|copy-pipe' > "$cfg"
+  tmux list-keys | grep -vF 'tmux_23_to_29.conf' | grep -E 'new-window|split(-|_)window|new-session|copy-selection|copy-pipe' > "$cfg"
 
   # tmux 3.0 doesn't include 02254d1e5c881be95fd2fc37b4c4209640b6b266 and the
   # output of list-keys can be truncated
@@ -606,9 +606,9 @@ _apply_bindings() {
   tmux_conf_new_pane_retain_current_path=${tmux_conf_new_pane_retain_current_path:-true}
   if ! _is_disabled "$tmux_conf_new_pane_retain_current_path"; then
     perl -p -i -e "
-      s/\brun-shell\b\s+(\"|')cat\s+~\/\.tmux\/tmux_23_up\.sh\s+\|\s+sh\s+-s\s+_split_window\s+#\{b:pane_tty\}([^\n\1]*)(\s+-c\s+((?:\\\\\")?|\"?|'?)#\{pane_current_path\}\4)([^\n\1]*)\1/run-shell \1cat ~\/.tmux\/tmux_23_up.sh | sh -s _split_window #{pane_pid} #{b:pane_tty}\2\5\1/g
+      s/\brun-shell\b\s+(\"|')cat\s+~\/\.tmux\/tmux_23_to_29\/tmux_23_to_29\.sh\s+\|\s+sh\s+-s\s+_split_window\s+#\{b:pane_tty\}([^\n\1]*)(\s+-c\s+((?:\\\\\")?|\"?|'?)#\{pane_current_path\}\4)([^\n\1]*)\1/run-shell \1cat ~\/.tmux\/tmux_23_to_29\/tmux_23_to_29.sh | sh -s _split_window #{pane_pid} #{b:pane_tty}\2\5\1/g
       ;
-      s/\brun-shell\b(\s+((?:\\\\\")?|\"?|'?)cat\s+~\/\.tmux\/tmux_23_up\.sh\s+\|\s+sh\s+-s\s+_split_window\s+((?:\\\\\")?|\"?|'?)#\{b:pane_tty\}\3)(.*?)\2/split-window\4/g
+      s/\brun-shell\b(\s+((?:\\\\\")?|\"?|'?)cat\s+~\/\.tmux\/tmux_23_to_29\/tmux_23_to_29\.sh\s+\|\s+sh\s+-s\s+_split_window\s+((?:\\\\\")?|\"?|'?)#\{b:pane_tty\}\3)(.*?)\2/split-window\4/g
       ;
       s/\bsplit-window\b([^;}\n]*?)(?:\s+-c\s+((?:\\\\\")?|\"?|'?)#\{pane_current_path\}\2)/split-window\1/g" \
       "$cfg"
@@ -625,12 +625,12 @@ _apply_bindings() {
   fi
 
   perl -p -i -e "
-    s/\bsplit-window\b((?:(?:[ \t]+-[bdfhIvP])|(?:[ \t]+-[celtF][ \t]+(?!\bssh\b)[^\s]+))*)?(?:\s+(\bssh\b))((?:(?:[ \t]+-[bdfhIvP])|(?:[ \t]+-[celtF][ \t]+(?!\bssh\b)[^\s]+))*)?/run-shell 'cat ~\/\.tmux\/tmux_23_up\.sh | sh -s _split_window_ssh #\{pane_pid\} #\{b:pane_tty\}\1'/g if /\bsplit-window\b((?:(?:[ \t]+-[bdfhIvP])|(?:[ \t]+-[celtF][ \t]+(?!ssh)[^\s]+))*)?(?:\s+(ssh))((?:(?:[ \t]+-[bdfhIvP])|(?:[ \t]+-[celtF][ \t]+(?!ssh)[^\s]+))*)?/"\
+    s/\bsplit-window\b((?:(?:[ \t]+-[bdfhIvP])|(?:[ \t]+-[celtF][ \t]+(?!\bssh\b)[^\s]+))*)?(?:\s+(\bssh\b))((?:(?:[ \t]+-[bdfhIvP])|(?:[ \t]+-[celtF][ \t]+(?!\bssh\b)[^\s]+))*)?/run-shell 'cat ~\/\.tmux\/tmux_23_to_29\/tmux_23_to_29\.sh | sh -s _split_window_ssh #\{pane_pid\} #\{b:pane_tty\}\1'/g if /\bsplit-window\b((?:(?:[ \t]+-[bdfhIvP])|(?:[ \t]+-[celtF][ \t]+(?!ssh)[^\s]+))*)?(?:\s+(ssh))((?:(?:[ \t]+-[bdfhIvP])|(?:[ \t]+-[celtF][ \t]+(?!ssh)[^\s]+))*)?/"\
   "$cfg"
 
   tmux_conf_new_pane_reconnect_ssh=${tmux_conf_new_pane_reconnect_ssh:-false}
   if ! _is_disabled "$tmux_conf_new_pane_reconnect_ssh" && _is_true "$tmux_conf_new_pane_reconnect_ssh"; then
-    perl -p -i -e "s/\bsplit-window\b([^;}\n\"]*)/run-shell 'cat ~\/\.tmux\/tmux_23_up\.sh | sh -s _split_window #\{pane_pid\} #\{b:pane_tty\}\1'/g" "$cfg"
+    perl -p -i -e "s/\bsplit-window\b([^;}\n\"]*)/run-shell 'cat ~\/\.tmux\/tmux_23_to_29\/tmux_23_to_29\.sh | sh -s _split_window #\{pane_pid\} #\{b:pane_tty\}\1'/g" "$cfg"
   fi
 
   if ! _is_disabled "$tmux_conf_new_pane_retain_current_path" && _is_true "$tmux_conf_new_pane_retain_current_path"; then
@@ -639,9 +639,9 @@ _apply_bindings() {
       ;
       s/\bsplit-window\b/split-window -c '#{pane_current_path}'\1/g
       ;
-      s/\brun-shell\b\s+'cat\s+~\/\.tmux\/tmux_23_up\.sh\s+\|\s+sh\s+-s\s+_split_window(_ssh)?\s+#\{pane_pid\}\s+#\{b:pane_tty\}([^}\n']*)'/run-shell 'cat ~\/.tmux\/tmux_23_up.sh | sh -s _split_window\1 #\{pane_pid\} #\{b:pane_tty\} -c \\\\\"#\{pane_current_path\}\\\\\"\2'/g if /\bdisplay-menu\b/
+      s/\brun-shell\b\s+'cat\s+~\/\.tmux\/tmux_23_to_29\/tmux_23_to_29\.sh\s+\|\s+sh\s+-s\s+_split_window(_ssh)?\s+#\{pane_pid\}\s+#\{b:pane_tty\}([^}\n']*)'/run-shell 'cat ~\/.tmux\/tmux_23_to_29\/tmux_23_to_29.sh | sh -s _split_window\1 #\{pane_pid\} #\{b:pane_tty\} -c \\\\\"#\{pane_current_path\}\\\\\"\2'/g if /\bdisplay-menu\b/
       ;
-      s/\brun-shell\b\s+'cat\s+~\/\.tmux\/tmux_23_up\.sh\s+\|\s+sh\s+-s\s+_split_window(_ssh)?\s+#\{pane_pid\}\s+#\{b:pane_tty\}([^}\n']*)'/run-shell 'cat ~\/.tmux\/tmux_23_up.sh | sh -s _split_window\1 #\{pane_pid\} #\{b:pane_tty\} -c \"#\{pane_current_path\}\"\2'/g" \
+      s/\brun-shell\b\s+'cat\s+~\/\.tmux\/tmux_23_to_29\/tmux_23_to_29\.sh\s+\|\s+sh\s+-s\s+_split_window(_ssh)?\s+#\{pane_pid\}\s+#\{b:pane_tty\}([^}\n']*)'/run-shell 'cat ~\/.tmux\/tmux_23_to_29\/tmux_23_to_29.sh | sh -s _split_window\1 #\{pane_pid\} #\{b:pane_tty\} -c \"#\{pane_current_path\}\"\2'/g" \
       "$cfg"
   fi
 
@@ -824,14 +824,14 @@ _apply_theme() {
   tmux_conf_theme_terminal_title=${tmux_conf_theme_terminal_title:-#h ❐ #S ● #I #W}
 
   tmux_conf_theme_terminal_title=$(echo "$tmux_conf_theme_terminal_title" | sed \
-    -e 's%#{circled_window_index}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #I)%g' \
-    -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #S)%g' \
-    -e 's%#{username}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
-    -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
-    -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
-    -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
-    -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
-    -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
+    -e 's%#{circled_window_index}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #I)%g' \
+    -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #S)%g' \
+    -e 's%#{username}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
+    -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
+    -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
+    -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
+    -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
+    -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
 
   tmux_conf_theme_window_status_fg_light=${tmux_conf_theme_window_status_fg_light:-$tmux_conf_theme_color_window_status_fg_light}
   tmux_conf_theme_window_status_fg_dark=${tmux_conf_theme_window_status_fg_dark:-$tmux_conf_theme_color_window_status_fg_dark}
@@ -927,42 +927,42 @@ _apply_theme() {
   fi
 
   tmux_conf_theme_window_status_format_light=$(echo "$tmux_conf_theme_window_status_format_light" | sed \
-    -e 's%#{circled_window_index}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #I)%g' \
-    -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #S)%g' \
-    -e 's%#{username}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
-    -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
-    -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
-    -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
-    -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
-    -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
+    -e 's%#{circled_window_index}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #I)%g' \
+    -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #S)%g' \
+    -e 's%#{username}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
+    -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
+    -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
+    -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
+    -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
+    -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
   tmux_conf_theme_window_status_format_dark=$(echo "$tmux_conf_theme_window_status_format_dark" | sed \
-    -e 's%#{circled_window_index}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #I)%g' \
-    -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #S)%g' \
-    -e 's%#{username}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
-    -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
-    -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
-    -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
-    -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
-    -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
+    -e 's%#{circled_window_index}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #I)%g' \
+    -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #S)%g' \
+    -e 's%#{username}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
+    -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
+    -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
+    -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
+    -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
+    -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
 
   tmux_conf_theme_window_status_current_format_light=$(echo "$tmux_conf_theme_window_status_current_format_light" | sed \
-    -e 's%#{circled_window_index}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #I)%g' \
-    -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #S)%g' \
-    -e 's%#{username}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
-    -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
-    -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
-    -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
-    -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
-    -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
+    -e 's%#{circled_window_index}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #I)%g' \
+    -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #S)%g' \
+    -e 's%#{username}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
+    -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
+    -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
+    -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
+    -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
+    -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
   tmux_conf_theme_window_status_current_format_dark=$(echo "$tmux_conf_theme_window_status_current_format_dark" | sed \
-    -e 's%#{circled_window_index}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #I)%g' \
-    -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #S)%g' \
-    -e 's%#{username}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
-    -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
-    -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
-    -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
-    -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
-    -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
+    -e 's%#{circled_window_index}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #I)%g' \
+    -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #S)%g' \
+    -e 's%#{username}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
+    -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
+    -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
+    -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
+    -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
+    -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
 
   # -- indicators
 
@@ -1022,14 +1022,14 @@ _apply_theme() {
       -e "s/#{prefix}/#[fg=$tmux_conf_theme_prefix_fg_light]#[bg=$tmux_conf_theme_prefix_bg_light]#[$tmux_conf_theme_prefix_attr]#{?client_prefix,$tmux_conf_theme_prefix ,$(printf "$tmux_conf_theme_prefix" | sed -e 's/./ /g') }/g" \
       -e "s/#{mouse}/#[fg=$tmux_conf_theme_mouse_fg_light]#[bg=$tmux_conf_theme_mouse_bg_light]#[$tmux_conf_theme_mouse_attr]#{?mouse,$tmux_conf_theme_mouse ,$(printf "$tmux_conf_theme_mouse" | sed -e 's/./ /g') }/g" \
       -e "s%#{synchronized}%#[fg=$tmux_conf_theme_synchronized_fg_light]#[bg=$tmux_conf_theme_synchronized_bg_light]#[$tmux_conf_theme_synchronized_attr]#{?pane_synchronized,$tmux_conf_theme_synchronized ,}%g" \
-      -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #S)%g')
+      -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #S)%g')
 
     if [ -n "$(tmux display -p '#{version}')" ]; then
       status_left_light=$(echo "$status_left_light" | sed \
-        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_light]#[bg=$tmux_conf_theme_root_bg_light]#[$tmux_conf_theme_root_attr]#{?#{==:#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} #D),root},$tmux_conf_theme_root,}#[inherit]%g")
+        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_light]#[bg=$tmux_conf_theme_root_bg_light]#[$tmux_conf_theme_root_attr]#{?#{==:#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} #D),root},$tmux_conf_theme_root,}#[inherit]%g")
     else
       status_left_light=$(echo "$status_left_light" | sed \
-        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_light]#[bg=$tmux_conf_theme_root_bg_light]#[$tmux_conf_theme_root_attr]#(cat ~/.tmux/tmux_23_up.sh | sh -s _root #{pane_pid} #{b:pane_tty} $tmux_conf_theme_root #D)#[inherit]%g")
+        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_light]#[bg=$tmux_conf_theme_root_bg_light]#[$tmux_conf_theme_root_attr]#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _root #{pane_pid} #{b:pane_tty} $tmux_conf_theme_root #D)#[inherit]%g")
     fi
 
     status_left_light=$(printf '%s' "$status_left_light" | awk \
@@ -1107,14 +1107,14 @@ _apply_theme() {
       -e "s/#{prefix}/#[fg=$tmux_conf_theme_prefix_fg_dark]#[bg=$tmux_conf_theme_prefix_bg_dark]#[$tmux_conf_theme_prefix_attr]#{?client_prefix,$tmux_conf_theme_prefix ,$(printf "$tmux_conf_theme_prefix" | sed -e 's/./ /g') }/g" \
       -e "s/#{mouse}/#[fg=$tmux_conf_theme_mouse_fg_dark]#[bg=$tmux_conf_theme_mouse_bg_dark]#[$tmux_conf_theme_mouse_attr]#{?mouse,$tmux_conf_theme_mouse ,$(printf "$tmux_conf_theme_mouse" | sed -e 's/./ /g') }/g" \
       -e "s%#{synchronized}%#[fg=$tmux_conf_theme_synchronized_fg_dark]#[bg=$tmux_conf_theme_synchronized_bg_dark]#[$tmux_conf_theme_synchronized_attr]#{?pane_synchronized,$tmux_conf_theme_synchronized ,}%g" \
-      -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #S)%g')
+      -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #S)%g')
 
     if [ -n "$(tmux display -p '#{version}')" ]; then
       status_left_dark=$(echo "$status_left_dark" | sed \
-        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_dark]#[bg=$tmux_conf_theme_root_bg_dark]#[$tmux_conf_theme_root_attr]#{?#{==:#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} #D),root},$tmux_conf_theme_root,}#[inherit]%g")
+        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_dark]#[bg=$tmux_conf_theme_root_bg_dark]#[$tmux_conf_theme_root_attr]#{?#{==:#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} #D),root},$tmux_conf_theme_root,}#[inherit]%g")
     else
       status_left_dark=$(echo "$status_left_dark" | sed \
-        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_dark]#[bg=$tmux_conf_theme_root_bg_dark]#[$tmux_conf_theme_root_attr]#(cat ~/.tmux/tmux_23_up.sh | sh -s _root #{pane_pid} #{b:pane_tty} $tmux_conf_theme_root #D)#[inherit]%g")
+        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_dark]#[bg=$tmux_conf_theme_root_bg_dark]#[$tmux_conf_theme_root_attr]#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _root #{pane_pid} #{b:pane_tty} $tmux_conf_theme_root #D)#[inherit]%g")
     fi
 
     status_left_dark=$(printf '%s' "$status_left_dark" | awk \
@@ -1203,14 +1203,14 @@ _apply_theme() {
       -e "s/#{prefix}/#[fg=$tmux_conf_theme_prefix_fg_light]#[bg=$tmux_conf_theme_prefix_bg_light]#[$tmux_conf_theme_prefix_attr]#{?client_prefix,$tmux_conf_theme_prefix ,$(printf "$tmux_conf_theme_prefix" | sed -e 's/./ /g') }/g" \
       -e "s/#{mouse}/#[fg=$tmux_conf_theme_mouse_fg_light]#[bg=$tmux_conf_theme_mouse_bg_light]#[$tmux_conf_theme_mouse_attr]#{?mouse,$tmux_conf_theme_mouse ,$(printf "$tmux_conf_theme_mouse" | sed -e 's/./ /g') }/g" \
       -e "s%#{synchronized}%#[fg=$tmux_conf_theme_synchronized_fg_light]#[bg=$tmux_conf_theme_synchronized_bg_light]#[$tmux_conf_theme_synchronized_attr]#{?pane_synchronized,$tmux_conf_theme_synchronized ,}%g" \
-      -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #S)%g')
+      -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #S)%g')
 
     if [ -z "$(tmux display -p '#{version}')" ]; then
       status_right_light=$(echo "$status_right_light" | sed \
-        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_light]#[bg=$tmux_conf_theme_root_bg_light]#[$tmux_conf_theme_root_attr]#{?#{==:#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} #D),root},$tmux_conf_theme_root,}#[inherit]%g")
+        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_light]#[bg=$tmux_conf_theme_root_bg_light]#[$tmux_conf_theme_root_attr]#{?#{==:#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} #D),root},$tmux_conf_theme_root,}#[inherit]%g")
     else
       status_right_light=$(echo "$status_right_light" | sed \
-        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_light]#[bg=$tmux_conf_theme_root_bg_light]#[$tmux_conf_theme_root_attr]#(cat ~/.tmux/tmux_23_up.sh | sh -s _root #{pane_pid} #{b:pane_tty} $tmux_conf_theme_root #D)#[inherit]%g")
+        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_light]#[bg=$tmux_conf_theme_root_bg_light]#[$tmux_conf_theme_root_attr]#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _root #{pane_pid} #{b:pane_tty} $tmux_conf_theme_root #D)#[inherit]%g")
     fi
 
     status_right_light=$(printf '%s' "$status_right_light" | awk \
@@ -1288,14 +1288,14 @@ _apply_theme() {
       -e "s/#{prefix}/#[fg=$tmux_conf_theme_prefix_fg_dark]#[bg=$tmux_conf_theme_prefix_bg_dark]#[$tmux_conf_theme_prefix_attr]#{?client_prefix,$tmux_conf_theme_prefix ,$(printf "$tmux_conf_theme_prefix" | sed -e 's/./ /g') }/g" \
       -e "s/#{mouse}/#[fg=$tmux_conf_theme_mouse_fg_dark]#[bg=$tmux_conf_theme_mouse_bg_dark]#[$tmux_conf_theme_mouse_attr]#{?mouse,$tmux_conf_theme_mouse ,$(printf "$tmux_conf_theme_mouse" | sed -e 's/./ /g') }/g" \
       -e "s%#{synchronized}%#[fg=$tmux_conf_theme_synchronized_fg_dark]#[bg=$tmux_conf_theme_synchronized_bg_dark]#[$tmux_conf_theme_synchronized_attr]#{?pane_synchronized,$tmux_conf_theme_synchronized ,}%g" \
-      -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _circled #S)%g')
+      -e 's%#{circled_session_name}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _circled #S)%g')
 
     if [ -z "$(tmux display -p '#{version}')" ]; then
       status_right_dark=$(echo "$status_right_dark" | sed \
-        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_dark]#[bg=$tmux_conf_theme_root_bg_dark]#[$tmux_conf_theme_root_attr]#{?#{==:#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} #D),root},$tmux_conf_theme_root,}#[inherit]%g")
+        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_dark]#[bg=$tmux_conf_theme_root_bg_dark]#[$tmux_conf_theme_root_attr]#{?#{==:#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} #D),root},$tmux_conf_theme_root,}#[inherit]%g")
     else
       status_right_dark=$(echo "$status_right_dark" | sed \
-        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_dark]#[bg=$tmux_conf_theme_root_bg_dark]#[$tmux_conf_theme_root_attr]#(cat ~/.tmux/tmux_23_up.sh | sh -s _root #{pane_pid} #{b:pane_tty} $tmux_conf_theme_root #D)#[inherit]%g")
+        -e "s%#{root}%#[fg=$tmux_conf_theme_root_fg_dark]#[bg=$tmux_conf_theme_root_bg_dark]#[$tmux_conf_theme_root_attr]#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _root #{pane_pid} #{b:pane_tty} $tmux_conf_theme_root #D)#[inherit]%g")
     fi
 
     status_right_dark=$(printf '%s' "$status_right_dark" | awk \
@@ -1369,7 +1369,7 @@ _apply_theme() {
   tmux_conf_battery_status_charging=$(_decode_unicode_escapes "${tmux_conf_battery_status_charging:-↑}")        # U+2191
   tmux_conf_battery_status_discharging=$(_decode_unicode_escapes "${tmux_conf_battery_status_discharging:-↓}")  # U+2193
 
-  _pkillf 'cat ~/\.tmux/tmux_23_up\.sh \| sh -s _battery_bar'
+  _pkillf 'cat ~/\.tmux/tmux_23_to_29/tmux_23_to_29\.sh \| sh -s _battery_bar'
   _battery_info
   if [ "$charge" != 0 ]; then
     case "$status_left_light $status_right_light $status_left_dark $status_right_dark" in
@@ -1398,31 +1398,31 @@ _apply_theme() {
           -e 's/#\{(\?)?battery_vbar/#\{\1@battery_vbar/g' \
           -e 's/#\{(\?)?battery_status/#\{\1@battery_status/g' \
           -e 's/#\{(\?)?battery_percentage/#\{\1@battery_percentage/g')
-        status_right_light="#(echo; nice cat ~/.tmux/tmux_23_up.sh | sh -s _battery_status \"$tmux_conf_battery_status_charging\" \"$tmux_conf_battery_status_discharging\")$status_right_light"
-        status_right_dark="#(echo; nice cat ~/.tmux/tmux_23_up.sh | sh -s _battery_status \"$tmux_conf_battery_status_charging\" \"$tmux_conf_battery_status_discharging\")$status_right_dark"
+        status_right_light="#(echo; nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _battery_status \"$tmux_conf_battery_status_charging\" \"$tmux_conf_battery_status_discharging\")$status_right_light"
+        status_right_dark="#(echo; nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _battery_status \"$tmux_conf_battery_status_charging\" \"$tmux_conf_battery_status_discharging\")$status_right_dark"
         interval=60
         if [ $_tmux_version -ge 320 ]; then
-          tmux run -b "trap '[ -n \"\$sleep_pid\" ] && kill -9 \$sleep_pid; exit 0' TERM; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\"; sleep $interval & sleep_pid=\$!; wait \$sleep_pid; sleep_pid=; done"
+          tmux run -b "trap '[ -n \"\$sleep_pid\" ] && kill -9 \$sleep_pid; exit 0' TERM; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\"; sleep $interval & sleep_pid=\$!; wait \$sleep_pid; sleep_pid=; done"
         else
           case "$status_left_light $status_right_light" in
             *'#{battery_'*|*'#{?battery_'*)
               if [ $_tmux_version -ge 280 ]; then
-                status_right_light="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\"; sleep $interval; done)$status_right_light"
+                status_right_light="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\"; sleep $interval; done)$status_right_light"
               elif [ $_tmux_version -gt 240 ]; then
-                status_right_light="#(echo; while :; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\"; sleep $interval; done)$status_right_light"
+                status_right_light="#(echo; while :; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\"; sleep $interval; done)$status_right_light"
               else
-                status_right_light="#(nice cat ~/.tmux/tmux_23_up.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\")$status_right_light"
+                status_right_light="#(nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\")$status_right_light"
               fi
               ;;
           esac
           case "$status_left_dark $status_right_dark" in
             *'#{battery_'*|*'#{?battery_'*)
               if [ $_tmux_version -ge 280 ]; then
-                status_right_dark="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\"; sleep $interval; done)$status_right_dark"
+                status_right_dark="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\"; sleep $interval; done)$status_right_dark"
               elif [ $_tmux_version -gt 240 ]; then
-                status_right_dark="#(echo; while :; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\"; sleep $interval; done)$status_right_dark"
+                status_right_dark="#(echo; while :; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\"; sleep $interval; done)$status_right_dark"
               else
-                status_right_dark="#(nice cat ~/.tmux/tmux_23_up.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\")$status_right_dark"
+                status_right_dark="#(nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _battery_bar \"$tmux_conf_battery_bar_symbol_full\" \"$tmux_conf_battery_bar_symbol_empty\" \"$tmux_conf_battery_bar_length\" \"$tmux_conf_battery_bar_palette\" \"$tmux_conf_battery_hbar_palette\" \"$tmux_conf_battery_vbar_palette\")$status_right_dark"
               fi
               ;;
           esac
@@ -1433,42 +1433,42 @@ _apply_theme() {
   case "$status_left_light $status_right_light" in
     *'#{username}'*|*'#{hostname}'*|*'#{hostname_full}'*|*'#{username_ssh}'*|*'#{hostname_ssh}'*|*'#{hostname_full_ssh}'*)
       status_left_light=$(echo "$status_left_light" | sed \
-        -e 's%#{username}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
-        -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
-        -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
-        -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
-        -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
-        -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
+        -e 's%#{username}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
+        -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
+        -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
+        -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
+        -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
+        -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
       status_right_light=$(echo "$status_right_light" | sed \
-        -e 's%#{username}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
-        -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
-        -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
-        -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
-        -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
-        -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
+        -e 's%#{username}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
+        -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
+        -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
+        -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
+        -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
+        -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
       ;;
   esac
 
   case "$status_left_dark $status_right_dark" in
     *'#{username}'*|*'#{hostname}'*|*'#{hostname_full}'*|*'#{username_ssh}'*|*'#{hostname_ssh}'*|*'#{hostname_full_ssh}'*)
       status_left_dark=$(echo "$status_left_dark" | sed \
-        -e 's%#{username}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
-        -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
-        -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
-        -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
-        -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
-        -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
+        -e 's%#{username}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
+        -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
+        -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
+        -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
+        -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
+        -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
       status_right_dark=$(echo "$status_right_dark" | sed \
-        -e 's%#{username}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
-        -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
-        -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
-        -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
-        -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
-        -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_up.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
+        -e 's%#{username}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} false #D)%g' \
+        -e 's%#{hostname}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false false #h #D)%g' \
+        -e 's%#{hostname_full}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} false true #H #D)%g' \
+        -e 's%#{username_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _username #{pane_pid} #{b:pane_tty} true #D)%g' \
+        -e 's%#{hostname_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true false #h #D)%g' \
+        -e 's%#{hostname_full_ssh}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _hostname #{pane_pid} #{b:pane_tty} true true #H #D)%g')
       ;;
   esac
 
-  _pkillf 'cat ~/\.tmux/tmux_23_up\.sh \| sh -s _uptime'
+  _pkillf 'cat ~/\.tmux/tmux_23_to_29/tmux_23_to_29\.sh \| sh -s _uptime'
   case "$status_left_light $status_right_light $status_left_dark $status_right_dark" in
     *'#{uptime_'*|*'#{?uptime_'*)
       status_left_light=$(echo "$status_left_light" | perl -p -e '
@@ -1506,34 +1506,34 @@ _apply_theme() {
           ;;
       esac
       if [ $_tmux_version -ge 320 ]; then
-        tmux run -b "trap '[ -n \"\$sleep_pid\" ] && kill -9 \$sleep_pid; exit 0' TERM; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _uptime; sleep $interval & sleep_pid=\$!; wait \$sleep_pid; sleep_pid=; done"
+        tmux run -b "trap '[ -n \"\$sleep_pid\" ] && kill -9 \$sleep_pid; exit 0' TERM; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _uptime; sleep $interval & sleep_pid=\$!; wait \$sleep_pid; sleep_pid=; done"
       else
         case "$status_left_light $status_right_light" in
           *'#{uptime_'*|*'#{?uptime_'*)
             if [ $_tmux_version -gt 280 ]; then
-              status_right_light="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _uptime; sleep $interval; done)$status_right_light"
+              status_right_light="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _uptime; sleep $interval; done)$status_right_light"
             elif [ $_tmux_version -gt 240 ]; then
-              status_right_light="#(echo; while :; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _uptime; sleep $interval; done)$status_right_light"
+              status_right_light="#(echo; while :; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _uptime; sleep $interval; done)$status_right_light"
             else
-              status_right_light="#(nice cat ~/.tmux/tmux_23_up.sh | sh -s _uptime)$status_right_light"
+              status_right_light="#(nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _uptime)$status_right_light"
             fi
             ;;
         esac
         case "$status_left_dark $status_right_dark" in
           *'#{uptime_'*|*'#{?uptime_'*)
             if [ $_tmux_version -gt 280 ]; then
-              status_right_dark="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _uptime; sleep $interval; done)$status_right_dark"
+              status_right_dark="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _uptime; sleep $interval; done)$status_right_dark"
             elif [ $_tmux_version -gt 240 ]; then
-              status_right_dark="#(echo; while :; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _uptime; sleep $interval; done)$status_right_dark"
+              status_right_dark="#(echo; while :; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _uptime; sleep $interval; done)$status_right_dark"
             else
-              status_right_dark="#(nice cat ~/.tmux/tmux_23_up.sh | sh -s _uptime)$status_right_dark"
+              status_right_dark="#(nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _uptime)$status_right_dark"
             fi
             ;;
         esac
       fi
   esac
 
-  _pkillf 'cat ~/\.tmux/tmux_23_up\.sh \| sh -s _loadavg'
+  _pkillf 'cat ~/\.tmux/tmux_23_to_29/tmux_23_to_29\.sh \| sh -s _loadavg'
   case "$status_left_light $status_right_light $status_left_dark $status_right_dark" in
     *'#{loadavg'*|*'#{?loadavg'*)
       status_left_light=$(echo "$status_left_light" | sed -E \
@@ -1547,16 +1547,16 @@ _apply_theme() {
       interval=$(tmux show -gv status-interval)
 
       if [ $_tmux_version -ge 320 ]; then
-        tmux run -b "trap '[ -n \"\$sleep_pid\" ] && kill -9 \$sleep_pid; exit 0' TERM; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _loadavg; sleep $interval & sleep_pid=\$!; wait \$sleep_pid; sleep_pid=; done"
+        tmux run -b "trap '[ -n \"\$sleep_pid\" ] && kill -9 \$sleep_pid; exit 0' TERM; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _loadavg; sleep $interval & sleep_pid=\$!; wait \$sleep_pid; sleep_pid=; done"
       else
         case "$status_left_light $status_right_light" in
           *'#{loadavg'*|*'#{?loadavg'*)
             if [ $_tmux_version -gt 280 ]; then
-              status_right_light="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _loadavg; sleep $interval; done)$status_right_light"
+              status_right_light="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _loadavg; sleep $interval; done)$status_right_light"
             elif [ $_tmux_version -gt 240 ]; then
-              status_right_light="#(echo; while :; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _loadavg; sleep $interval; done)$status_right_light"
+              status_right_light="#(echo; while :; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _loadavg; sleep $interval; done)$status_right_light"
             else
-              status_right_light="#(nice cat ~/.tmux/tmux_23_up.sh | sh -s _loadavg)$status_right_light"
+              status_right_light="#(nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _loadavg)$status_right_light"
             fi
             ;;
         esac
@@ -1564,11 +1564,11 @@ _apply_theme() {
         case "$status_left_dark $status_right_dark" in
           *'#{loadavg'*|*'#{?loadavg'*)
             if [ $_tmux_version -gt 280 ]; then
-              status_right_dark="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _loadavg; sleep $interval; done)$status_right_dark"
+              status_right_dark="#(echo; while [ x\"\$(tmux -S '#{socket_path}' display -p '#{l:#{pid}}')\" = x\"#{pid}\" ]; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _loadavg; sleep $interval; done)$status_right_dark"
             elif [ $_tmux_version -gt 240 ]; then
-              status_right_dark="#(echo; while :; do nice cat ~/.tmux/tmux_23_up.sh | sh -s _loadavg; sleep $interval; done)$status_right_dark"
+              status_right_dark="#(echo; while :; do nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _loadavg; sleep $interval; done)$status_right_dark"
             else
-              status_right_dark="#(nice cat ~/.tmux/tmux_23_up.sh | sh -s _loadavg)$status_right_dark"
+              status_right_dark="#(nice cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s _loadavg)$status_right_dark"
             fi
             ;;
         esac
@@ -1584,8 +1584,8 @@ _apply_theme() {
 
   # -- custom variables ---------------------------------------------------
 
-  if [ -f ~/.tmux/tmux_23_up.conf.local ] && [ x"$(cat ~/.tmux/tmux_23_up.sh.local | sh 2>/dev/null -s printf probe)" = x"probe" ]; then
-    replacements=$(perl -n -e 'print if s!^#\s+([^_][^()\s]+)\s*\(\)\s*{\s*\n!s%#\\\{\1((?:\\s+(?:[^\{\}]+?|#\\{(?:[^\{\}]+?)\}))*)\\\}%#(cat ~/.tmux/tmux_23_up.sh.local | sh -s \1\\1)%g; !p' < ~/.tmux/tmux_23_up.conf.local)
+  if [ -f ~/.tmux/tmux_23_to_29/tmux_23_to_29.conf.local ] && [ x"$(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh.local | sh 2>/dev/null -s printf probe)" = x"probe" ]; then
+    replacements=$(perl -n -e 'print if s!^#\s+([^_][^()\s]+)\s*\(\)\s*{\s*\n!s%#\\\{\1((?:\\s+(?:[^\{\}]+?|#\\{(?:[^\{\}]+?)\}))*)\\\}%#(cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh.local | sh -s \1\\1)%g; !p' < ~/.tmux/tmux_23_to_29/tmux_23_to_29.conf.local)
     status_left_light=$(echo "$status_left_light" | perl -p -e "$replacements" || echo "$status_left_light")
     status_left_dark=$(echo "$status_left_dark" | perl -p -e "$replacements" || echo "$status_left_dark")
     status_right_light=$(echo "$status_right_light" | perl -p -e "$replacements" || echo "$status_right_light")
@@ -1716,13 +1716,13 @@ _apply_plugins() {
   tmux_conf_update_plugins_on_launch=${tmux_conf_update_plugins_on_launch:-true}
   tmux_conf_update_plugins_on_reload=${tmux_conf_update_plugins_on_reload:-true}
   tmux_conf_uninstall_plugins_on_reload=${tmux_conf_uninstall_plugins_on_reload:-true}
-  tmux run -b "cat ~/.tmux/tmux_23_up.sh | sh -s __apply_plugins \"$window_active\" \"$tmux_conf_update_plugins_on_launch\" \"$tmux_conf_update_plugins_on_reload\" \"$tmux_conf_uninstall_plugins_on_reload\""
+  tmux run -b "cat ~/.tmux/tmux_23_to_29/tmux_23_to_29.sh | sh -s __apply_plugins \"$window_active\" \"$tmux_conf_update_plugins_on_launch\" \"$tmux_conf_update_plugins_on_reload\" \"$tmux_conf_uninstall_plugins_on_reload\""
 }
 
 _apply_important() {
   cfg=$(mktemp) && trap 'rm -f $cfg*' EXIT
 
-  if perl -n -e 'print if /^\s*(?:set|bind|unbind).+?#!important\s*$/' ~/.tmux/tmux_23_up.conf.local 2>/dev/null > "$cfg.local"; then
+  if perl -n -e 'print if /^\s*(?:set|bind|unbind).+?#!important\s*$/' ~/.tmux/tmux_23_to_29/tmux_23_to_29.conf.local 2>/dev/null > "$cfg.local"; then
     if ! tmux source-file "$cfg.local"; then
       verbose_flag=$(tmux source-file -v /dev/null 2> /dev/null && printf -- '-v' || true)
       while ! out=$(tmux source-file "$verbose_flag" "$cfg.local"); do
