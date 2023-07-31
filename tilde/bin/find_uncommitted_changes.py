@@ -6,6 +6,7 @@ import sys
 IGNORED_REPOS = [
   "setup/dotfiles/vim/bundle",
   "setup/dotfiles/tmux/plugins",
+  ".terragrunt-cache",
 ]
 
 def find_git_repos(root_dir):
