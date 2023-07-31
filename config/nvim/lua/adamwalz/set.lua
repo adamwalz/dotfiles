@@ -112,10 +112,9 @@ vim.opt.sessionoptions = (
 )
 
 vim.opt.wrap = true -- lines longer than the width of the window will wrap and displaying continues on the next line
-vim.opt.foldlevelstart = 99   -- sets 'foldlevel' when starting to edit another buffer in a window
-vim.opt.foldenable = true          -- when off, all folds are open
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldenable = false          -- disable folding at startup
 
 vim.opt.splitbelow = true          -- splitting a window will put the new window below the current one
 vim.opt.splitright = true          -- splitting a window will put the new window to the right of the current one

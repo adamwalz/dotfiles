@@ -33,7 +33,7 @@ if lspzero_available then
     'puppet',
     'pyright',
     'rust_analyzer',
-    'sqls',
+    'sqlls',
     'sumneko_lua',
     'terraformls',
     'texlab',
@@ -42,10 +42,11 @@ if lspzero_available then
   })
 
   -- Fix Undefined global 'vim'
-  lsp.configure('sumneko_lua', {
+  lsp.configure('lua_ls', {
       settings = {
           Lua = {
               diagnostics = {
+                  enable = true,
                   globals = { 'vim' }
               }
           }

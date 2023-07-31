@@ -16,28 +16,33 @@ return require('packer').startup(function(use)
 
   -- Color schemes
   use('tanvirtin/monokai.nvim')
-  use({
-    'rose-pine/neovim',
-    as = 'rose-pine',
-    config = function()
-      vim.cmd('colorscheme rose-pine')
-    end
-  })
+  --use({
+  --  'rose-pine/neovim',
+  --  as = 'rose-pine',
+  --  config = function()
+  --    vim.cmd('colorscheme rose-pine')
+  --  end
+  --})
 
   use({'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'})
-  use('nvim-treesitter/playground')
-  use('theprimeagen/harpoon')
-  use('mbbill/undotree')
+  --use('nvim-treesitter/playground')
+  --use('theprimeagen/harpoon')
+  --use('mbbill/undotree')
 
   -- Git
-  use('tpope/vim-fugitive') -- git wrapper for vim
-  use('octref/RootIgnore') -- set 'wildignore' from git repo root or home folder
-  use('airblade/vim-gitgutter') -- shows a git diff in the gutter
-
-  -- File navigation
   use {
-    'nvim-telescope/telescope.nvim', tag = '0.1.0',
-    -- or                            , branch = '0.1.x',
+    'tanvirtin/vgit.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim'
+    }
+  }
+  --use('tpope/vim-fugitive') -- git wrapper for vim
+  --use('octref/RootIgnore') -- set 'wildignore' from git repo root or home folder
+  --use('airblade/vim-gitgutter') -- shows a git diff in the gutter
+
+  ---- File navigation
+  use {
+    'nvim-telescope/telescope.nvim', tag = '0.1.2',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
   use {
@@ -47,56 +52,56 @@ return require('packer').startup(function(use)
     },
   }
 
-  -- status line
+  ---- status line
   use('nvim-lualine/lualine.nvim')
 
-  -- terminal
-  use('voldikss/vim-floaterm')
+  ---- terminal
+  --use('voldikss/vim-floaterm')
 
-  -- color html codes
-  use('norcalli/nvim-colorizer.lua')
+  ---- color html codes
+  --use('norcalli/nvim-colorizer.lua')
 
   -- LSP (Language Server Provider)
   use {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v1.x',
+    branch = 'v2.x',
     requires = {
-      -- LSP Support
-      {'neovim/nvim-lspconfig'},
-      {'williamboman/mason.nvim'},
-      {'williamboman/mason-lspconfig.nvim'},
+  --    -- LSP Support
+  --    {'neovim/nvim-lspconfig'},
+  --    {'williamboman/mason.nvim'},
+  --    {'williamboman/mason-lspconfig.nvim'},
 
-      -- Completion framework
-      {'hrsh7th/nvim-cmp'},
+  --    -- Completion framework
+  --    {'hrsh7th/nvim-cmp'},
 
-      -- LSP completion source
-      {'hrsh7th/cmp-nvim-lsp'},
+  --    -- LSP completion source
+  --    {'hrsh7th/cmp-nvim-lsp'},
 
-      -- Useful completion sources
-      {'hrsh7th/cmp-nvim-lua'},
-      {'hrsh7th/cmp-nvim-lsp-signature-help'},
-      {'hrsh7th/cmp-path'},
-      {'hrsh7th/cmp-buffer'},
-      {'hrsh7th/cmp-cmdline'},
+  --    -- Useful completion sources
+  --    {'hrsh7th/cmp-nvim-lua'},
+  --    {'hrsh7th/cmp-nvim-lsp-signature-help'},
+  --    {'hrsh7th/cmp-path'},
+  --    {'hrsh7th/cmp-buffer'},
+  --    {'hrsh7th/cmp-cmdline'},
 
-      -- Snippets
-      {'hrsh7th/cmp-vsnip'},
-      {'hrsh7th/vim-vsnip'},
+  --    -- Snippets
+  --    {'hrsh7th/cmp-vsnip'},
+  --    {'hrsh7th/vim-vsnip'},
 
-      -- Github Copilot
-      {'zbirenbaum/copilot.lua'},
-      {'zbirenbaum/copilot-cmp'},
+  --    -- Github Copilot
+  --    {'zbirenbaum/copilot.lua'},
+  --    {'zbirenbaum/copilot-cmp'},
 
-      -- Rust
-      {'simrat39/rust-tools.nvim'}
+  --    -- Rust
+  --    {'simrat39/rust-tools.nvim'}
     }
   }
 
-  use {'windwp/nvim-autopairs'}
+  --use {'windwp/nvim-autopairs'}
 
-  use('puremourning/vimspector')
+  --use('puremourning/vimspector')
 
-  use("folke/zen-mode.nvim")
+  --use("folke/zen-mode.nvim")
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

@@ -20,7 +20,8 @@ if tree_available then
     },
   })
 
-  vim.keymap.set("n", "<C-n>", ":NvimTreeFindFileToggle<CR>")
+  vim.keymap.set("n", "<C-n>", ":NvimTreeFocus<CR>")
+  vim.keymap.set("n", "<C-S-n>", ":NvimTreeFindFileToggle<CR>")
   vim.keymap.set("n", "<leader>mn", api.marks.navigate.next)
   vim.keymap.set("n", "<leader>mp", api.marks.navigate.prev)
   vim.keymap.set("n", "<leader>ms", api.marks.navigate.select)

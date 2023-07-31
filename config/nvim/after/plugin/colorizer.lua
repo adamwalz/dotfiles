@@ -1,7 +1,6 @@
 local colorizer_available, colorizer = pcall(require, "colorizer")
 
-if colorizer_available then
-  colorizer.setup({
+if colorizer_available then colorizer.setup({
     'css';
     'javascript';
     html = { mode = 'foreground' };
