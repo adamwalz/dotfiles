@@ -1,1 +1,0 @@
-sh "$(dirname "$(readlink -f "$0")")/split_window_ssh.sh" "$@"

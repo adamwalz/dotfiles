@@ -1,4 +1,0 @@
-{
-  "cmd": ["open","-a","Marked.app","$file"],
-  "selector": "text.html.markdown"
-}

@@ -1,1 +1,0 @@
-run-shell "bash ~/.tmux/verify_tmux_version.sh"
