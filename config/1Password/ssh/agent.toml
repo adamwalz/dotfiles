@@ -13,5 +13,5 @@
 #  https://developer.1password.com/docs/ssh/agent/config
 
 [[ssh-keys]]
-Item = "hgoqnlt7zeyufskhenwds45gke"
+item = "hgoqnlt7zeyufskhenwds45gke"
 vault = "a753hocbyvh47iwlp3jv7hswgi"
