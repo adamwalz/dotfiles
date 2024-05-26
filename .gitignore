@@ -2,3 +2,5 @@ tmux/plugins/
 !tmux/plugins/tpm/
 __pycache__/
 config/op/config
+cargo/*
+!cargo/config
