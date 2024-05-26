@@ -62,6 +62,8 @@ brew "the_silver_searcher"
 brew "trash"
 # Executes a program periodically, showing output fullscreen
 brew "watch"
+# Resource monitor. C++ version and continuation of bashtop and bpytop
+brew "btop"
 # Command-line pager for JSON data
 brew "jless"
 
