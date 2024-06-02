@@ -3,4 +3,4 @@ tmux/plugins/
 __pycache__/
 config/op/config
 cargo/*
-!cargo/config
+!cargo/config.toml
