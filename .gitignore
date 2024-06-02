@@ -4,3 +4,4 @@ __pycache__/
 config/op/config
 cargo/*
 !cargo/config.toml
+config/simple-update-notifier/nodemon.json
