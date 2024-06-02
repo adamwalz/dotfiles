@@ -28,5 +28,6 @@ yabai -m rule --add app="^Calculator$" manage=off
 yabai -m rule --add app="^App Store$" manage=off
 yabai -m rule --add app="^Finder$" manage=off
 yabai -m rule --add app="^Little Snitch$" manage=off
+yabai -m rule --add app="^Docker Desktop$" manage=off
 yabai -m rule --add app="^Discord$" manage=off
 
