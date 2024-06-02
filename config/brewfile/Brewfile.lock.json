@@ -2801,6 +2801,12 @@
         "options": {
           "full_name": "1password-cli"
         }
+      },
+      "vimr": {
+        "version": "0.47.2,20240531.221846",
+        "options": {
+          "full_name": "vimr"
+        }
       }
     }
   },
