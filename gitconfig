@@ -1,31 +1,65 @@
 [user]
   name = Adam Walz
   email = adam@adamwalz.net
+  useConfigOnly = true
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFnB+OOlvUP3cFhvd1GXB+2C1mo+egLAiTDpJ3vII8wg
 
 [core]
   editor = nvim
   pager = delta
-	excludesfile = /Users/adamwalz/.gitignore_global
+	excludesfile = /Users/adamwalz/.gitignore
+  whitespace = trailing-space,space-before-tab
+  quotepath = false
 
 [init]
   defaultBranch = main
 
+[commit]
+  gpgsign = true
+
+[branch]
+  autosetupmerge = true
+
+[push]
+  default = tracking
+
+[diff]
+  colorMoved = default
+
+[merge]
+  conflictstyle = diff3
+
 [interactive]
   diffFilter = delta --color-only
+
+[apply]
+  whitespace = warn
+
+[format]
+  numbered = auto
+
+[pager]
+  status = false
+
+[repack]
+  usedeltabaseoffset = true
+
+[rerere]
+  enabled = true
+
+[gpg]
+  format = ssh
+  [gpg "ssh"]
+    program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+    allowedSignersFile = ~/.config/git/allowed_signers
+
+[credential]
+	helper = /usr/local/share/gcm-core/git-credential-manager
 
 [delta]
   navigate = true
   side-by-side = true
   dark = true
 
-[merge]
-  conflictstyle = diff3
-
-[diff]
-  colorMoved = default
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/
