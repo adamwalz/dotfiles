@@ -1,0 +1,47 @@
+# /Users/adamwalz/.config/tmuxinator/server.yml
+
+name: server
+root: ~/Developer/github/PistachioNotes/server/go
+
+<% all_services = ['api-gateway', 'auth-service', 'secure-token-service', 'user-service'] %>
+<% service_to_directory_map = {'api-gateway' => 'apigateway', 'auth-service' => 'auth', 'secure-token-service' => 'sts', 'user-service' => 'user'} %>
+<% service_to_environment_map = {'api-gateway' => [], 'auth-service' => ['AUTH_SERVICE_HOST=host.docker.internal'], 'secure-token-service' => ['STS_HOST=host.docker.internal'], 'user-service' => ['USER_SERVICE_HOST=host.docker.internal']} %>
+
+<% databases = ['postgres', 'zookeeper', 'kafka', 'vault'] %>
+
+<% services = @args.select { |arg| all_services.include?(arg) } %>
+<% service_directories = services.map { |s| service_to_directory_map[s] } %>
+<% selected_services_env_vars = services.flat_map { |s| service_to_environment_map[s] } %>
+
+on_project_first_start: cd ../docker-compose && docker compose build
+
+on_project_stop: cd ../docker-compose && docker compose stop
+
+windows:
+  - editor: nvim
+  - query:
+      root: ~/Developer/github/PistachioNotes/api
+      panes:
+        - "grpcurl -import-path protos -proto google/rpc/error_details.proto -proto v1/api.proto -plaintext -d '{\"username_cased\": \"adam\" }' localhost:5001 pistachio.v1.PistachioApi.Signup"
+  <% unless services.empty? %>
+  - live-server:
+      layout: tiled
+      panes:
+        <% service_directories.each do |service| %>
+        - export ENV=local; nodemon --watch 'services/<%= service %>' --watch 'pkg' --watch go.mod --watch .env --ext 'go,env' --signal SIGTERM --exec 'go' run services/<%= service %>/main.go
+        <% end %>
+  <% end %>
+  - docker-compose:
+      root: ~/Developer/github/PistachioNotes/server/docker-compose/
+      panes:
+        - >
+          <% if services.empty? %>
+          docker-compose up -d
+          <% else %>
+          <% if selected_services_env_vars.any? %>
+          export <%= selected_services_env_vars.join(' ') %> && docker-compose up -d <%= all_services.reject { |s| services.include?(s) }.join(' ') %> <%= databases.join(' ') %>
+          <% else %>
+          docker-compose up -d <%= all_services.reject { |s| services.include?(s) }.join(' ') %> <%= databases.join(' ') %>
+          <% end %>
+          <% end %>
+

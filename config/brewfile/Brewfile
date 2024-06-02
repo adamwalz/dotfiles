@@ -12,6 +12,8 @@ brew "zsh"
 
 # Terminal multiplexer
 brew "tmux"
+# Manage complex tmux sessions easily
+brew "tmuxinator"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # Search tool like grep and The Silver Searcher
