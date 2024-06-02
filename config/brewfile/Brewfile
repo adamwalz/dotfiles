@@ -120,8 +120,10 @@ brew "shellcheck"
 brew "swiftlint"
 # Extensible command-line tool to format YAML files
 brew "yamlfmt"
-# JavaScript package manager
-brew "yarn"
+# Platform built on V8 to build network applications
+brew "node"
+# Package acting as bridge between Node projects and their package managers
+brew "corepack" # installs yarn
 
 ############ Other ############
 
