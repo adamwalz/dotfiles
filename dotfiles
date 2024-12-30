@@ -1,0 +1,418 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ----------------------------------
+# Configuration
+# ----------------------------------
+
+RAW_FILE_EXTENSION="rrc"
+RAW_FILE_EXTENSION_REGEXP="\.${RAW_FILE_EXTENSION}$"
+
+KEYCHAIN_GENERIC_PASSWORD_COMMAND="security find-generic-password"
+KEYCHAIN_INTERNET_PASSWORD_COMMAND="security find-internet-password"
+
+EXCLUDES=(
+  "dotfiles"
+  "LICENSE"
+  ".DS_Store"
+  ".git"
+  ".gitignore"
+  ".gitmodules"
+  "install.sh"
+  "brew"
+  "sublime"
+  "pythons"
+  "README.md"
+  # regex patterns
+  ".*~$"
+  "^#.*#$"
+  "^backup/.*$"
+)
+
+# ----------------------------------
+# OS Detection
+# ----------------------------------
+uname_s=$(uname -s | tr '[:upper:]' '[:lower:]')
+if [[ "$uname_s" == "darwin"* ]]; then
+  OS="darwin"
+elif [[ "$uname_s" == "linux"* ]]; then
+  OS="linux"
+elif [[ "$uname_s" == "cygwin"* || "$uname_s" == "mingw"* || "$uname_s" == "msys"* ]]; then
+  OS="windows"
+else
+  OS="other"
+fi
+
+# ----------------------------------
+# Paths
+# ----------------------------------
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+CONFIG_DIR_PATH="$SCRIPT_DIR"
+BACKUP_DIR_PATH="$HOME/.dotfiles_backup/$(date +'%Y-%m-%d-%H-%M-%S')"
+mkdir -p "$BACKUP_DIR_PATH"
+
+# ----------------------------------
+# Utility Functions
+# ----------------------------------
+
+info() { echo "$*" >&2; }
+warn() { echo "Warning: $*" >&2; }
+error() {
+  echo "Error: $*" >&2
+  exit 1
+}
+
+excluded() {
+  local path="$1"
+  for ex in "${EXCLUDES[@]}"; do
+    # If ex looks like a regex pattern, try it as a regex.
+    if [[ "$ex" =~ [\^\$\\\*\.\[] ]]; then
+      if [[ "$path" =~ $ex ]]; then
+        return 0
+      fi
+    else
+      if [[ "$path" == "$ex" ]]; then
+        return 0
+      fi
+    fi
+  done
+  return 1
+}
+
+backup() {
+  local from="$1"
+  local to="$2"
+  if [[ -e "$from" ]]; then
+    info "Backing up old version of $(basename "$from")"
+    mkdir -p "$(dirname "$to")"
+    mv "$from" "$to"
+  fi
+}
+
+# ----------------------------------
+# Secret Retrieval
+# ----------------------------------
+get_keychain_item() {
+  local label="$1"
+  local output
+  local password_output
+
+  # On macOS, try internet password first, then generic
+  if [[ "$OS" == "darwin" ]]; then
+    # Try to get internet password
+    output=$($KEYCHAIN_INTERNET_PASSWORD_COMMAND -l "$label" 2>/dev/null || true)
+    password_output=$($KEYCHAIN_INTERNET_PASSWORD_COMMAND -w -l "$label" 2>/dev/null || true)
+
+    # If not found, try generic password
+    if [[ "$output" == *"could not be found"* || -z "$output" ]]; then
+      output=$($KEYCHAIN_GENERIC_PASSWORD_COMMAND -l "$label" 2>/dev/null || true)
+      password_output=$($KEYCHAIN_GENERIC_PASSWORD_COMMAND -w -l "$label" 2>/dev/null || true)
+    fi
+
+    if [[ "$output" == *"could not be found"* || -z "$output" ]]; then
+      error "Item '$label' could not be found in Keychain"
+    fi
+
+    local account
+    local password
+
+    # Get account name from the main output
+    account=$(echo "$output" | grep '"acct"' | sed -E 's/.*"acct"<blob>="([^"]*)".*/\1/' || true)
+
+    # Use the separate password output
+    password="$password_output"
+
+    [[ -z "$account" || -z "$password" ]] && error "Could not parse account/password for '$label'"
+    echo "$account:$password"
+  elif [[ "$OS" == "linux" ]]; then
+    local account_val password_val
+    account_val=$(secret-tool lookup service "$label" type account 2>/dev/null || true)
+    password_val=$(secret-tool lookup service "$label" type password 2>/dev/null || true)
+    if [[ -z "$account_val" || -z "$password_val" ]]; then
+      error "Item '$label' could not be found in Keychain"
+    fi
+    echo "$account_val:$password_val"
+  else
+    error "Item '$label' could not be found in Keychain (unsupported OS)"
+  fi
+}
+
+get_keychain_item2() {
+  local label="$1"
+  local output
+
+  # On macOS, try internet password first, then generic
+  if [[ "$OS" == "darwin" ]]; then
+    output=$($KEYCHAIN_INTERNET_PASSWORD_COMMAND "$label" 2>/dev/null || true)
+    if [[ "$output" == *"could not be found"* ]]; then
+      output=$($KEYCHAIN_GENERIC_PASSWORD_COMMAND "$label" 2>/dev/null || true)
+    fi
+
+    if [[ "$output" == *"could not be found"* || -z "$output" ]]; then
+      error "Item '$label' could not be found in Keychain"
+    fi
+
+    local account
+    local password
+    account=$(echo "$output" | grep '"acct"' | sed -E 's/.*"acct"<blob>="([^"]*)".*/\1/' || true)
+    password=$(echo "$output" | grep '^password:' | sed -E 's/^password: "([^"]*)".*/\1/' || true)
+
+    [[ -z "$account" || -z "$password" ]] && error "Could not parse account/password for '$label'"
+    echo "$account:$password"
+  elif [[ "$OS" == "linux" ]]; then
+    local account_val password_val
+    account_val=$(secret-tool lookup service "$label" type account 2>/dev/null || true)
+    password_val=$(secret-tool lookup service "$label" type password 2>/dev/null || true)
+    if [[ -z "$account_val" || -z "$password_val" ]]; then
+      error "Item '$label' could not be found in Keychain"
+    fi
+    echo "$account_val:$password_val"
+  else
+    error "Item '$label' could not be found in Keychain (unsupported OS)"
+  fi
+}
+
+secret() {
+  local param="$1"
+  local type="${param%%:*}"
+  local label="${param#*:}"
+  local creds
+  creds=$(get_keychain_item "$label")
+  local acc="${creds%%:*}"
+  local pass="${creds#*:}"
+
+  if [[ "$type" == "account" ]]; then
+    echo "$acc"
+  else
+    echo "$pass"
+  fi
+}
+
+# ----------------------------------
+# Template Processing
+# ----------------------------------
+debug_stack() {
+  echo "DEBUG Stack: ${if_stack[*]}" >&2
+}
+
+process_template() {
+  local infile="$1"
+  local outfile="$2"
+
+  local tmpfile
+  tmpfile=$(mktemp)
+
+  declare -a if_stack=()
+
+  current_block_active() {
+    for s in "${if_stack[@]}"; do
+      if [[ "$s" == "0" ]]; then
+        return 1
+      fi
+    done
+    return 0
+  }
+
+  while IFS='' read -r line || [[ -n "$line" ]]; do
+    local processed_line="$line"
+
+    # Changed the regex to properly match both opening and closing tags
+    while [[ "$processed_line" =~ (<%[[:space:]]*([^%]+)[[:space:]]*%>) ]]; do
+      local tag="${BASH_REMATCH[1]}"
+      local inner="${BASH_REMATCH[2]}"
+      inner="$(echo "$inner" | sed 's/^ *//;s/ *$//')"
+
+      if [[ "$inner" =~ ^if\  ]]; then
+        local condition="${inner:3}"
+        if eval "${condition}"; then
+          if_stack+=("1")
+        else
+          if_stack+=("0")
+        fi
+        processed_line="${processed_line//$tag/}"
+
+      elif [[ "$inner" == "end" ]]; then
+        if ((${#if_stack[@]} > 0)); then
+          unset 'if_stack[${#if_stack[@]}-1]'
+          if_stack=("${if_stack[@]}") # Repack array after unset
+        fi
+        processed_line="${processed_line//$tag/}"
+      elif [[ "$inner" =~ ^=.*$ ]]; then
+        local expr="${inner#=}"
+        expr="$(echo "$expr" | sed 's/^ *//;s/ *$//')"
+        local replacement=""
+        if [[ "$expr" =~ ^secret[[:space:]]+\"([^\"]+)\"$ ]]; then
+          replacement="$(secret "${BASH_REMATCH[1]}")"
+        fi
+        processed_line="${processed_line//$tag/$replacement}"
+      else
+        processed_line="${processed_line//$tag/}"
+      fi
+    done
+
+    if current_block_active; then
+      echo "$processed_line" >>"$tmpfile"
+    fi
+  done <"$infile"
+
+  if [[ -e "$outfile" ]]; then
+    if ! cmp -s "$tmpfile" "$outfile"; then
+      info "Writing: $outfile"
+      mv "$tmpfile" "$outfile"
+      chmod 600 "$outfile"
+    else
+      rm "$tmpfile"
+    fi
+  else
+    info "Writing: $outfile"
+    mv "$tmpfile" "$outfile"
+    chmod 600 "$outfile"
+  fi
+}
+
+link_file() {
+  local source="$1"
+  local target="$2"
+  if [[ -L "$target" && "$(readlink "$target")" == "$source" ]]; then
+    # already correct link
+    return
+  fi
+  backup "$target" "$BACKUP_DIR_PATH/$(basename "$target")"
+  info "Linking: $target"
+  mkdir -p "$(dirname "$target")"
+  ln -s "$source" "$target"
+}
+
+unlink_file() {
+  local file="$1"
+  if [[ -L "$file" ]]; then
+    info "Unlinking: $file"
+    rm "$file"
+  fi
+}
+
+unlink_if_broken() {
+  local file="$1"
+  if [[ -L "$file" && ! -e "$file" ]]; then
+    unlink_file "$file"
+  fi
+}
+
+render() {
+  while IFS= read -r -d '' source; do
+    local relative="${source#$CONFIG_DIR_PATH/}"
+    if excluded "$relative"; then
+      continue
+    fi
+
+    # OS checks
+    if [[ "$relative" =~ ^mac- && "$OS" != "darwin" ]]; then
+      continue
+    fi
+    if [[ "$relative" =~ ^linux- && "$OS" != "linux" ]]; then
+      continue
+    fi
+    if [[ "$relative" =~ ^windows- && "$OS" != "windows" ]]; then
+      continue
+    fi
+
+    local target="${source%.$RAW_FILE_EXTENSION}"
+    process_template "$source" "$target"
+  done < <(find "$CONFIG_DIR_PATH" -maxdepth 1 -type f -name "*.$RAW_FILE_EXTENSION" -print0)
+}
+
+link_dotfiles() {
+  for source in "$CONFIG_DIR_PATH"/*; do
+    [[ -f "$source" ]] || continue
+    local relative="${source#$CONFIG_DIR_PATH/}"
+    if excluded "$relative"; then
+      continue
+    fi
+
+    if [[ "$relative" =~ ^mac- && "$OS" != "darwin" ]]; then
+      continue
+    fi
+    if [[ "$relative" =~ ^linux- && "$OS" != "linux" ]]; then
+      continue
+    fi
+    if [[ "$relative" =~ ^windows- && "$OS" != "windows" ]]; then
+      continue
+    fi
+
+    local link_relative="$relative"
+    link_relative="${link_relative#mac-}"
+    link_relative="${link_relative#linux-}"
+    link_relative="${link_relative#windows-}"
+
+    if [[ "$link_relative" =~ $RAW_FILE_EXTENSION_REGEXP ]]; then
+      # Link rendered file
+      local rendered="${source%.$RAW_FILE_EXTENSION}"
+      if [[ -f "$rendered" ]] && ! excluded "$(basename "$rendered")"; then
+        link_file "$rendered" "$HOME/.${link_relative%.$RAW_FILE_EXTENSION}"
+      fi
+    else
+      # Link directly
+      link_file "$source" "$HOME/.$link_relative"
+    fi
+  done
+}
+
+clean() {
+  for item in "$HOME"/.*; do
+    [[ "$item" == "$HOME/." || "$item" == "$HOME/.." ]] && continue
+    unlink_if_broken "$item"
+  done
+}
+
+unlink_dotfiles() {
+  for source in "$CONFIG_DIR_PATH"/*; do
+    [[ -f "$source" ]] || continue
+    local relative="${source#$CONFIG_DIR_PATH/}"
+
+    if excluded "$relative"; then
+      continue
+    fi
+
+    if [[ "$relative" =~ ^mac- && "$OS" != "darwin" ]]; then
+      continue
+    fi
+    if [[ "$relative" =~ ^linux- && "$OS" != "linux" ]]; then
+      continue
+    fi
+    if [[ "$relative" =~ ^windows- && "$OS" != "windows" ]]; then
+      continue
+    fi
+
+    local link_relative="$relative"
+    link_relative="${link_relative#mac-}"
+    link_relative="${link_relative#linux-}"
+    link_relative="${link_relative#windows-}"
+    link_relative="${link_relative%.$RAW_FILE_EXTENSION}"
+
+    unlink_file "$HOME/.$link_relative"
+  done
+}
+
+task="${1:-install}"
+
+case "$task" in
+install)
+  render
+  link_dotfiles
+  ;;
+uninstall)
+  unlink_dotfiles
+  ;;
+render)
+  render
+  ;;
+clean)
+  clean
+  ;;
+*)
+  echo "Usage: $0 [install|uninstall|render|clean]"
+  exit 1
+  ;;
+esac
+
+info "Done."

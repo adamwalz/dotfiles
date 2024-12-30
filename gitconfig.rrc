@@ -1,0 +1,126 @@
+[user]
+  name = Adam Walz
+  email = adam@adamwalz.net
+  useConfigOnly = true
+  signingkey = <%= secret "password:git_commit_signing" %>
+
+[core]
+  legacyheaders = false
+  excludesfile = ~/.gitignore
+  whitespace = trailing-space,space-before-tab
+  quotepath = false
+  editor = nvim
+
+[init]
+  defaultBranch = main
+
+[advice]
+  pushNonFastForward = false
+  statusHints = false
+
+[commit]
+  gpgsign = true
+
+[branch]
+  autosetupmerge = true
+
+[push]
+  default = tracking
+
+[apply]
+  whitespace = warn
+
+[format]
+  numbered = auto
+
+[pager]
+  status = false
+
+[repack]
+  usedeltabaseoffset = true
+
+[rerere]
+  enabled = true
+
+[diff]
+  tool = nvimdiff
+<% if test "$OS" = "darwin" %>
+  guitool = ksdiff
+<% end %>
+  colorMoved = default
+  mnemonicprefix = true
+  renames = copies
+
+[difftool]
+    prompt = false
+
+[difftool "nvimdiff"]
+    cmd = nvim -d "$LOCAL" "$REMOTE" -c 'wincmd l' -c 'cd "$GIT_PREFIX"'
+[difftool "fugitive"]
+    cmd = nvim -c "Gdiffsplit" "$MERGED"
+
+[merge]
+  tool = fugitive
+  conflictstyle = diff3
+
+[mergetool]
+    prompt = false
+    keepBackup = false
+
+[mergetool "nvimdiff"]
+    cmd = nvim -d "$LOCAL" "$REMOTE" "$MERGED" -c '$wincmd w' -c 'wincmd J'
+[mergetool "fugitive"]
+    cmd = nvim -f -c "Gdiffsplit!" "$MERGED"
+
+[color]
+  ui = auto
+  [color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+  [color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+  [color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge --skip -- %f
+  process = git-lfs filter-process --skip
+  required = true
+
+[credential]
+<% if test "$OS" = "darwin" %>
+  helper = /usr/local/share/gcm-core/git-credential-manager
+<% end %>
+
+[gpg]
+  format = ssh
+  [gpg "ssh"]
+<% if test "$OS" = "darwin" %>
+    program = /opt/homebrew/bin/gpg
+<% end %>
+    allowedSignersFile = ~/.config/git/allowed_signers
+
+[alias]
+  dt = difftool
+  dtf = difftool --tool=fugitive
+  dtn = difftool --tool=nvimdiff
+
+  mt = mergetool
+  mtf = mergetool --tool=fugitive
+  mtn = mergetool --tool=nvimdiff
+
+  addremove = !git add --all && git ls-files --deleted -z | xargs -0 git rm
+  switch = checkout
+  unadd = reset --mixed
+  uncommit = reset --soft
+  undo = reset --hard
+  unstage = reset
+  quick-stats = ! /usr/local/bin/git-quick-stats
