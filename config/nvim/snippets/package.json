@@ -1,0 +1,26 @@
+{
+  "name": "adams-snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": [
+          "plaintext",
+          "markdown",
+          "tex",
+          "html",
+          "global",
+          "all"
+        ],
+        "path": "./snippets/global.json"
+      },
+      {
+        "language": ["license"],
+        "path": "./snippets/license.json"
+      },
+      {
+        "language": "go",
+        "path": "./snippets/go.json"
+      }
+    ]
+  }
+}

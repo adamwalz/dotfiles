@@ -1,0 +1,82 @@
+{
+    "fmt.Errorf": {
+        "prefix": "fe",
+        "body": "fmt.Errorf(\"${1:failed to} ${2:action}: %w\", ${3:err})$0",
+        "description": "Snippet for fmt.Errorf()"
+    },
+    "slogerr": {
+        "prefix": "slogerr",
+        "body": "logger.Error(\"${1:msg}\", slog.Any(\"error\", ${2:err}))$0",
+        "description": "Snippet for slog.Error"
+    },
+    "log.Trace().Msg": {
+        "prefix": "zlogtrace",
+        "body": "log.Trace().Msg(\"${1:msg}\")$0",
+        "description": "Snippet for zerolog log.Trace.Msg"
+    },
+    "log.Trace().Msgf": {
+        "prefix": "zlogtracef",
+        "body": "log.Trace().Msgf(\"${1:%s}\", ${2:var})$0",
+        "description": "Snippet for zerolog log.Trace.Msgf"
+    },
+    "log.Debug().Msg": {
+        "prefix": "zlogdebug",
+        "body": "log.Debug().Msg(\"${1:msg}\")$0",
+        "description": "Snippet for zerolog log.Debug.Msg"
+    },
+    "log.Debug().Msgf": {
+        "prefix": "zlogdebugf",
+        "body": "log.Debug().Msgf(\"${1:%s}\", ${2:var})$0",
+        "description": "Snippet for zerolog log.Debug.Msgf"
+    },
+    "log.Info().Msg": {
+        "prefix": "zloginfo",
+        "body": "log.Info().Msg(\"${1:msg}\")$0",
+        "description": "Snippet for zerolog log.Info.Msg"
+    },
+    "log.Info().Msgf": {
+        "prefix": "zloginfof",
+        "body": "log.Info().Msgf(\"${1:%s}\", ${2:var})$0",
+        "description": "Snippet for zerolog log.Info.Msgf"
+    },
+    "log.Warn().Err().Msg": {
+        "prefix": "zlogwarn",
+        "body": "log.Warn().Err(${2:err}).Msg(\"${1:msg}\")$0",
+        "description": "Snippet for zerolog log.Warn.Err.Msg"
+    },
+    "log.Warn().Err().Msgf": {
+        "prefix": "zlogwarnf",
+        "body": "log.Warn().Err(${3:err}).Msgf(\"${1:%s}\", ${2:var})$0",
+        "description": "Snippet for zerolog log.Warn.Err.Msgf"
+    },
+    "log.Error().Err().Msg": {
+        "prefix": "zlogerror",
+        "body": "log.Error().Err(${2:err}).Msg(\"${1:msg}\")$0",
+        "description": "Snippet for zerolog log.Error.Err.Msg"
+    },
+    "log.Error().Err().Msgf": {
+        "prefix": "zlogerrorf",
+        "body": "log.Error().Err(${3:err}).Msgf(\"${1:%s}\", ${2:var})$0",
+        "description": "Snippet for zerolog log.Error.Err.Msgf"
+    },
+    "log.Fatal().Err().Msg": {
+        "prefix": "zlogfatal",
+        "body": "log.Fatal().Err(${2:err}).Msg(\"${1:msg}\")$0",
+        "description": "Snippet for zerolog log.Fatal.Err.Msg"
+    },
+    "log.Fatal().Err().Msgf": {
+        "prefix": "zlogfatalf",
+        "body": "log.Fatal().Err(${3:err}).Msgf(\"${1:%s}\", ${2:var})$0",
+        "description": "Snippet for zerolog log.Fatal.Err.Msgf"
+    },
+    "log.Panic().Err().Msg": {
+        "prefix": "zlogpanic",
+        "body": "log.Panic().Err(${2:err}).Msg(\"${1:msg}\")$0",
+        "description": "Snippet for zerolog log.Panic.Err.Msg"
+    },
+    "log.Panic().Err().Msgf": {
+        "prefix": "zlogpanicf",
+        "body": "log.Panic().Err(${3:err}).Msgf(\"${1:%s}\", ${2:var})$0",
+        "description": "Snippet for zerolog log.Panic.Err.Msgf"
+    }
+}

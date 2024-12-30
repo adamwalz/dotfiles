@@ -1,0 +1,68 @@
+-- 'williamboman/mason.nvim'
+-- 'nvim-treesitter/nvim-treesitter'
+-- 'neovim/nvim-lspconfig'
+-- 'nvimtools/none-ls.nvim'
+-- 'hrsh7th/nvim-cmp'
+-- 'nvim-telescope/telescope.nvim'
+-- 'stevearc/conform.nvim'
+-- 'mfussenegger/nvim-lint'
+-- 'mfussenegger/nvim-dap'
+-- 'nvim-neotest/neotest'
+-- 'echasnovski/mini.icons'
+-- language specific configuration
+return {
+  {
+    'mason.nvim',
+    opts = { ensure_installed = { 'bashls', 'shellcheck', 'shfmt' } },
+  },
+  {
+    'nvim-treesitter/nvim-treesitter',
+    opts = { ensure_installed = { 'bash' } },
+  },
+  {
+    'neovim/nvim-lspconfig',
+    opts = {
+      servers = {
+        bashls = {},
+      },
+    },
+  },
+  {
+    'nvimtools/none-ls.nvim',
+    opts = function(_, opts) end,
+  },
+  {
+    'hrsh7th/nvim-cmp',
+    dependencies = {},
+    opts = function(_, opts) end,
+  },
+  {
+    'nvim-telescope/telescope.nvim',
+    specs = {},
+  },
+  {
+    'stevearc/conform.nvim',
+    opts = {
+      formatters_by_ft = {
+        bash = { 'shfmt' },
+      },
+    },
+  },
+  {
+    'mfussenegger/nvim-lint',
+    opts = {
+      linters_by_ft = {
+        bash = { 'shellcheck' },
+      },
+    },
+  },
+  {
+    'echasnovski/mini.icons',
+    opts = {
+      file = {
+        ['.bash_profile'] = { glyph = '󰒓', hl = 'MiniIconsGreen' },
+        ['.bashrc'] = { glyph = '󰒓', hl = 'MiniIconsGreen' },
+      },
+    },
+  },
+}

@@ -1,0 +1,9 @@
+{
+    "copyrightp": {
+        "prefix": "cp)",
+        "body": [
+            "Copyright (c) ${CURRENT_YEAR} Pistachio ${0:Author}. All Rights Reserved."
+        ],
+        "description": "Snippet to put pistachio copyright"
+    }
+}
