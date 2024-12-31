@@ -1,0 +1,6 @@
+#compdef cargo
+#autoload
+
+if (( $+commands[rustc] )) && (( $+commands[cargo] )); then
+  source "$(rustc +${${(z)$(rustup default)}[1]} --print sysroot)"/share/zsh/site-functions/_cargo
+fi

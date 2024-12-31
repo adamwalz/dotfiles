@@ -1,0 +1,4 @@
+#compdef dut
+#autoload
+
+_du

@@ -1,0 +1,154 @@
+#
+# General
+#
+
+# Color output (auto set to 'no' on dumb terminals).
+zstyle ':zenith:*:*' color 'yes'
+
+# Set the Zsh modules to load (man zshmodules).
+#zstyle ':zenith:load' zshmodule 'attr' 'stat'
+
+# Set the Zsh functions to load (man zshcontrib).
+zstyle ':zenith:load' zshfunction 'zargs' 'zmv'
+
+# The load ordering of some modules is important -- load these first
+## environment must be loaded first
+## gnu-utility must be loaded before the utility module
+## completion must be loadad after the utility module
+## zoxide must be loaded after the completion module
+zenithmodules=('environment' 'gnu-utility' 'utility' 'completion' 'zoxide')
+
+# Load common zenith modules next -- the ordering of these should be irrelevant
+zenithmodules=($zenithmodules \
+  'archive'         \
+  'editor'          \
+  'git'             \
+  'history'         \
+  'spectrum'        \
+  'ssh'             \
+  'terminal'        \
+  'tmux'            \
+)
+
+# Load OS specific zenith modules
+if [[ "$OSTYPE" == darwin* ]]; then
+  zenithmodules=($zenithmodules 'homebrew' 'macos')
+elif [[ "$OSTYPE" == linux-gnu ]]; then
+  zenithmodules=($zenithmodules 'dpkg' 'pacman' 'yum')
+fi
+
+# Load machine specific zenith modules from file
+if [[ -s "${ZDOTDIR:-$HOME}/.zenithmodules" ]]; then
+  for zenithmodule in "${(f)$(< ${ZDOTDIR:-$HOME}/.zenithmodules)}"
+    if [[ "$zenithmodule" != '#'* ]] zenithmodules=($zenithmodules $zenithmodule)
+fi
+
+# syntax-highlighting, history-substring-search, autosuggestions, and prompt must be loaded last,
+# in that order
+zenithmodules=($zenithmodules 'syntax-highlighting' 'history-substring-search' 'autosuggestions' 'prompt')
+
+# Now actually do the module loading
+zstyle ':zenith:load' zenithmodule $zenithmodules
+
+#
+# Highlighters
+#
+zstyle ':zenith:module:syntax-highlighting' highlighters \
+  'main' \
+  'brackets' \
+  'cursor'
+
+#
+# Editor
+#
+
+# Set the key mapping style to 'emacs' or 'vi'.
+zstyle ':zenith:module:editor' key-bindings 'vi'
+
+# Auto convert .... to ../..
+zstyle ':zenith:module:editor' dot-expansion 'yes'
+
+#
+# Git
+#
+
+# Ignore submodules when they are 'dirty', 'untracked', 'all', or 'none'.
+zstyle ':zenith:module:git:status:ignore' submodules 'all'
+
+#
+# History
+#
+
+# Set the file to save the history in when an interactive shell exits.
+zstyle ':zenith:module:history' histfile "${ZDOTDIR:-$HOME}/.zsh_history"
+
+# Set the maximum  number  of  events  stored  in  the  internal history list.
+zstyle ':zenith:module:history' histsize 10000
+
+# Set the maximum number of history events to save in the history file.
+zstyle ':zenith:module:history' savehist 10000
+
+#
+# Prompt
+#
+
+# Set the prompt theme to load.
+# Setting it to 'random' loads a random theme.
+# Auto set to 'off' on dumb terminals.
+zstyle ':zenith:module:prompt' theme 'adam3'
+
+# Set the working directory prompt display length.
+# By default, it is set to 'short'. Set it to 'long' (without '~' expansion)
+# for longer or 'full' (with '~' expansion) for even longer prompt display.
+zstyle ':zenith:module:prompt' pwd-length 'short'
+
+# Set the prompt to display the return code along with an indicator for non-zero
+# return codes. This is not supported by all prompts.
+zstyle ':zenith:module:prompt' show-return-val 'yes'
+
+#
+# Terminal
+#
+
+# Auto set the tab and window titles.
+zstyle ':zenith:module:terminal' auto-title 'yes'
+
+# Set the window title format.
+zstyle ':zenith:module:terminal:window-title' format '%n@%m: %s'
+
+# Set the tab title format.
+zstyle ':zenith:module:terminal:tab-title' format '%m: %s'
+
+# Set the terminal multiplexer title format.
+zstyle ':zenith:module:terminal:multiplexer-title' format '%s'
+
+#
+# SSH
+#
+
+zstyle ':zenith:module:ssh:load' identities 'id_ed25519' 'id_rsa' 
+
+#
+# Auto Suggestions
+#
+
+zstyle ':zenith:module:autosuggestions' color 'yes'
+
+#
+# Tmux
+#
+
+zstyle ':zenith:module:tmux:session' name 'default'
+
+# Auto start a session when Zsh is launched.
+zstyle ':zenith:module:tmux:auto-start' local 'yes'
+zstyle ':zenith:module:tmux:auto-start' remote 'yes'
+
+#
+# Utility
+#
+
+# Enabled safe options. This aliases cp, ln, mv and rm so that they prompt
+# before deleting or overwriting files. Set to 'no' to disable this safer
+# behavior.
+zstyle ':zenith:module:utility' safe-ops 'yes'

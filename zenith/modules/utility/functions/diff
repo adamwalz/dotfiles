@@ -1,0 +1,14 @@
+#
+# Highlights diff output.
+#
+
+# function diff {
+
+if zstyle -t ':zenith:module:utility:diff' color \
+      && (( $+commands[colordiff] )); then
+  command diff "$@" | colordiff
+else
+  command diff "$@"
+fi
+
+# }

@@ -1,0 +1,4 @@
+#compdef noremoteglob
+#autoload
+
+_precommand

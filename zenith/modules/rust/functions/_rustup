@@ -1,0 +1,6 @@
+#compdef rustup
+#autoload
+
+if (( $+commands[rustup] )); then
+  eval "$(rustup completions zsh)"
+fi

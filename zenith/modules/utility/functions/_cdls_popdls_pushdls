@@ -1,0 +1,4 @@
+#compdef cdls popdls pushdls
+#autoload
+
+_cd

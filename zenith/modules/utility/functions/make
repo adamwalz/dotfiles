@@ -1,0 +1,14 @@
+#
+# Highlights make output.
+#
+
+# function make {
+
+if zstyle -t ':zenith:module:utility:make' color \
+      && (( $+commands[colormake] )); then
+  command colormake "$@"
+else
+  command make "$@"
+fi
+
+# }
