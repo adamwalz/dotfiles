@@ -37,6 +37,11 @@ option_value_not_changed() {
 	[ "$option_value" == "$default_value" ]
 }
 
+get_server_option_value() {
+	local option="$1"
+	tmux show-options -gv "$option"
+}
+
 server_option_value_not_changed() {
 	local option="$1"
 	local default_value="$2"
@@ -100,7 +105,7 @@ main() {
 
 	# required (only) on OS X
 	if is_osx && command_exists "reattach-to-user-namespace" && option_value_not_changed "default-command" ""; then
-		tmux set-option -g default-command "reattach-to-user-namespace -l $SHELL"
+		tmux set-option -g default-command "reattach-to-user-namespace -l $(get_server_option_value 'default-shell')"
 	fi
 
 	# upgrade $TERM, tmux 1.9
