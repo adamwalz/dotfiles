@@ -4,6 +4,7 @@ tap "hashicorp/tap"
 tap "majd/repo"
 tap "nikitabobko/tap"
 tap "go-task/tap"
+tap "get-woke/tap"
 
 ############ Shells ############
 
@@ -74,6 +75,8 @@ brew "watch"
 brew "btop"
 # Command-line pager for JSON data
 brew "jless"
+# Perl-powered file rename script with many helpful built-ins
+brew "rename"
 
 ############ Developer Tools ############
 
@@ -123,6 +126,8 @@ brew "vault"
 brew "cmctl"
 # Task is a task runner/build tool that aims to be simpler and easier to use
 brew "go-task"
+# Simple terminal UI for git commands
+brew "lazygit"
 
 ############ Programming Languages ############
 
@@ -156,8 +161,18 @@ brew "node"
 brew "corepack" # installs yarn
 # Your favorite rust -> wasm workflow tool!
 brew "wasm-pack"
+# Package manager for the Lua programming language
+brew "luarocks"
+# Configurable static site generator
+brew "hugo"
+# Dependency Manager for PHP
+brew "composer"
+# JavaScript package manager
+brew "yarn"
+# Fast, Dynamic Programming Language
+brew "julia"
 
-############ Other ############
+############ Security ############
 
 # Tool for managing your YubiKey configuration
 brew "ykman"
@@ -167,6 +182,19 @@ brew "ykpers"
 brew "pam-u2f"
 # Utility for IPMI control with kernel driver or LAN interface
 brew "ipmitool"
+# GNU Pretty Good Privacy (PGP) package
+brew "gnupg"
+
+############ Other ############
+
+# Fix common misspellings in source code and text files
+brew "codespell"
+# Source code spell checker
+brew "typos-cli"
+# Catch insensitive, inconsiderate writing
+brew "alexjs"
+# Detect non-inclusive language in your source code
+brew "get-woke/tap/woke"
 
 ############ Web Browsers ############
 
@@ -197,6 +225,8 @@ cask "viscosity"
 cask "yubico-authenticator"
 # Application for configuring any YubiKey
 cask "yubico-yubikey-manager"
+# Mesh VPN client
+cask "zerotier-one"
 
 ############ Productivity ############
 
@@ -210,13 +240,15 @@ cask "aerospace"
 cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
+# Calendar software
+cask "fantastical"
 
 ############ Developer Tools ############
 
 # Developer targeted fonts with a high number of glyphs
 cask "font-caskaydia-cove-nerd-font"
-# GPU-accelerated terminal emulator
-cask "alacritty"
+# Terminal emulator as alternative to Apple's Terminal app
+cask "iterm2"
 # Graphical client for Git version control
 cask "sourcetree"
 # Tools for building Android applications
@@ -229,8 +261,14 @@ cask "vimr"
 cask "ipatool"
 # Inspect application bundles
 cask "apparency"
+# Reverse proxy, secure introspectable tunnels to localhost
+cask "ngrok"
 
 ############ Creativity ############
 
 # Professional graphic design software
 cask "affinity-designer"
+# Professional image editing software
+cask "affinity-photo"
+# Musical instrument learning tool
+cask "yousician"
