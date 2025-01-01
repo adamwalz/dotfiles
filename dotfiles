@@ -5,29 +5,28 @@ set -euo pipefail
 # Configuration
 # ----------------------------------
 
+DRY_RUN="${DRY_RUN:-false}"
+
 RAW_FILE_EXTENSION="rrc"
 RAW_FILE_EXTENSION_REGEXP="\.${RAW_FILE_EXTENSION}$"
 
 KEYCHAIN_GENERIC_PASSWORD_COMMAND="security find-generic-password"
 KEYCHAIN_INTERNET_PASSWORD_COMMAND="security find-internet-password"
 
+CONTENTS_ONLY_DIRS=(
+  "config"
+  "ssh"
+)
+
 EXCLUDES=(
   "dotfiles"
   "LICENSE"
-  ".DS_Store"
-  ".git"
-  ".gitignore"
-  ".gitmodules"
-  "install.sh"
-  "brew"
-  "sublime"
-  "pythons"
   "README.md"
   # regex patterns
-  ".*~$"
-  "^#.*#$"
-  "^backup/.*$"
+  ".*$"
 )
+
+EXCLUDES+=("${CONTENTS_ONLY_DIRS[@]}")
 
 # ----------------------------------
 # OS Detection
@@ -55,10 +54,11 @@ mkdir -p "$BACKUP_DIR_PATH"
 # Utility Functions
 # ----------------------------------
 
-info() { echo "$*" >&2; }
-warn() { echo "Warning: $*" >&2; }
+info() { echo "[INFO] $*" >&2; }
+warn() { echo "[WARN] $*" >&2; }
+dry_info() { echo "[DRY RUN] $*" >&2; }
 error() {
-  echo "Error: $*" >&2
+  echo "[ERROR] $*" >&2
   exit 1
 }
 
@@ -83,9 +83,13 @@ backup() {
   local from="$1"
   local to="$2"
   if [[ -e "$from" ]]; then
-    info "Backing up old version of $(basename "$from")"
-    mkdir -p "$(dirname "$to")"
-    mv "$from" "$to"
+    if [[ "$DRY_RUN" == "true" ]]; then
+      dry_info "Would back up old version of $(basename "$from") to $to"
+    else
+      info "Backing up old version of $(basename "$from")"
+      mkdir -p "$(dirname "$to")"
+      mv "$from" "$to"
+    fi
   fi
 }
 
@@ -137,41 +141,6 @@ get_keychain_item() {
   fi
 }
 
-get_keychain_item2() {
-  local label="$1"
-  local output
-
-  # On macOS, try internet password first, then generic
-  if [[ "$OS" == "darwin" ]]; then
-    output=$($KEYCHAIN_INTERNET_PASSWORD_COMMAND "$label" 2>/dev/null || true)
-    if [[ "$output" == *"could not be found"* ]]; then
-      output=$($KEYCHAIN_GENERIC_PASSWORD_COMMAND "$label" 2>/dev/null || true)
-    fi
-
-    if [[ "$output" == *"could not be found"* || -z "$output" ]]; then
-      error "Item '$label' could not be found in Keychain"
-    fi
-
-    local account
-    local password
-    account=$(echo "$output" | grep '"acct"' | sed -E 's/.*"acct"<blob>="([^"]*)".*/\1/' || true)
-    password=$(echo "$output" | grep '^password:' | sed -E 's/^password: "([^"]*)".*/\1/' || true)
-
-    [[ -z "$account" || -z "$password" ]] && error "Could not parse account/password for '$label'"
-    echo "$account:$password"
-  elif [[ "$OS" == "linux" ]]; then
-    local account_val password_val
-    account_val=$(secret-tool lookup service "$label" type account 2>/dev/null || true)
-    password_val=$(secret-tool lookup service "$label" type password 2>/dev/null || true)
-    if [[ -z "$account_val" || -z "$password_val" ]]; then
-      error "Item '$label' could not be found in Keychain"
-    fi
-    echo "$account_val:$password_val"
-  else
-    error "Item '$label' could not be found in Keychain (unsupported OS)"
-  fi
-}
-
 secret() {
   local param="$1"
   local type="${param%%:*}"
@@ -191,9 +160,6 @@ secret() {
 # ----------------------------------
 # Template Processing
 # ----------------------------------
-debug_stack() {
-  echo "DEBUG Stack: ${if_stack[*]}" >&2
-}
 
 process_template() {
   local infile="$1"
@@ -216,7 +182,6 @@ process_template() {
   while IFS='' read -r line || [[ -n "$line" ]]; do
     local processed_line="$line"
 
-    # Changed the regex to properly match both opening and closing tags
     while [[ "$processed_line" =~ (<%[[:space:]]*([^%]+)[[:space:]]*%>) ]]; do
       local tag="${BASH_REMATCH[1]}"
       local inner="${BASH_REMATCH[2]}"
@@ -261,26 +226,66 @@ process_template() {
       mv "$tmpfile" "$outfile"
       chmod 600 "$outfile"
     else
-      rm "$tmpfile"
+      if [[ "$DRY_RUN" = "true" ]]; then
+        dry_info "Skipping rendering: $outfile is already up to date"
+      else
+        rm "$tmpfile"
+      fi
     fi
   else
-    info "Writing: $outfile"
-    mv "$tmpfile" "$outfile"
-    chmod 600 "$outfile"
+    if [[ "$DRY_RUN" = "true" ]]; then
+      dry_info "Would write rendered file: $outfile"
+    else
+      info "Writing: $outfile"
+      mv "$tmpfile" "$outfile"
+      chmod 600 "$outfile"
+    fi
   fi
 }
 
 link_file() {
   local source="$1"
   local target="$2"
+
   if [[ -L "$target" && "$(readlink "$target")" == "$source" ]]; then
+    if [[ "$DRY_RUN" == "true" ]]; then
+      dry_info "Skipping link: $target already links to $source"
+    fi
     # already correct link
     return
   fi
+
   backup "$target" "$BACKUP_DIR_PATH/$(basename "$target")"
-  info "Linking: $target"
-  mkdir -p "$(dirname "$target")"
-  ln -s "$source" "$target"
+
+  if [[ "$DRY_RUN" == "true" ]]; then
+    dry_info "Would create symlink $target -> $source"
+  else
+    info "Linking: $target"
+    mkdir -p "$(dirname "$target")"
+    ln -s "$source" "$target"
+  fi
+}
+
+link_directory_contents() {
+  local source_dir="$1"
+  local target_dir="$2"
+
+  if [[ "$DRY_RUN" == "true" ]]; then
+    dry_info "Would ensure directory $target_dir exists"
+  else
+    mkdir -p "$target_dir"
+  fi
+
+  for item in "$source_dir"/*; do
+    [[ -e "$item" ]] || continue
+
+    local name
+    name="$(basename "$item")"
+
+    local target="$target_dir/$name"
+
+    link_file "$item" "$target"
+  done
 }
 
 unlink_file() {
@@ -317,6 +322,11 @@ render() {
     fi
 
     local target="${source%.$RAW_FILE_EXTENSION}"
+
+    if [[ "$DRY_RUN" = "true" ]]; then
+      dry_info "Processing template: $source -> $target"
+    fi
+
     process_template "$source" "$target"
   done < <(find "$CONFIG_DIR_PATH" -maxdepth 1 -type f -name "*.$RAW_FILE_EXTENSION" -print0)
 }
@@ -353,6 +363,13 @@ link_dotfiles() {
     else
       # Link directly
       link_file "$source" "$HOME/.$link_relative"
+    fi
+  done
+
+  for dir_name in "${CONTENTS_ONLY_DIRS[@]}"; do
+    local dir_path="$CONFIG_DIR_PATH/$dir_name"
+    if [[ -d "$dir_name" ]]; then
+      link_directory_contents "$dir_path" "$HOME/.$dir_name"
     fi
   done
 }
@@ -408,6 +425,12 @@ render)
   ;;
 clean)
   clean
+  ;;
+dryrun)
+  DRY_RUN=true
+  info "Running in DRY RUN mode..."
+  render
+  link_dotfiles
   ;;
 *)
   echo "Usage: $0 [install|uninstall|render|clean]"
