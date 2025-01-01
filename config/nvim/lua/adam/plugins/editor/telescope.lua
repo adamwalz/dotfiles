@@ -267,6 +267,7 @@ return {
   -- better vim.ui with telescope
   {
     'stevearc/dressing.nvim',
+    version = '3.1.0',
     lazy = true,
     enabled = function()
       return utils.pick.want() == 'telescope'
