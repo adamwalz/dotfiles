@@ -103,9 +103,7 @@
 [gpg]
   format = ssh
   [gpg "ssh"]
-<% if test "$OS" = "darwin" %>
-    program = /opt/homebrew/bin/gpg
-<% end %>
+    program = /usr/bin/ssh-keygen
     allowedSignersFile = ~/.config/git/allowed_signers
 
 [alias]
