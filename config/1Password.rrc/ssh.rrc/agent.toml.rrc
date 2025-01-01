@@ -1,0 +1,5 @@
+<% if test "$(hostname -s)" = "adams-mac-studio" %>
+[[ssh-keys]]
+vault = "a753hocbyvh47iwlp3jv7hswgi"
+item = "hvudgtwqdrlpnqgp3rxi4qmtzy"
+<% end %>
