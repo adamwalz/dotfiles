@@ -56,7 +56,7 @@ return {
   {
     'mrcjkb/rustaceanvim',
     enabled = vim.fn.has('nvim-0.10.0') == 1,
-    version = vim.fn.has 'nvim-0.10.0' == 0 and '5.19.2' or false,
+    commit = '0a618c1',
     lazy = false, -- This plugin is already lazy
     ft = { 'rust' },
     opts = {
